@@ -38,18 +38,7 @@ dependencies {
     simulationRelease wpi.sim.enableRelease()
 
     implementation 'com.google.code.gson:gson:2.10.1'
-
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
-    testImplementation 'org.mockito:mockito-core:5.+'
-
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.+'
-
     annotationProcessor "org.littletonrobotics.akit.junction:junction-autolog:$AdvantageKitJSON.version"
-}
-
-test {
-    useJUnitPlatform()
-    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 
 // Simulation configuration (e.g. environment variables).
