@@ -37,7 +37,7 @@ dependencies {
     nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
     simulationRelease wpi.sim.enableRelease()
 
-    implementation 'org.apache.commons:commons-math3:3.+'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
     testImplementation 'org.mockito:mockito-core:5.+'
