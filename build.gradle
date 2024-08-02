@@ -9,8 +9,8 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-
-group = 'org.github.Programming-TRIGON'
+apply plugin: 'maven-publish'
+group = 'org.github.levyishai'
 
 repositories {
     maven {
