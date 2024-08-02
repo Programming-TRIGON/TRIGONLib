@@ -13,6 +13,9 @@ public class SimpleSensor {
     private final String name;
     private final SimpleSensorIO sensorIO;
     private final SimpleSensorInputsAutoLogged sensorInputs = new SimpleSensorInputsAutoLogged();
+    private double
+            scalingSlope = 1,
+            scalingInterceptPoint = 0;
 
     public static SimpleSensor createAnalogSensor(int channel, String name) {
         final SimpleSensor nonRealSensor = createNonRealSensor(name);
@@ -48,6 +51,11 @@ public class SimpleSensor {
         this.name = name;
     }
 
+    public void setScalingConstants(double scalingSlope, double scalingInterceptPoint) {
+        this.scalingSlope = scalingSlope;
+        this.scalingInterceptPoint = scalingInterceptPoint;
+    }
+
     public double getValue() {
         return sensorInputs.value;
     }
@@ -56,8 +64,8 @@ public class SimpleSensor {
         return sensorInputs.value > 0;
     }
 
-    public double getDutyCycleValue(double maximumValue) {
-        return (sensorInputs.value - 0.5) * maximumValue;
+    public double getScaledValue() {
+        return (sensorInputs.value * scalingSlope) + scalingInterceptPoint;
     }
 
     public void setSimulationSupplier(DoubleSupplier simulationValueSupplier) {
@@ -66,6 +74,6 @@ public class SimpleSensor {
 
     public void updateSensor() {
         sensorIO.updateInputs(sensorInputs);
-        Logger.processInputs("AnalogSensors/" + name, sensorInputs);
+        Logger.processInputs("SimpleSensors/" + name, sensorInputs);
     }
 }

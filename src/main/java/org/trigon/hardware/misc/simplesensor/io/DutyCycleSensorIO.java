@@ -13,7 +13,7 @@ public class DutyCycleSensorIO extends SimpleSensorIO {
     }
 
     public void updateInputs(SimpleSensorInputsAutoLogged inputs) {
-        inputs.value = dutyCycle.getOutput();
+        inputs.value = dutyCycle.getHighTimeNanoseconds();
     }
 }
 
