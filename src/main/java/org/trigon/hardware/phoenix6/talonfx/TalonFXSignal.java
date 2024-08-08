@@ -12,8 +12,7 @@ public enum TalonFXSignal {
     TORQUE_CURRENT(TalonFX::getTorqueCurrent),
     STATOR_CURRENT(TalonFX::getStatorCurrent),
     SUPPLY_CURRENT(TalonFX::getSupplyCurrent),
-    CLOSED_LOOP_REFERENCE(TalonFX::getClosedLoopReference),
-    MOTOR_VOLTAGE(TalonFX::getMotorVoltage);
+    CLOSED_LOOP_REFERENCE(TalonFX::getClosedLoopReference);
 
     final String name;
     final Function<TalonFX, BaseStatusSignal> signalFunction;
