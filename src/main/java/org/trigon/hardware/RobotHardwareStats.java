@@ -6,8 +6,8 @@ public class RobotHardwareStats {
     private static double PERIODIC_TIME_SECONDS = 0.02;
 
     public static void setCurrentRobotStats(boolean isReal, boolean isSimulation, boolean isReplay) {
-        IS_SIMULATION = isSimulation && isReal;
-        IS_REPLAY = isReplay && isReal;
+        IS_SIMULATION = isSimulation && !isReal;
+        IS_REPLAY = isReplay && !isReal;
     }
 
     public static void setPeriodicTimeSeconds(double periodicTimeSeconds) {
