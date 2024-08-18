@@ -23,10 +23,8 @@ public class Phoenix6Inputs extends BaseInputs {
     public void toLog(LogTable table) {
         if (signals.length == 0)
             return;
-        BaseStatusSignal.refreshAll(signals);
         for (BaseStatusSignal signal : signals) {
-            if (signal.getName().equals("ClosedLoopReference"))
-                ((StatusSignal<Double>) signal).refresh();
+            ((StatusSignal<Double>) signal).refresh();
             table.put(signal.getName(), signal.getValueAsDouble());
         }
         for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
