@@ -4,6 +4,10 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.Phoenix6Inputs;
@@ -26,7 +30,11 @@ public class TalonFXMotor {
         this.motorIO = generateIO(id, canbus);
         this.motorInputs = new Phoenix6Inputs(motorName);
         this.id = id;
-        motorIO.optimizeBusUsage();
+        Commands.run(this::dl);
+    }
+
+    private Command dl() {
+        return new WaitCommand(5).andThen(new InstantCommand(motorIO::optimizeBusUsage));
     }
 
     public void update() {
