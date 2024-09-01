@@ -79,8 +79,8 @@ public class TalonFXMotor {
         motorInputs.registerSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
-    public void registerThreadedSignal(TalonFXSignal signal, TalonFXSignal slopeSignal, double updateFrequencyHertz) {
-        motorInputs.registerThreadedSignal(motorSignalToStatusSignal(signal), motorSignalToStatusSignal(slopeSignal), updateFrequencyHertz);
+    public void registerThreadedSignal(TalonFXSignal signal, double updateFrequencyHertz) {
+        motorInputs.registerThreadedSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
     public void setControl(ControlRequest request) {

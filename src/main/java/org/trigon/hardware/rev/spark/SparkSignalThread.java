@@ -67,9 +67,8 @@ public class SparkSignalThread extends SignalThreadBase {
         SIGNALS_LOCK.lock();
         timestamps.offer(Logger.getRealTimestamp() / 1.0e6);
         try {
-            for (int i = 0; i < signals.size(); i++) {
+            for (int i = 0; i < signals.size(); i++)
                 queues.get(i).offer(signals.get(i).getAsDouble());
-            }
         } finally {
             SIGNALS_LOCK.unlock();
         }

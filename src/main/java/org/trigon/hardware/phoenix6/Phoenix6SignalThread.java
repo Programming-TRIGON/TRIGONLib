@@ -14,7 +14,6 @@
 package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusSignal;
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
@@ -29,7 +28,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Phoenix6SignalThread extends SignalThreadBase {
     public static ReentrantLock SIGNALS_LOCK = new ReentrantLock();
-    private static final boolean IS_CAN_FD = true;
     private final List<Queue<Double>> queues = new ArrayList<>();
     private BaseStatusSignal[] signals = new BaseStatusSignal[0];
 
@@ -51,15 +49,11 @@ public class Phoenix6SignalThread extends SignalThreadBase {
         start();
     }
 
-    public Queue<Double> registerSignal(BaseStatusSignal signal, BaseStatusSignal slopeSignal) {
+    public Queue<Double> registerSignal(BaseStatusSignal signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         SIGNALS_LOCK.lock();
         try {
-            BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 2];
-            System.arraycopy(signals, 0, newSignals, 0, signals.length);
-            newSignals[signals.length] = signal;
-            newSignals[signals.length + 1] = slopeSignal;
-            signals = newSignals;
+            addSignalToSignalsArray(signal);
             queues.add(queue);
         } finally {
             SIGNALS_LOCK.unlock();
@@ -70,33 +64,36 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     @Override
     public void run() {
         Timer.delay(5);
-        while (true) {
-            // Wait for updates from all signals
-            try {
-                if (IS_CAN_FD) {
-                    BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals);
-                } else {
-                    Thread.sleep((long) (1000.0 / super.odometryFrequencyHertz));
-                    if (signals.length > 0) BaseStatusSignal.refreshAll(signals);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            double fpgaTimestamp = Logger.getRealTimestamp() / 1.0e6;
 
-            // Save new data to queues
-            SIGNALS_LOCK.lock();
-            try {
-                for (int i = 0; i < signals.length; i += 2) {
-                    final StatusSignal<Double> signal = (StatusSignal<Double>) signals[i];
-                    final StatusSignal<Double> slopeSignal = (StatusSignal<Double>) signals[i + 1];
-                    final double latencyCompensatedValue = BaseStatusSignal.getLatencyCompensatedValue(signal, slopeSignal);
-                    queues.get(i / 2).offer(latencyCompensatedValue);
-                }
-                timestamps.offer(fpgaTimestamp);
-            } finally {
-                SIGNALS_LOCK.unlock();
-            }
+        while (true)
+            updateValues();
+    }
+
+    private void updateValues() {
+        BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals);
+        final double updateTimestamp = (Logger.getRealTimestamp() / 1.0e6) - signals[0].getTimestamp().getLatency();
+
+        SIGNALS_LOCK.lock();
+        try {
+            updateQueues(updateTimestamp);
+        } finally {
+            SIGNALS_LOCK.unlock();
         }
+    }
+
+    private void updateQueues(double updateTimestamp) {
+        for (int i = 0; i < signals.length; i += 1) {
+            final BaseStatusSignal signal = signals[i];
+            queues.get(i).offer(signal.getValueAsDouble());
+        }
+
+        timestamps.offer(updateTimestamp);
+    }
+
+    private void addSignalToSignalsArray(BaseStatusSignal statusSignal) {
+        final BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 1];
+        System.arraycopy(signals, 0, newSignals, 0, signals.length);
+        newSignals[signals.length] = statusSignal;
+        signals = newSignals;
     }
 }
