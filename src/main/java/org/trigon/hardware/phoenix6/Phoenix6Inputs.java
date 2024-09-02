@@ -41,6 +41,8 @@ public class Phoenix6Inputs extends BaseInputs {
     public void registerSignal(BaseStatusSignal statusSignal, double updateFrequencyHertz) {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;
+        if (RobotHardwareStats.isSimulation())
+            updateFrequencyHertz = 1000; // For some reason, simulation sometimes malfunctions if a status signal isn't updated frequently enough.
 
         statusSignal.setUpdateFrequency(updateFrequencyHertz);
         addSignalToSignalsArray(statusSignal);

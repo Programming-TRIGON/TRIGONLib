@@ -7,15 +7,15 @@ import org.trigon.hardware.SignalUtilities;
 import java.util.function.Function;
 
 public enum TalonFXSignal {
-    POSITION((motor) -> motor.getPosition().clone()),
-    VELOCITY((motor) -> motor.getVelocity().clone()),
-    TORQUE_CURRENT((motor) -> motor.getTorqueCurrent().clone()),
-    STATOR_CURRENT((motor) -> motor.getStatorCurrent().clone()),
-    SUPPLY_CURRENT((motor) -> motor.getSupplyCurrent().clone()),
-    CLOSED_LOOP_REFERENCE((motor) -> motor.getClosedLoopReference().clone()),
-    MOTOR_VOLTAGE((motor) -> motor.getMotorVoltage().clone()),
-    FORWARD_LIMIT((motor) -> motor.getForwardLimit().clone()),
-    REVERSE_LIMIT((motor) -> motor.getReverseLimit().clone());
+    POSITION(TalonFX::getPosition),
+    VELOCITY(TalonFX::getVelocity),
+    TORQUE_CURRENT(TalonFX::getTorqueCurrent),
+    STATOR_CURRENT(TalonFX::getStatorCurrent),
+    SUPPLY_CURRENT(TalonFX::getSupplyCurrent),
+    CLOSED_LOOP_REFERENCE(TalonFX::getClosedLoopReference),
+    MOTOR_VOLTAGE(TalonFX::getMotorVoltage),
+    FORWARD_LIMIT(TalonFX::getForwardLimit),
+    REVERSE_LIMIT(TalonFX::getReverseLimit);
 
     final String name;
     final Function<TalonFX, BaseStatusSignal> signalFunction;
