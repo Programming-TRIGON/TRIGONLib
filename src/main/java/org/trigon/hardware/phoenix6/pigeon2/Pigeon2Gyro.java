@@ -81,8 +81,8 @@ public class Pigeon2Gyro {
         gyroInputs.registerSignal(pigeon2SignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
-    public void registerThreadedSignal(Pigeon2Signal signal, Pigeon2Signal slopeSignal, double updateFrequencyHertz) {
-        gyroInputs.registerThreadedSignal(pigeon2SignalToStatusSignal(signal), pigeon2SignalToStatusSignal(slopeSignal), updateFrequencyHertz);
+    public void registerThreadedSignal(Pigeon2Signal signal, double updateFrequencyHertz) {
+        gyroInputs.registerThreadedSignal(pigeon2SignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
     private BaseStatusSignal pigeon2SignalToStatusSignal(Pigeon2Signal signal) {

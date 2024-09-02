@@ -82,8 +82,8 @@ public class CANcoderEncoder {
         encoderInputs.registerSignal(encoderSignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
-    public void registerThreadedSignal(CANcoderSignal signal, CANcoderSignal slopeSignal, double updateFrequencyHertz) {
-        encoderInputs.registerThreadedSignal(encoderSignalToStatusSignal(signal), encoderSignalToStatusSignal(slopeSignal), updateFrequencyHertz);
+    public void registerThreadedSignal(CANcoderSignal signal, double updateFrequencyHertz) {
+        encoderInputs.registerThreadedSignal(encoderSignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
     private BaseStatusSignal encoderSignalToStatusSignal(CANcoderSignal signal) {
