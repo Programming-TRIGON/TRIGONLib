@@ -35,6 +35,7 @@ public class Phoenix6Inputs extends BaseInputs {
             return;
 
         registerSignal(statusSignal, updateFrequencyHertz);
+        statusSignal.setUpdateFrequency(50);
         signalToThreadedQueue.put(statusSignal.getName() + "_Threaded", signalThread.registerSignal(statusSignal));
     }
 
