@@ -26,7 +26,7 @@ public class TalonFXMotor {
         this.motorIO = generateIO(id, canbus);
         this.motorInputs = new Phoenix6Inputs(motorName);
         this.id = id;
-//        motorIO.optimizeBusUsage();
+        motorIO.optimizeBusUsage();
     }
 
     public void update() {
