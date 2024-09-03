@@ -11,6 +11,7 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
     private final double diameterMeters;
 
     public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters, double retractedHeightMeters, double maximumHeightMeters, boolean simulateGravity) {
+        super(gearRatio);
         diameterMeters = drumRadiusMeters + drumRadiusMeters;
         this.retractedHeightMeters = retractedHeightMeters;
         elevatorSimulation = new ElevatorSim(
@@ -31,12 +32,12 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
     }
 
     @Override
-    public double getPositionRotations() {
+    public double getSystemPositionRotations() {
         return Conversions.distanceToRotations(elevatorSimulation.getPositionMeters() - retractedHeightMeters, diameterMeters);
     }
 
     @Override
-    public double getVelocityRotationsPerSecond() {
+    public double getSystemVelocityRotationsPerSecond() {
         return Conversions.distanceToRotations(elevatorSimulation.getVelocityMetersPerSecond(), diameterMeters);
     }
 

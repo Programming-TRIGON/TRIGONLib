@@ -10,6 +10,7 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     private final DCMotorSim motorSimulation;
 
     public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+        super(gearRatio);
         motorSimulation = new DCMotorSim(gearbox, gearRatio, momentOfInertia);
     }
 
@@ -19,12 +20,12 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     }
 
     @Override
-    public double getPositionRotations() {
+    public double getSystemPositionRotations() {
         return Units.radiansToRotations(motorSimulation.getAngularPositionRad());
     }
 
     @Override
-    public double getVelocityRotationsPerSecond() {
+    public double getSystemVelocityRotationsPerSecond() {
         return Units.radiansToRotations(motorSimulation.getAngularVelocityRadPerSec());
     }
 

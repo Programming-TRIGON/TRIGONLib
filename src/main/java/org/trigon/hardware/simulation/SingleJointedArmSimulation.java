@@ -11,6 +11,7 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
     private final SingleJointedArmSim armSimulation;
 
     public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMassKilograms, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity) {
+        super(gearRatio);
         armSimulation = new SingleJointedArmSim(
                 gearbox,
                 gearRatio,
@@ -29,12 +30,12 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
     }
 
     @Override
-    public double getPositionRotations() {
+    public double getSystemPositionRotations() {
         return Units.radiansToRotations(armSimulation.getAngleRads());
     }
 
     @Override
-    public double getVelocityRotationsPerSecond() {
+    public double getSystemVelocityRotationsPerSecond() {
         return Units.radiansToRotations(armSimulation.getVelocityRadPerSec());
     }
 

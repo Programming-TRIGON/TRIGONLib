@@ -26,8 +26,8 @@ public class SimulationTalonFXIO extends TalonFXIO {
             return;
         physicsSimulation.setInputVoltage(motorSimState.getMotorVoltage());
         physicsSimulation.updateMotor();
-        motorSimState.setRawRotorPosition(physicsSimulation.getPositionRotations());
-        motorSimState.setRotorVelocity(physicsSimulation.getVelocityRotationsPerSecond());
+        motorSimState.setRawRotorPosition(physicsSimulation.getRotorPositionRotations());
+        motorSimState.setRotorVelocity(physicsSimulation.getRotorVelocityRotationsPerSecond());
     }
 
     @Override
@@ -43,9 +43,11 @@ public class SimulationTalonFXIO extends TalonFXIO {
     @Override
     public void applyConfiguration(TalonFXConfiguration configuration) {
         configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        configuration.Feedback.SensorToMechanismRatio = 1;
-        configuration.Feedback.RotorToSensorRatio = 1;
         configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        if (configuration.Feedback.RotorToSensorRatio != 1.0) {
+            configuration.Feedback.SensorToMechanismRatio *= configuration.Feedback.RotorToSensorRatio;
+            configuration.Feedback.RotorToSensorRatio = 1.0;
+        }
         talonFX.getConfigurator().apply(configuration);
     }
 
