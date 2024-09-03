@@ -12,10 +12,12 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     private double lastPositionRadians = 0;
 
     public FlywheelSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+        super(gearRatio);
         flywheelSimulation = new FlywheelSim(gearbox, gearRatio, momentOfInertia);
     }
 
     public FlywheelSimulation(DCMotor gearbox, double gearRatio, double kv, double ka) {
+        super(gearRatio);
         flywheelSimulation = new FlywheelSim(LinearSystemId.identifyVelocitySystem(kv, ka), gearbox, gearRatio);
     }
 
@@ -25,12 +27,12 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     }
 
     @Override
-    public double getPositionRotations() {
+    public double getSystemPositionRotations() {
         return Units.radiansToRotations(lastPositionRadians);
     }
 
     @Override
-    public double getVelocityRotationsPerSecond() {
+    public double getSystemVelocityRotationsPerSecond() {
         return Units.radiansToRotations(flywheelSimulation.getAngularVelocityRadPerSec());
     }
 
