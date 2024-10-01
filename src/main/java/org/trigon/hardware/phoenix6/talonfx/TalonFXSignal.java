@@ -9,6 +9,8 @@ import java.util.function.Function;
 public enum TalonFXSignal {
     POSITION(TalonFX::getPosition),
     VELOCITY(TalonFX::getVelocity),
+    ROTOR_VELOCITY(TalonFX::getRotorVelocity),
+    ROTOR_POSITION(TalonFX::getRotorPosition),
     TORQUE_CURRENT(TalonFX::getTorqueCurrent),
     STATOR_CURRENT(TalonFX::getStatorCurrent),
     SUPPLY_CURRENT(TalonFX::getSupplyCurrent),
