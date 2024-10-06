@@ -27,6 +27,7 @@ public class GearRatioCalculationCommand extends Command {
         this.encoderPositionSupplier = encoderPositionSupplier;
         this.runGearRatioCalculation = runGearRatioCalculation;
         this.subsystemName = repeatedly().getName();
+      
         addRequirements(requirement);
     }
 
