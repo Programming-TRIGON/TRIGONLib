@@ -10,13 +10,13 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 public class GearRatioCalculationCommand extends Command {
-    private final LoggedDashboardNumber MOVEMENT_VOLTAGE;
-    private final LoggedDashboardBoolean SHOULD_MOVE_CLOCKWISE;
-
     private final DoubleSupplier rotorPositionSupplier;
     private final DoubleSupplier encoderPositionSupplier;
     private final DoubleConsumer runGearRatioCalculation;
     private final String subsystemName;
+
+    private final LoggedDashboardNumber movementVoltage;
+    private final LoggedDashboardBoolean shouldMoveClockwise;
 
     private double startingRotorPosition;
     private double startingEncoderPosition;
@@ -28,9 +28,10 @@ public class GearRatioCalculationCommand extends Command {
         this.runGearRatioCalculation = runGearRatioCalculation;
         this.subsystemName = requirement.getName();
 
+        this.movementVoltage = new LoggedDashboardNumber("GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
+        this.shouldMoveClockwise = new LoggedDashboardBoolean("GearRatioCalculation/" + this.subsystemName + "/ShouldMoveClockwise", false);
+
         addRequirements(requirement);
-        MOVEMENT_VOLTAGE = new LoggedDashboardNumber("GearRatioCalculation/" + subsystemName + "/Voltage", 1);
-        SHOULD_MOVE_CLOCKWISE = new LoggedDashboardBoolean("GearRatioCalculation/" + subsystemName + "/ShouldMoveClockwise", false);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class GearRatioCalculationCommand extends Command {
 
     @Override
     public void execute() {
-        runGearRatioCalculation.accept(MOVEMENT_VOLTAGE.get() * getRotationDirection());
+        runGearRatioCalculation.accept(movementVoltage.get() * getRotationDirection());
         gearRatio = calculateGearRatio();
 
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
@@ -69,7 +70,7 @@ public class GearRatioCalculationCommand extends Command {
     }
 
     private int getRotationDirection() {
-        return SHOULD_MOVE_CLOCKWISE.get() ? -1 : 1;
+        return shouldMoveClockwise.get() ? -1 : 1;
     }
 
     private void printResult() {
