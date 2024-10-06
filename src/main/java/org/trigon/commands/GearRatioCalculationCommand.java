@@ -10,8 +10,8 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 public class GearRatioCalculationCommand extends Command {
-    private static final LoggedDashboardNumber MOVEMENT_VOLTAGE = new LoggedDashboardNumber("GearRatioCalculation/Voltage", 1);
-    private static final LoggedDashboardBoolean SHOULD_MOVE_CLOCKWISE = new LoggedDashboardBoolean("GearRatioCalculation/ShouldMoveClockwise", false);
+    private final LoggedDashboardNumber MOVEMENT_VOLTAGE;
+    private final LoggedDashboardBoolean SHOULD_MOVE_CLOCKWISE;
 
     private final DoubleSupplier rotorPositionSupplier;
     private final DoubleSupplier encoderPositionSupplier;
@@ -26,9 +26,11 @@ public class GearRatioCalculationCommand extends Command {
         this.rotorPositionSupplier = rotorPositionSupplier;
         this.encoderPositionSupplier = encoderPositionSupplier;
         this.runGearRatioCalculation = runGearRatioCalculation;
-        this.subsystemName = repeatedly().getName();
-      
+        this.subsystemName = requirement.getName();
+
         addRequirements(requirement);
+        MOVEMENT_VOLTAGE = new LoggedDashboardNumber("GearRatioCalculation/" + subsystemName + "/Voltage", 1);
+        SHOULD_MOVE_CLOCKWISE = new LoggedDashboardBoolean("GearRatioCalculation/" + subsystemName + "/ShouldMoveClockwise", false);
     }
 
     @Override
@@ -42,9 +44,9 @@ public class GearRatioCalculationCommand extends Command {
         runGearRatioCalculation.accept(MOVEMENT_VOLTAGE.get() * getRotationDirection());
         gearRatio = calculateGearRatio();
 
-        Logger.recordOutput(subsystemName + "GearRatioCalculation/RotorDistance", getRotorDistance());
-        Logger.recordOutput(subsystemName + "GearRatioCalculation/EncoderDistance", getEncoderDistance());
-        Logger.recordOutput(subsystemName + "GearRatioCalculation/GearRatio", gearRatio);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", getEncoderDistance());
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
     }
 
     @Override
