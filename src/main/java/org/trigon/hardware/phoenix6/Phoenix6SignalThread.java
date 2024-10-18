@@ -14,7 +14,6 @@
 package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusCode;
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
@@ -71,12 +70,8 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     }
 
     private void updateValues() {
-        final StatusCode waitForAllStatus = BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals);
-        if (waitForAllStatus != StatusCode.OK) {
-            System.out.println("Phoenix6SignalThread Failed to get all signals: " + waitForAllStatus);
-            return;
-        }
-        final double updateTimestamp = (Logger.getRealTimestamp() / 1.0e6) - signals[0].getTimestamp().getLatency();
+        BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals);
+        final double updateTimestamp = (Logger.getRealTimestamp() / 1e6) - signals[0].getTimestamp().getLatency();
 
         SIGNALS_LOCK.lock();
         try {
