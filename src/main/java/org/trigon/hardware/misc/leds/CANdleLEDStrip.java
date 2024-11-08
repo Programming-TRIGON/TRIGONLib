@@ -21,6 +21,11 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
+    void clearLEDColors() {
+        CANDLE.clearAnimation(animationSlot);
+    }
+
+    @Override
     void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds) {
         CANDLE.animate(
                 new SingleFadeAnimation(
@@ -76,10 +81,6 @@ public class CANdleLEDStrip extends LEDStrip {
         );
     }
 
-    @Override
-    void sectionColor(int amountOfSections, Supplier<Color>[] colors) {
-
-    }
 
     @Override
     void rainbow(double brightness, double speed) {
@@ -96,7 +97,36 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void clearLEDColors() {
-        CANDLE.clearAnimation(animationSlot);
+    void sectionColor(int amountOfSections, Supplier<Color>[] colors) {
+        if (amountOfSections != colors.length)
+            throw new IllegalArgumentException("Amount of sections must be equal to the amount of colors");
+        final int LEDSPerSection = (int) Math.floor(numberOfLEDs / amountOfSections);
+        setSectionColor(amountOfSections, LEDSPerSection, colors);
+    }
+
+    private void setSectionColor(int amountOfSections, int LEDSPerSection, Supplier<Color>[] colors) {
+        if (inverted) {
+            for (int i = 0; i < amountOfSections; i++) {
+                CANDLE.setLEDs(
+                        colors[amountOfSections - i - 1].get().getRed(),
+                        colors[amountOfSections - i - 1].get().getGreen(),
+                        colors[amountOfSections - i - 1].get().getBlue(),
+                        0,
+                        LEDSPerSection * i + indexOffset,
+                        i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDSPerSection * (i + 1) - 1
+                );
+            }
+            return;
+        }
+        for (int i = 0; i < amountOfSections; i++) {
+            CANDLE.setLEDs(
+                    colors[i].get().getRed(),
+                    colors[i].get().getGreen(),
+                    colors[i].get().getBlue(),
+                    0,
+                    LEDSPerSection * i + indexOffset,
+                    i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDSPerSection * (i + 1) - 1
+            );
+        }
     }
 }
