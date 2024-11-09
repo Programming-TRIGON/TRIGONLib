@@ -3,6 +3,7 @@ package org.trigon.hardware.misc.leds;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import org.trigon.commands.ExecuteEndCommand;
 
 import java.awt.*;
@@ -24,16 +25,35 @@ public class LEDCommands {
         ).ignoringDisable(true);
     }
 
-    public static Command getBreathingCommand(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDStrip... ledStrips) {
-        return new ExecuteEndCommand(
-                () -> runForLEDs((LEDStrip -> LEDStrip.breath(color, breathingLEDs, cycleTimeSeconds, shouldLoop, inverted, bounceMode)), ledStrips),
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips)
+    public static Command getBreatheCommand(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDStrip... ledStrips) {
+        return new FunctionalCommand(
+                () -> {
+                    if (!shouldLoop)
+                        runForLEDs(LEDStrip::resetLEDSettings, ledStrips);
+                },
+                () -> runForLEDs((LEDStrip) -> LEDStrip.breathe(color, breathingLEDs, cycleTimeSeconds, shouldLoop, inverted, bounceMode), ledStrips),
+                (interrupted) -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
+                () -> false,
+                ledStrips
         ).ignoringDisable(true);
     }
 
-    public static Command getTwinkleCommand(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider) {
+    public static Command getColorFlowCommand(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LEDStrip... ledStrips) {
+        return new FunctionalCommand(
+                () -> {
+                    if (!shouldLoop)
+                        runForLEDs(LEDStrip::resetLEDSettings, ledStrips);
+                },
+                () -> runForLEDs((LEDStrip) -> LEDStrip.colorFlow(color, cycleTimeSeconds, shouldLoop, inverted), ledStrips),
+                (interrupted) -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
+                () -> false,
+                ledStrips
+        ).ignoringDisable(true);
+    }
+
+    public static Command getAlternateColorCommand(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider) {
         return new ExecuteEndCommand(
-                () -> runForLEDs(LEDStrip -> LEDStrip.twinkle(firstColor, secondColor, intervalSeconds, divider), LEDStrip.LED_STRIPS),
+                () -> runForLEDs(LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds, divider), LEDStrip.LED_STRIPS),
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrip.LED_STRIPS)
         ).ignoringDisable(true);
     }

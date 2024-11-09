@@ -19,6 +19,8 @@ public class AddressableLEDStrip extends LEDStrip {
     private double lastBlinkTime = 0;
     private boolean alternateColor = true;
     private double lastAlternateColorTime = 0;
+    private double lastColorFlowTime = 0;
+    private int amountOfColorFlowLEDs = 0;
 
     public static void setLED(AddressableLED led) {
         LED = led;
@@ -62,7 +64,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void breath(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         clearLEDColors();
         inverted = this.inverted != inverted;
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
@@ -90,7 +92,33 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void twinkle(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider) {
+    void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted) {
+        clearLEDColors();
+        inverted = this.inverted != inverted;
+        double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
+        if (Timer.getFPGATimestamp() - lastColorFlowTime > moveLEDTimeSeconds) {
+            lastColorFlowTime = Timer.getFPGATimestamp();
+            if (inverted)
+                amountOfColorFlowLEDs--;
+            else
+                amountOfColorFlowLEDs++;
+        }
+        if (inverted ? amountOfColorFlowLEDs < 0 : amountOfColorFlowLEDs >= numberOfLEDs) {
+            if (!shouldLoop) {
+                getDefaultCommand().schedule();
+                return;
+            }
+            amountOfColorFlowLEDs = inverted ? numberOfLEDs : 0;
+        }
+        if (inverted) {
+            setLEDColors(color, numberOfLEDs - amountOfColorFlowLEDs, numberOfLEDs - 1);
+            return;
+        }
+        setLEDColors(color, 0, amountOfColorFlowLEDs);
+    }
+
+    @Override
+    void alternateColor(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider) {
         if (Timer.getFPGATimestamp() - lastAlternateColorTime > intervalSeconds) {
             alternateColor = !alternateColor;
             lastAlternateColorTime = Timer.getFPGATimestamp();
@@ -129,6 +157,19 @@ public class AddressableLEDStrip extends LEDStrip {
         setSectionColor(amountOfSections, LEDSPerSection, colors);
     }
 
+    @Override
+    void resetLEDSettings() {
+        lastBreatheLED = indexOffset;
+        lastBreatheMovementTime = Timer.getFPGATimestamp();
+        rainbowFirstPixelHue = 0;
+        areLEDsOnForBlinking = false;
+        lastBlinkTime = 0;
+        alternateColor = true;
+        lastAlternateColorTime = 0;
+        lastColorFlowTime = 0;
+        amountOfColorFlowLEDs = 0;
+    }
+
     private void setSectionColor(int amountOfSections, int LEDSPerSection, Supplier<Color>[] colors) {
         if (inverted) {
             for (int i = 0; i < amountOfSections; i++)
@@ -142,16 +183,6 @@ public class AddressableLEDStrip extends LEDStrip {
     private void setLEDColors(Color color, int startIndex, int endIndex) {
         for (int i = 0; i <= endIndex - startIndex; i++)
             LED_BUFFER.setLED(startIndex + indexOffset + i, convertToColor(color));
-    }
-
-    private void resetLEDSettings() {
-        lastBreatheLED = indexOffset;
-        lastBreatheMovementTime = Timer.getFPGATimestamp();
-        rainbowFirstPixelHue = 0;
-        areLEDsOnForBlinking = false;
-        lastBlinkTime = 0;
-        alternateColor = true;
-        lastAlternateColorTime = 0;
     }
 
     private edu.wpi.first.wpilibj.util.Color convertToColor(Color color) {

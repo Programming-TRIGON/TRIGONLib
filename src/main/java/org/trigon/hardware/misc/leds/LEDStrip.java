@@ -31,13 +31,18 @@ public abstract class LEDStrip extends SubsystemBase {
         return numberOfLEDs;
     }
 
+    void resetLEDSettings() {
+    }
+
     abstract void staticColor(Color color);
 
     abstract void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds);
 
-    abstract void breath(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode);
+    abstract void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode);
 
-    abstract void twinkle(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider);
+    abstract void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted);
+
+    abstract void alternateColor(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider);
 
     abstract void sectionColor(int amountOfSections, Supplier<Color>[] colors);
 
