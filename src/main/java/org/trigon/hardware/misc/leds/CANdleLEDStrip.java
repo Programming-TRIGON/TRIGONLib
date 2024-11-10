@@ -2,8 +2,8 @@ package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 
-import java.awt.*;
 import java.util.function.Supplier;
 
 public class CANdleLEDStrip extends LEDStrip {
@@ -32,9 +32,9 @@ public class CANdleLEDStrip extends LEDStrip {
     void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds) {
         CANDLE.animate(
                 new SingleFadeAnimation(
-                        firstColor.getRed(),
-                        firstColor.getGreen(),
-                        firstColor.getBlue(),
+                        (int) firstColor.red,
+                        (int) firstColor.green,
+                        (int) firstColor.blue,
                         0,
                         blinkingIntervalSeconds,
                         this.numberOfLEDs,
@@ -46,16 +46,16 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void staticColor(Color color) {
-        CANDLE.setLEDs(color.getRed(), color.getGreen(), color.getBlue(), 0, indexOffset, numberOfLEDs);
+        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, indexOffset, numberOfLEDs);
     }
 
     @Override
     void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         CANDLE.animate(
                 new LarsonAnimation(
-                        color.getRed(),
-                        color.getGreen(),
-                        color.getBlue(),
+                        (int) color.red,
+                        (int) color.green,
+                        (int) color.blue,
                         0,
                         cycleTimeSeconds,
                         this.numberOfLEDs,
@@ -76,9 +76,9 @@ public class CANdleLEDStrip extends LEDStrip {
         if (alternateColor) {
             for (int i = 0; i < numberOfLEDs; i++)
                 CANDLE.setLEDs(
-                        firstColor.getRed(),
-                        firstColor.getGreen(),
-                        firstColor.getBlue(),
+                        (int) firstColor.red,
+                        (int) firstColor.green,
+                        (int) firstColor.blue,
                         0,
                         i + indexOffset,
                         1
@@ -87,9 +87,9 @@ public class CANdleLEDStrip extends LEDStrip {
         }
         for (int i = 0; i < numberOfLEDs; i++)
             CANDLE.setLEDs(
-                    firstColor.getRed(),
-                    firstColor.getGreen(),
-                    firstColor.getBlue(),
+                    (int) firstColor.red,
+                    (int) firstColor.green,
+                    (int) firstColor.blue,
                     0,
                     i + indexOffset,
                     1
@@ -100,9 +100,9 @@ public class CANdleLEDStrip extends LEDStrip {
     void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted) {
         CANDLE.animate(
                 new ColorFlowAnimation(
-                        color.getRed(),
-                        color.getGreen(),
-                        color.getBlue(),
+                        (int) color.red,
+                        (int) color.green,
+                        (int) color.blue,
                         0,
                         cycleTimeSeconds,
                         this.numberOfLEDs,
@@ -139,9 +139,9 @@ public class CANdleLEDStrip extends LEDStrip {
         if (inverted) {
             for (int i = 0; i < amountOfSections; i++) {
                 CANDLE.setLEDs(
-                        colors[amountOfSections - i - 1].get().getRed(),
-                        colors[amountOfSections - i - 1].get().getGreen(),
-                        colors[amountOfSections - i - 1].get().getBlue(),
+                        (int) colors[amountOfSections - i - 1].get().red,
+                        (int) colors[amountOfSections - i - 1].get().green,
+                        (int) colors[amountOfSections - i - 1].get().blue,
                         0,
                         LEDSPerSection * i + indexOffset,
                         i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDSPerSection * (i + 1) - 1
@@ -151,9 +151,9 @@ public class CANdleLEDStrip extends LEDStrip {
         }
         for (int i = 0; i < amountOfSections; i++) {
             CANDLE.setLEDs(
-                    colors[i].get().getRed(),
-                    colors[i].get().getGreen(),
-                    colors[i].get().getBlue(),
+                    (int) colors[i].get().red,
+                    (int) colors[i].get().green,
+                    (int) colors[i].get().blue,
                     0,
                     LEDSPerSection * i + indexOffset,
                     i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDSPerSection * (i + 1) - 1

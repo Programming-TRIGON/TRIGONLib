@@ -5,8 +5,8 @@ import com.ctre.phoenix.led.TwinkleAnimation;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 
-import java.awt.*;
 import java.util.function.Supplier;
 
 public class AddressableLEDStrip extends LEDStrip {
@@ -42,7 +42,7 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     void clearLEDColors() {
-        staticColor(Color.BLACK);
+        staticColor(Color.kBlack);
     }
 
     @Override
@@ -85,9 +85,9 @@ public class AddressableLEDStrip extends LEDStrip {
         }
         for (int i = 0; i < breathingLEDs; i++) {
             if (lastBreatheLED - i >= indexOffset && lastBreatheLED - i < indexOffset + numberOfLEDs)
-                LED_BUFFER.setLED(lastBreatheLED - i, convertToColor(color));
+                LED_BUFFER.setLED(lastBreatheLED - i, color);
             else if (lastBreatheLED - i < indexOffset + numberOfLEDs)
-                LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, convertToColor(color));
+                LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, color);
         }
     }
 
@@ -125,11 +125,11 @@ public class AddressableLEDStrip extends LEDStrip {
         }
         if (alternateColor) {
             for (int i = 0; i < numberOfLEDs; i++)
-                LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? convertToColor(firstColor) : convertToColor(secondColor));
+                LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? firstColor : secondColor);
             return;
         }
         for (int i = 0; i < numberOfLEDs; i++)
-            LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? convertToColor(secondColor) : convertToColor(firstColor));
+            LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? secondColor : firstColor);
     }
 
 
@@ -182,10 +182,6 @@ public class AddressableLEDStrip extends LEDStrip {
 
     private void setLEDColors(Color color, int startIndex, int endIndex) {
         for (int i = 0; i <= endIndex - startIndex; i++)
-            LED_BUFFER.setLED(startIndex + indexOffset + i, convertToColor(color));
-    }
-
-    private edu.wpi.first.wpilibj.util.Color convertToColor(Color color) {
-        return new edu.wpi.first.wpilibj.util.Color(color.getRed(), color.getGreen(), color.getBlue());
+            LED_BUFFER.setLED(startIndex + indexOffset + i, color);
     }
 }

@@ -2,11 +2,11 @@ package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.TwinkleAnimation;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import org.trigon.commands.ExecuteEndCommand;
 
-import java.awt.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -72,7 +72,7 @@ public class LEDCommands {
         ).ignoringDisable(true);
     }
 
-    public static void runForLEDs(Consumer<LEDStrip> action, LEDStrip... ledStrips) {
+    private static void runForLEDs(Consumer<LEDStrip> action, LEDStrip... ledStrips) {
         for (LEDStrip LEDStrip : ledStrips)
             action.accept(LEDStrip);
     }
