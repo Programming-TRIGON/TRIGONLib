@@ -98,6 +98,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted) {
+        inverted = this.inverted != inverted;
         CANDLE.animate(
                 new ColorFlowAnimation(
                         (int) color.red,
