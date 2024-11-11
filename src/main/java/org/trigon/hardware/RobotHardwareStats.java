@@ -6,11 +6,12 @@ public class RobotHardwareStats {
     private static double PERIODIC_TIME_SECONDS = 0.02;
 
     public static void setCurrentRobotStats(boolean isReal, ReplayType replayType) {
-        if (isReal && replayType.equals(ReplayType.NONE)) {
+        if (isReal || replayType.equals(ReplayType.NONE)) {
             IS_SIMULATION = !isReal;
             IS_REPLAY = false;
             return;
         }
+        
         IS_SIMULATION = replayType.equals(ReplayType.SIMULATION_REPLAY);
         IS_REPLAY = true;
     }
