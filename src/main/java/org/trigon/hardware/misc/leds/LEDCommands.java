@@ -1,7 +1,6 @@
 package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.LarsonAnimation;
-import com.ctre.phoenix.led.TwinkleAnimation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -51,9 +50,9 @@ public class LEDCommands {
         ).ignoringDisable(true);
     }
 
-    public static Command getAlternateColorCommand(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider) {
+    public static Command getAlternateColorCommand(Color firstColor, Color secondColor, double intervalSeconds, LEDStrip... ledStrips) {
         return new ExecuteEndCommand(
-                () -> runForLEDs(LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds, divider), LEDStrip.LED_STRIPS),
+                () -> runForLEDs(LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds), ledStrips),
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrip.LED_STRIPS)
         ).ignoringDisable(true);
     }

@@ -68,7 +68,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void alternateColor(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider) {
+    void alternateColor(Color firstColor, Color secondColor, double intervalSeconds) {
         if (Timer.getFPGATimestamp() - lastAlternateColorTime > intervalSeconds) {
             alternateColor = !alternateColor;
             lastAlternateColorTime = Timer.getFPGATimestamp();

@@ -1,7 +1,6 @@
 package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.LarsonAnimation;
-import com.ctre.phoenix.led.TwinkleAnimation;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,13 +12,10 @@ public class AddressableLEDStrip extends LEDStrip {
     private static AddressableLED LED;
     private static AddressableLEDBuffer LED_BUFFER;
     private int lastBreatheLED;
-    private double lastBreatheMovementTime = 0;
+    private double lastLEDMovementTime = 0;
     private double rainbowFirstPixelHue = 0;
     private boolean areLEDsOnForBlinking = false;
-    private double lastBlinkTime = 0;
     private boolean alternateColor = true;
-    private double lastAlternateColorTime = 0;
-    private double lastColorFlowTime = 0;
     private int amountOfColorFlowLEDs = 0;
 
     public static void setLED(AddressableLED led) {
@@ -48,8 +44,8 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds) {
         double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastBlinkTime > blinkingIntervalSeconds) {
-            lastBlinkTime = currentTime;
+        if (currentTime - lastLEDMovementTime > blinkingIntervalSeconds) {
+            lastLEDMovementTime = currentTime;
             areLEDsOnForBlinking = !areLEDsOnForBlinking;
         }
         if (areLEDsOnForBlinking)
@@ -69,8 +65,8 @@ public class AddressableLEDStrip extends LEDStrip {
         inverted = this.inverted != inverted;
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
         double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastBreatheMovementTime > moveLEDTimeSeconds) {
-            lastBreatheMovementTime = currentTime;
+        if (currentTime - lastLEDMovementTime > moveLEDTimeSeconds) {
+            lastLEDMovementTime = currentTime;
             if (inverted)
                 lastBreatheLED--;
             else
@@ -96,8 +92,9 @@ public class AddressableLEDStrip extends LEDStrip {
         clearLEDColors();
         inverted = this.inverted != inverted;
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
-        if (Timer.getFPGATimestamp() - lastColorFlowTime > moveLEDTimeSeconds) {
-            lastColorFlowTime = Timer.getFPGATimestamp();
+        double currentTime = Timer.getFPGATimestamp();
+        if (currentTime - lastLEDMovementTime > moveLEDTimeSeconds) {
+            lastLEDMovementTime = currentTime;
             if (inverted)
                 amountOfColorFlowLEDs--;
             else
@@ -118,10 +115,11 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void alternateColor(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider) {
-        if (Timer.getFPGATimestamp() - lastAlternateColorTime > intervalSeconds) {
+    void alternateColor(Color firstColor, Color secondColor, double intervalSeconds) {
+        double currentTime = Timer.getFPGATimestamp();
+        if (currentTime - lastLEDMovementTime > intervalSeconds) {
             alternateColor = !alternateColor;
-            lastAlternateColorTime = Timer.getFPGATimestamp();
+            lastLEDMovementTime = currentTime;
         }
         if (alternateColor) {
             for (int i = 0; i < numberOfLEDs; i++)
@@ -160,13 +158,10 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void resetLEDSettings() {
         lastBreatheLED = indexOffset;
-        lastBreatheMovementTime = Timer.getFPGATimestamp();
+        lastLEDMovementTime = Timer.getFPGATimestamp();
         rainbowFirstPixelHue = 0;
         areLEDsOnForBlinking = false;
-        lastBlinkTime = 0;
         alternateColor = true;
-        lastAlternateColorTime = 0;
-        lastColorFlowTime = 0;
         amountOfColorFlowLEDs = 0;
     }
 

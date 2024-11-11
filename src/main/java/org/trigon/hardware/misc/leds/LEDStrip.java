@@ -1,7 +1,6 @@
 package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.LarsonAnimation;
-import com.ctre.phoenix.led.TwinkleAnimation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,7 +41,7 @@ public abstract class LEDStrip extends SubsystemBase {
 
     abstract void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted);
 
-    abstract void alternateColor(Color firstColor, Color secondColor, double intervalSeconds, TwinkleAnimation.TwinklePercent divider);
+    abstract void alternateColor(Color firstColor, Color secondColor, double intervalSeconds);
 
     abstract void sectionColor(int amountOfSections, Supplier<Color>[] colors);
 
