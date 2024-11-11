@@ -13,14 +13,16 @@ public class LEDCommands {
     public static Command getStaticColorCommand(Color color, LEDStrip... ledStrips) {
         return new ExecuteEndCommand(
                 () -> runForLEDs((LEDStrip -> LEDStrip.staticColor(color)), ledStrips),
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips)
+                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
+                ledStrips
         ).ignoringDisable(true);
     }
 
     public static Command getBlinkingCommand(Color firstColor, Color secondColor, double blinkingIntervalSeconds, LEDStrip... ledStrips) {
         return new ExecuteEndCommand(
                 () -> runForLEDs((LEDStrip -> LEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds)), ledStrips),
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips)
+                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
+                ledStrips
         ).ignoringDisable(true);
     }
 
@@ -53,21 +55,24 @@ public class LEDCommands {
     public static Command getAlternateColorCommand(Color firstColor, Color secondColor, double intervalSeconds, LEDStrip... ledStrips) {
         return new ExecuteEndCommand(
                 () -> runForLEDs(LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds), ledStrips),
-                () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrip.LED_STRIPS)
+                () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrip.LED_STRIPS),
+                ledStrips
         ).ignoringDisable(true);
     }
 
     public static Command getSectionColorCommand(int amountOfSections, Supplier<Color>[] colors, LEDStrip... ledStrips) {
         return new ExecuteEndCommand(
                 () -> runForLEDs((LEDStrip) -> LEDStrip.sectionColor(amountOfSections, colors), ledStrips),
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips)
+                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
+                ledStrips
         ).ignoringDisable(true);
     }
 
     public static Command getRainbowCommand(double brightness, double speed, LEDStrip... ledStrips) {
         return new ExecuteEndCommand(
                 () -> runForLEDs(LEDStrip -> LEDStrip.rainbow(brightness, speed), ledStrips),
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips)
+                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
+                ledStrips
         ).ignoringDisable(true);
     }
 
