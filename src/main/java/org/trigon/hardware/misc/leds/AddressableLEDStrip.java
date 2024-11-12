@@ -12,10 +12,9 @@ public class AddressableLEDStrip extends LEDStrip {
     private static AddressableLED LED;
     private static AddressableLEDBuffer LED_BUFFER;
     private int lastBreatheLED;
-    private double lastLEDMovementTime = 0;
+    private double lastLEDAnimationChangeTime = 0;
     private double rainbowFirstPixelHue = 0;
-    private boolean areLEDsOnForBlinking = false;
-    private boolean alternateColor = true;
+    private boolean isLEDAnimationChanged = false;
     private int amountOfColorFlowLEDs = 0;
 
     public static void setLED(AddressableLED led) {
@@ -44,11 +43,11 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds) {
         double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastLEDMovementTime > blinkingIntervalSeconds) {
-            lastLEDMovementTime = currentTime;
-            areLEDsOnForBlinking = !areLEDsOnForBlinking;
+        if (currentTime - lastLEDAnimationChangeTime > blinkingIntervalSeconds) {
+            lastLEDAnimationChangeTime = currentTime;
+            isLEDAnimationChanged = !isLEDAnimationChanged;
         }
-        if (areLEDsOnForBlinking)
+        if (isLEDAnimationChanged)
             staticColor(firstColor);
         else
             staticColor(secondColor);
@@ -65,26 +64,15 @@ public class AddressableLEDStrip extends LEDStrip {
         inverted = this.inverted != inverted;
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
         double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastLEDMovementTime > moveLEDTimeSeconds) {
-            lastLEDMovementTime = currentTime;
+
+        if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
+            lastLEDAnimationChangeTime = currentTime;
             if (inverted)
                 lastBreatheLED--;
             else
                 lastBreatheLED++;
         }
-        if (inverted ? (lastBreatheLED < indexOffset) : (lastBreatheLED >= numberOfLEDs + indexOffset)) {
-            if (!shouldLoop) {
-                getDefaultCommand().schedule();
-                return;
-            }
-            lastBreatheLED = inverted ? indexOffset + numberOfLEDs : indexOffset;
-        }
-        for (int i = 0; i < breathingLEDs; i++) {
-            if (lastBreatheLED - i >= indexOffset && lastBreatheLED - i < indexOffset + numberOfLEDs)
-                LED_BUFFER.setLED(lastBreatheLED - i, color);
-            else if (lastBreatheLED - i < indexOffset + numberOfLEDs)
-                LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, color);
-        }
+        setBreathingLEDs(color, breathingLEDs, shouldLoop);
     }
 
     @Override
@@ -93,8 +81,8 @@ public class AddressableLEDStrip extends LEDStrip {
         inverted = this.inverted != inverted;
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
         double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastLEDMovementTime > moveLEDTimeSeconds) {
-            lastLEDMovementTime = currentTime;
+        if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
+            lastLEDAnimationChangeTime = currentTime;
             if (inverted)
                 amountOfColorFlowLEDs--;
             else
@@ -117,11 +105,11 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void alternateColor(Color firstColor, Color secondColor, double intervalSeconds) {
         double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastLEDMovementTime > intervalSeconds) {
-            alternateColor = !alternateColor;
-            lastLEDMovementTime = currentTime;
+        if (currentTime - lastLEDAnimationChangeTime > intervalSeconds) {
+            isLEDAnimationChanged = !isLEDAnimationChanged;
+            lastLEDAnimationChangeTime = currentTime;
         }
-        if (alternateColor) {
+        if (isLEDAnimationChanged) {
             for (int i = 0; i < numberOfLEDs; i++)
                 LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? firstColor : secondColor);
             return;
@@ -163,11 +151,27 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void resetLEDSettings() {
         lastBreatheLED = indexOffset;
-        lastLEDMovementTime = Timer.getFPGATimestamp();
+        lastLEDAnimationChangeTime = Timer.getFPGATimestamp();
         rainbowFirstPixelHue = 0;
-        areLEDsOnForBlinking = false;
-        alternateColor = true;
+        isLEDAnimationChanged = false;
         amountOfColorFlowLEDs = 0;
+    }
+
+    private void setBreathingLEDs(Color color, int breathingLEDs, boolean shouldLoop) {
+        if (inverted ? (lastBreatheLED < indexOffset) : (lastBreatheLED >= numberOfLEDs + indexOffset)) {
+            if (!shouldLoop) {
+                getDefaultCommand().schedule();
+                return;
+            }
+            lastBreatheLED = inverted ? indexOffset + numberOfLEDs : indexOffset;
+        }
+
+        for (int i = 0; i < breathingLEDs; i++) {
+            if (lastBreatheLED - i >= indexOffset && lastBreatheLED - i < indexOffset + numberOfLEDs)
+                LED_BUFFER.setLED(lastBreatheLED - i, color);
+            else if (lastBreatheLED - i < indexOffset + numberOfLEDs)
+                LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, color);
+        }
     }
 
     private void setLEDColors(Color color, int startIndex, int endIndex) {
