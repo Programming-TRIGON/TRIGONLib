@@ -19,15 +19,18 @@ public class AddressableLEDStrip extends LEDStrip {
 
     /**
      * Sets the AddressableLED instance to be used for controlling the LED strip. Must be set before using any LED strips.
+     * The LED instance be configured before being set, however it does not need to be started.
      *
      * @param led the LED instance to be used
      */
     public static void setLED(AddressableLED led) {
         LED = led;
+        LED.start();
     }
 
     /**
      * Sets the AddressableLEDBuffer instance to be used for controlling the LED strip. Must be set before using any LED strips.
+     * The LED buffer instance must be configured before being set.
      *
      * @param ledBuffer the LED buffer instance to be used
      */
