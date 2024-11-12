@@ -14,9 +14,9 @@ public abstract class LEDStrip extends SubsystemBase {
     final int numberOfLEDs;
 
     public LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
-        this.indexOffset = indexOffset;
         this.inverted = inverted;
         this.numberOfLEDs = numberOfLEDs;
+        this.indexOffset = indexOffset;
 
         addLEDStripToLEDStripsArray(this);
     }
@@ -44,7 +44,7 @@ public abstract class LEDStrip extends SubsystemBase {
      * Blinks the LED strip between two colors.
      *
      * @param firstColor              the first color to blink
-     * @param secondColor             the second color to blink, only for AddressableLEDStrip
+     * @param secondColor             the second color to blink
      * @param blinkingIntervalSeconds the interval in seconds to blink between the two colors
      */
     abstract void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds);
@@ -55,8 +55,8 @@ public abstract class LEDStrip extends SubsystemBase {
      * @param color            the color of the breathing LEDs
      * @param breathingLEDs    the amount of breathing LEDs
      * @param cycleTimeSeconds the time it takes for a full cycle of the breathing
-     * @param shouldLoop       whether the breathing should loop, only for AddressableLEDStrip
-     * @param inverted         whether the breathing should be inverted, only for AddressableLEDStrip
+     * @param shouldLoop       whether the breathing should loop
+     * @param inverted         whether the breathing should be inverted
      * @param bounceMode       the bounce mode of the breathing, only for CANdleLEDStrip
      */
     abstract void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode);
@@ -66,7 +66,7 @@ public abstract class LEDStrip extends SubsystemBase {
      *
      * @param color            the color to flow through the LED strip
      * @param cycleTimeSeconds the time it takes for the color to flow through the LED strip
-     * @param shouldLoop       whether the color should loop, only for AddressableLEDStrip
+     * @param shouldLoop       whether the color should loop
      * @param inverted         whether the color should be inverted
      */
     abstract void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted);
@@ -83,10 +83,9 @@ public abstract class LEDStrip extends SubsystemBase {
     /**
      * Colors the LED strip in sections.
      *
-     * @param amountOfSections the amount of sections to color
-     * @param colors           an array of the colors to color the sections with. The length of the array must be equal to the amount of sections
+     * @param colors an array of the colors to color the sections with. The length of the array is the amount of sections.
      */
-    abstract void sectionColor(int amountOfSections, Supplier<Color>[] colors);
+    abstract void sectionColor(Supplier<Color>[] colors);
 
     /**
      * Displays a rainbow pattern on the LED strip.

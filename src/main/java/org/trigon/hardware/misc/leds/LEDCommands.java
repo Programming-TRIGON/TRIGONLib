@@ -60,9 +60,9 @@ public class LEDCommands {
         ).ignoringDisable(true);
     }
 
-    public static Command getSectionColorCommand(int amountOfSections, Supplier<Color>[] colors, LEDStrip... ledStrips) {
+    public static Command getSectionColorCommand(Supplier<Color>[] colors, LEDStrip... ledStrips) {
         return new ExecuteEndCommand(
-                () -> runForLEDs((LEDStrip) -> LEDStrip.sectionColor(amountOfSections, colors), ledStrips),
+                () -> runForLEDs((LEDStrip) -> LEDStrip.sectionColor(colors), ledStrips),
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
         ).ignoringDisable(true);

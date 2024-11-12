@@ -1,8 +1,6 @@
 package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.*;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import org.trigon.hardware.RobotHardwareStats;
@@ -13,24 +11,19 @@ public class CANdleLEDStrip extends LEDStrip {
     private static CANdle CANDLE;
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
     private final int animationSlot;
-    private AddressableLEDStrip simulationLEDStrip;
-    private boolean alternateColor = true;
+    private final AddressableLEDStrip simulationLEDStrip;
+    private boolean isAlternateColorAlternated = true;
     private double lastAlternateColorTime = 0;
 
     public static void setCandle(CANdle candle) {
         CANDLE = candle;
     }
 
-    public CANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
+    public CANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset, AddressableLEDStrip simulationLEDStrip) {
         super(inverted, numberOfLEDs, indexOffset);
-        LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
-
-        if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip = new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
-            AddressableLEDStrip.setLED(new AddressableLED(0));
-            AddressableLEDStrip.setLEDBuffer(new AddressableLEDBuffer(numberOfLEDs));
-        }
+        LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
+        this.simulationLEDStrip = simulationLEDStrip;
     }
 
     @Override
@@ -100,30 +93,20 @@ public class CANdleLEDStrip extends LEDStrip {
             return;
         }
         if (Timer.getFPGATimestamp() - lastAlternateColorTime > intervalSeconds) {
-            alternateColor = !alternateColor;
+            isAlternateColorAlternated = !isAlternateColorAlternated;
             lastAlternateColorTime = Timer.getFPGATimestamp();
         }
-        if (alternateColor) {
+        if (isAlternateColorAlternated) {
             for (int i = 0; i < numberOfLEDs; i++)
                 CANDLE.setLEDs(
-                        (int) firstColor.red,
-                        (int) firstColor.green,
-                        (int) firstColor.blue,
+                        (int) (i % 2 == 0 ? firstColor.red : secondColor.red),
+                        (int) (i % 2 == 0 ? firstColor.green : secondColor.green),
+                        (int) (i % 2 == 0 ? firstColor.blue : secondColor.blue),
                         0,
                         i + indexOffset,
                         1
                 );
-            return;
         }
-        for (int i = 0; i < numberOfLEDs; i++)
-            CANDLE.setLEDs(
-                    (int) firstColor.red,
-                    (int) firstColor.green,
-                    (int) firstColor.blue,
-                    0,
-                    i + indexOffset,
-                    1
-            );
     }
 
     @Override
@@ -167,15 +150,13 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void sectionColor(int amountOfSections, Supplier<Color>[] colors) {
+    void sectionColor(Supplier<Color>[] colors) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.sectionColor(amountOfSections, colors);
+            simulationLEDStrip.sectionColor(colors);
             return;
         }
-        if (amountOfSections != colors.length)
-            throw new IllegalArgumentException("Amount of sections must be equal to the amount of colors");
-        final int LEDSPerSection = (int) Math.floor(numberOfLEDs / amountOfSections);
-        setSectionColor(amountOfSections, LEDSPerSection, colors);
+        final int LEDSPerSection = (int) Math.floor(numberOfLEDs / colors.length);
+        setSectionColor(colors.length, LEDSPerSection, colors);
     }
 
     @Override
@@ -185,24 +166,11 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     private void setSectionColor(int amountOfSections, int LEDSPerSection, Supplier<Color>[] colors) {
-        if (inverted) {
-            for (int i = 0; i < amountOfSections; i++) {
-                CANDLE.setLEDs(
-                        (int) colors[amountOfSections - i - 1].get().red,
-                        (int) colors[amountOfSections - i - 1].get().green,
-                        (int) colors[amountOfSections - i - 1].get().blue,
-                        0,
-                        LEDSPerSection * i + indexOffset,
-                        i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDSPerSection * (i + 1) - 1
-                );
-            }
-            return;
-        }
         for (int i = 0; i < amountOfSections; i++) {
             CANDLE.setLEDs(
-                    (int) colors[i].get().red,
-                    (int) colors[i].get().green,
-                    (int) colors[i].get().blue,
+                    (int) (inverted ? colors[amountOfSections - i - 1].get().red : colors[i].get().red),
+                    (int) (inverted ? colors[amountOfSections - i - 1].get().green : colors[i].get().green),
+                    (int) (inverted ? colors[amountOfSections - i - 1].get().blue : colors[i].get().blue),
                     0,
                     LEDSPerSection * i + indexOffset,
                     i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDSPerSection * (i + 1) - 1
