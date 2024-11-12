@@ -17,14 +17,31 @@ public class AddressableLEDStrip extends LEDStrip {
     private boolean isLEDAnimationChanged = false;
     private int amountOfColorFlowLEDs = 0;
 
+    /**
+     * Sets the AddressableLED instance to be used for controlling the LED strip. Must be set before using any LED strips.
+     *
+     * @param led the LED instance to be used
+     */
     public static void setLED(AddressableLED led) {
         LED = led;
     }
 
+    /**
+     * Sets the AddressableLEDBuffer instance to be used for controlling the LED strip. Must be set before using any LED strips.
+     *
+     * @param ledBuffer the LED buffer instance to be used
+     */
     public static void setLEDBuffer(AddressableLEDBuffer ledBuffer) {
         LED_BUFFER = ledBuffer;
     }
 
+    /**
+     * Constructs a new AddressableLEDStrip.
+     *
+     * @param inverted     whether the LED strip is inverted
+     * @param numberOfLEDs the amount of LEDs in the strip
+     * @param indexOffset  the offset of the first LED in the strip
+     */
     public AddressableLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
         super(inverted, numberOfLEDs, indexOffset);
         resetLEDSettings();

@@ -1,6 +1,8 @@
 package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.*;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import org.trigon.hardware.RobotHardwareStats;
@@ -15,15 +17,45 @@ public class CANdleLEDStrip extends LEDStrip {
     private boolean isAlternateColorAlternated = true;
     private double lastAlternateColorTime = 0;
 
+    /**
+     * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips.
+     *
+     * @param candle the CANdle instance to be used
+     */
     public static void setCandle(CANdle candle) {
         CANDLE = candle;
     }
 
-    public CANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset, AddressableLEDStrip simulationLEDStrip) {
+    /**
+     * Sets the simulation AddressableLED instance to be used for testing in simulation. Must be set before using any LED strips in simulation.
+     *
+     * @param simulationLEDStrip the AddressableLED instance to be used in simulation
+     */
+    public static void setSimulationLED(AddressableLED simulationLEDStrip) {
+        AddressableLEDStrip.setLED(simulationLEDStrip);
+    }
+
+    /**
+     * Sets the simulation AddressableLEDBuffer instance to be used for testing in simulation. Must be set before using any LED strips in simulation.
+     *
+     * @param simulationLEDBuffer the AddressableLED buffer instance to be used in simulation
+     */
+    public static void setSimulationLEDBuffer(AddressableLEDBuffer simulationLEDBuffer) {
+        AddressableLEDStrip.setLEDBuffer(simulationLEDBuffer);
+    }
+
+    /**
+     * Constructs a new CANdleLEDStrip.
+     *
+     * @param inverted     whether the LED strip is inverted
+     * @param numberOfLEDs the amount of LEDs in the strip
+     * @param indexOffset  the offset of the first LED in the strip
+     */
+    public CANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
         super(inverted, numberOfLEDs, indexOffset);
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
         LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
-        this.simulationLEDStrip = simulationLEDStrip;
+        this.simulationLEDStrip = new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
     }
 
     @Override
