@@ -52,6 +52,7 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     public void periodic() {
+        currentAnimation.run();
         LED.setData(LED_BUFFER);
     }
 
@@ -75,6 +76,7 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     void staticColor(Color color) {
+        currentAnimation = () -> staticColor(color);
         setLEDColors(color, 0, numberOfLEDs - 1);
     }
 

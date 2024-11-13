@@ -56,6 +56,12 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
+    public void periodic() {
+        if (RobotHardwareStats.isSimulation())
+            simulationLEDStrip.periodic();
+    }
+
+    @Override
     void clearLEDColors() {
         if (RobotHardwareStats.isSimulation()) {
             simulationLEDStrip.clearLEDColors();

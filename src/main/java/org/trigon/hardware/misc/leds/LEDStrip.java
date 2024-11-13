@@ -12,6 +12,8 @@ public abstract class LEDStrip extends SubsystemBase {
     final int indexOffset;
     final boolean inverted;
     final int numberOfLEDs;
+    Runnable currentAnimation = () -> {
+    };
 
     public LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
         this.inverted = inverted;
@@ -28,6 +30,10 @@ public abstract class LEDStrip extends SubsystemBase {
 
     public int getNumberOfLEDS() {
         return numberOfLEDs;
+    }
+
+    void setCurrentAnimation(Runnable currentAnimation) {
+        this.currentAnimation = currentAnimation;
     }
 
     abstract void resetLEDSettings();
