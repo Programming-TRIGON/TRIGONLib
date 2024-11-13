@@ -39,7 +39,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     /**
-     * Constructs a new AddressableLEDStrip.
+     * Constructs a new AddressableLEDStrip. Before any commands are sent to the LED strip, the setLED method must be called.
      *
      * @param inverted     whether the LED strip is inverted
      * @param numberOfLEDs the amount of LEDs in the strip
@@ -103,23 +103,13 @@ public class AddressableLEDStrip extends LEDStrip {
         double currentTime = Timer.getFPGATimestamp();
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
-            if (inverted)
+            if (isLEDAnimationChanged)
                 amountOfColorFlowLEDs--;
             else
                 amountOfColorFlowLEDs++;
         }
-        if (inverted ? amountOfColorFlowLEDs < 0 : amountOfColorFlowLEDs >= numberOfLEDs) {
-            if (!shouldLoop) {
-                getDefaultCommand().schedule();
-                return;
-            }
-            amountOfColorFlowLEDs = inverted ? numberOfLEDs : 0;
-        }
-        if (inverted) {
-            setLEDColors(color, numberOfLEDs - amountOfColorFlowLEDs, numberOfLEDs - 1);
-            return;
-        }
-        setLEDColors(color, 0, amountOfColorFlowLEDs);
+        checkIfColorFlowHasHitEnd(shouldLoop);
+        setLEDColors(color, inverted ? numberOfLEDs - amountOfColorFlowLEDs - 1 : 0, inverted ? numberOfLEDs - 1 : amountOfColorFlowLEDs);
     }
 
     @Override
@@ -191,6 +181,17 @@ public class AddressableLEDStrip extends LEDStrip {
                 LED_BUFFER.setLED(lastBreatheLED - i, color);
             else if (lastBreatheLED - i < indexOffset + numberOfLEDs)
                 LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, color);
+        }
+    }
+
+    private void checkIfColorFlowHasHitEnd(boolean shouldLoop) {
+        if (amountOfColorFlowLEDs >= numberOfLEDs || amountOfColorFlowLEDs < 0) {
+            if (!shouldLoop) {
+                getDefaultCommand().schedule();
+                return;
+            }
+            amountOfColorFlowLEDs = amountOfColorFlowLEDs < 0 ? amountOfColorFlowLEDs + 1 : amountOfColorFlowLEDs - 1;
+            isLEDAnimationChanged = !isLEDAnimationChanged;
         }
     }
 

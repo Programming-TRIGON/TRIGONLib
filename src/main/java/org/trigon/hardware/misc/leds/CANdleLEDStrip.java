@@ -45,7 +45,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     /**
-     * Constructs a new CANdleLEDStrip.
+     * Constructs a new CANdleLEDStrip. Before any commands are sent to the LED strip, the setLED method must be called.
      *
      * @param inverted     whether the LED strip is inverted
      * @param numberOfLEDs the amount of LEDs in the strip
