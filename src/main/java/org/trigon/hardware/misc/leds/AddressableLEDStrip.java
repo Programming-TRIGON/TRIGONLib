@@ -80,11 +80,10 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
-        clearLEDColors();
         inverted = this.inverted != inverted;
+        clearLEDColors();
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
         double currentTime = Timer.getFPGATimestamp();
-
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
             if (inverted)
@@ -92,7 +91,8 @@ public class AddressableLEDStrip extends LEDStrip {
             else
                 lastBreatheLED++;
         }
-        setBreathingLEDs(color, breathingLEDs, shouldLoop);
+        checkIfBreathingHasHitEnd(breathingLEDs, shouldLoop, inverted, bounceMode);
+        setBreathingLEDs(color, breathingLEDs, bounceMode);
     }
 
     @Override
@@ -167,20 +167,30 @@ public class AddressableLEDStrip extends LEDStrip {
         amountOfColorFlowLEDs = 0;
     }
 
-    private void setBreathingLEDs(Color color, int breathingLEDs, boolean shouldLoop) {
-        if (inverted ? (lastBreatheLED < indexOffset) : (lastBreatheLED >= numberOfLEDs + indexOffset)) {
+    private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+        int bounceModeThing = switch (bounceMode) {
+            case Back -> amountOfBreathingLEDs;
+            case Center -> amountOfBreathingLEDs / 2;
+            default -> 0;
+        };
+        if (inverted ? (lastBreatheLED < indexOffset + bounceModeThing) : (lastBreatheLED >= numberOfLEDs + indexOffset + bounceModeThing)) {
             if (!shouldLoop) {
                 getDefaultCommand().schedule();
                 return;
             }
             lastBreatheLED = inverted ? indexOffset + numberOfLEDs : indexOffset;
         }
+    }
 
+    private void setBreathingLEDs(Color color, int breathingLEDs, LarsonAnimation.BounceMode bounceMode) {
         for (int i = 0; i < breathingLEDs; i++) {
             if (lastBreatheLED - i >= indexOffset && lastBreatheLED - i < indexOffset + numberOfLEDs)
                 LED_BUFFER.setLED(lastBreatheLED - i, color);
-            else if (lastBreatheLED - i < indexOffset + numberOfLEDs)
+            else if (lastBreatheLED - i < indexOffset + numberOfLEDs) {
+                if (bounceMode.equals(LarsonAnimation.BounceMode.Back) || bounceMode.equals(LarsonAnimation.BounceMode.Center) && i > breathingLEDs / 2)
+                    return;
                 LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, color);
+            }
         }
     }
 
