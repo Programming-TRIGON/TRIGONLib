@@ -3,7 +3,6 @@ package org.trigon.hardware.misc.leds;
 import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import org.trigon.hardware.RobotHardwareStats;
 
@@ -14,8 +13,6 @@ public class CANdleLEDStrip extends LEDStrip {
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
     private final int animationSlot;
     private final AddressableLEDStrip simulationLEDStrip;
-    private boolean areAlternateColorLEDsAlternated = true;
-    private double lastAlternateColorTime = 0;
 
     /**
      * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips.
@@ -119,26 +116,20 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void alternateColor(Color firstColor, Color secondColor, double intervalSeconds) {
+    void alternateColor(Color firstColor, Color secondColor) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.alternateColor(firstColor, secondColor, intervalSeconds);
+            simulationLEDStrip.alternateColor(firstColor, secondColor);
             return;
         }
-        if (Timer.getFPGATimestamp() - lastAlternateColorTime > intervalSeconds) {
-            areAlternateColorLEDsAlternated = !areAlternateColorLEDsAlternated;
-            lastAlternateColorTime = Timer.getFPGATimestamp();
-        }
-        if (areAlternateColorLEDsAlternated) {
-            for (int i = 0; i < numberOfLEDs; i++)
-                CANDLE.setLEDs(
-                        (int) (i % 2 == 0 ? firstColor.red : secondColor.red),
-                        (int) (i % 2 == 0 ? firstColor.green : secondColor.green),
-                        (int) (i % 2 == 0 ? firstColor.blue : secondColor.blue),
-                        0,
-                        i + indexOffset,
-                        1
-                );
-        }
+        for (int i = 0; i < numberOfLEDs; i++)
+            CANDLE.setLEDs(
+                    (int) (i % 2 == 0 ? firstColor.red : secondColor.red),
+                    (int) (i % 2 == 0 ? firstColor.green : secondColor.green),
+                    (int) (i % 2 == 0 ? firstColor.blue : secondColor.blue),
+                    0,
+                    i + indexOffset,
+                    1
+            );
     }
 
     @Override

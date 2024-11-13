@@ -113,19 +113,9 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void alternateColor(Color firstColor, Color secondColor, double intervalSeconds) {
-        double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastLEDAnimationChangeTime > intervalSeconds) {
-            isLEDAnimationChanged = !isLEDAnimationChanged;
-            lastLEDAnimationChangeTime = currentTime;
-        }
-        if (isLEDAnimationChanged) {
-            for (int i = 0; i < numberOfLEDs; i++)
-                LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? firstColor : secondColor);
-            return;
-        }
+    void alternateColor(Color firstColor, Color secondColor) {
         for (int i = 0; i < numberOfLEDs; i++)
-            LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? secondColor : firstColor);
+            LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? firstColor : secondColor);
     }
 
     @Override

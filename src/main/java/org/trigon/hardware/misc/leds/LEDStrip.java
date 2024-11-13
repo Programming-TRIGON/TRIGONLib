@@ -71,11 +71,11 @@ public abstract class LEDStrip extends SubsystemBase {
     /**
      * Displays two colors in an alternating pattern on the LED strip.
      *
-     * @param firstColor      the first color
-     * @param secondColor     the second color
-     * @param intervalSeconds the interval in seconds to alternate colors
+     * @param firstColor  the first color
+     * @param secondColor the second color
+     *                    =
      */
-    abstract void alternateColor(Color firstColor, Color secondColor, double intervalSeconds);
+    abstract void alternateColor(Color firstColor, Color secondColor);
 
     /**
      * Colors the LED strip in sections.
