@@ -128,7 +128,6 @@ public class AddressableLEDStrip extends LEDStrip {
             LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? secondColor : firstColor);
     }
 
-
     @Override
     void rainbow(double brightness, double speed) {
         int adjustedBrightness = (int) (brightness * 255);
