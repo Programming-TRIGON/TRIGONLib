@@ -79,7 +79,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         inverted = this.inverted != inverted;
         clearLEDColors();
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
@@ -91,12 +91,12 @@ public class AddressableLEDStrip extends LEDStrip {
             else
                 lastBreatheLED++;
         }
-        checkIfBreathingHasHitEnd(breathingLEDs, shouldLoop, inverted, bounceMode);
+        checkIfBreathingHasHitEnd(breathingLEDs, inverted, bounceMode);
         setBreathingLEDs(color, breathingLEDs, bounceMode);
     }
 
     @Override
-    void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted) {
+    void colorFlow(Color color, double cycleTimeSeconds, boolean inverted) {
         clearLEDColors();
         inverted = this.inverted != inverted;
         double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
@@ -108,7 +108,7 @@ public class AddressableLEDStrip extends LEDStrip {
             else
                 amountOfColorFlowLEDs++;
         }
-        checkIfColorFlowHasHitEnd(shouldLoop);
+        checkIfColorFlowHasHitEnd();
         setLEDColors(color, inverted ? numberOfLEDs - amountOfColorFlowLEDs - 1 : 0, inverted ? numberOfLEDs - 1 : amountOfColorFlowLEDs);
     }
 
@@ -170,19 +170,14 @@ public class AddressableLEDStrip extends LEDStrip {
         amountOfColorFlowLEDs = 0;
     }
 
-    private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         int bounceModeAddition = switch (bounceMode) {
             case Back -> amountOfBreathingLEDs;
             case Center -> amountOfBreathingLEDs / 2;
             default -> 0;
         };
-        if (inverted ? (lastBreatheLED < indexOffset + bounceModeAddition) : (lastBreatheLED >= numberOfLEDs + indexOffset + bounceModeAddition)) {
-            if (!shouldLoop) {
-                getDefaultCommand().schedule();
-                return;
-            }
+        if (inverted ? (lastBreatheLED < indexOffset + bounceModeAddition) : (lastBreatheLED >= numberOfLEDs + indexOffset + bounceModeAddition))
             lastBreatheLED = inverted ? indexOffset + numberOfLEDs : indexOffset;
-        }
     }
 
     private void setBreathingLEDs(Color color, int breathingLEDs, LarsonAnimation.BounceMode bounceMode) {
@@ -197,12 +192,8 @@ public class AddressableLEDStrip extends LEDStrip {
         }
     }
 
-    private void checkIfColorFlowHasHitEnd(boolean shouldLoop) {
+    private void checkIfColorFlowHasHitEnd() {
         if (amountOfColorFlowLEDs >= numberOfLEDs || amountOfColorFlowLEDs < 0) {
-            if (!shouldLoop) {
-                getDefaultCommand().schedule();
-                return;
-            }
             amountOfColorFlowLEDs = amountOfColorFlowLEDs < 0 ? amountOfColorFlowLEDs + 1 : amountOfColorFlowLEDs - 1;
             isLEDAnimationChanged = !isLEDAnimationChanged;
         }

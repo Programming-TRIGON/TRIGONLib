@@ -97,9 +97,9 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.breathe(color, breathingLEDs, cycleTimeSeconds, shouldLoop, inverted, bounceMode);
+            simulationLEDStrip.breathe(color, breathingLEDs, cycleTimeSeconds, inverted, bounceMode);
             return;
         }
         CANDLE.animate(
@@ -142,9 +142,9 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted) {
+    void colorFlow(Color color, double cycleTimeSeconds, boolean inverted) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.colorFlow(color, cycleTimeSeconds, shouldLoop, inverted);
+            simulationLEDStrip.colorFlow(color, cycleTimeSeconds, inverted);
             return;
         }
         inverted = this.inverted != inverted;

@@ -30,8 +30,7 @@ public abstract class LEDStrip extends SubsystemBase {
         return numberOfLEDs;
     }
 
-    void resetLEDSettings() {
-    }
+    abstract void resetLEDSettings();
 
     /**
      * Sets the color of the LED strip to the given color.
@@ -55,21 +54,19 @@ public abstract class LEDStrip extends SubsystemBase {
      * @param color            the color of the breathing LEDs
      * @param breathingLEDs    the amount of breathing LEDs
      * @param cycleTimeSeconds the time it takes for a full cycle of the breathing
-     * @param shouldLoop       whether the breathing should loop
      * @param inverted         whether the breathing should be inverted
      * @param bounceMode       the bounce mode of the breathing
      */
-    abstract void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode);
+    abstract void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode);
 
     /**
      * Flows a color through the LED strip.
      *
      * @param color            the color to flow through the LED strip
      * @param cycleTimeSeconds the time it takes for the color to flow through the LED strip
-     * @param shouldLoop       whether the color should loop
      * @param inverted         whether the color should be inverted
      */
-    abstract void colorFlow(Color color, double cycleTimeSeconds, boolean shouldLoop, boolean inverted);
+    abstract void colorFlow(Color color, double cycleTimeSeconds, boolean inverted);
 
     /**
      * Displays two colors in an alternating pattern on the LED strip.
