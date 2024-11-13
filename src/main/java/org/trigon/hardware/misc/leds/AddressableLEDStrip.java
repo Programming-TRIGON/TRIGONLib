@@ -131,18 +131,22 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     void rainbow(double brightness, double speed) {
+        int adjustedBrightness = (int) (brightness * 255);
+        int hueIncrement = (int) (speed * 3);
+
         for (int led = 0; led < numberOfLEDs; led++) {
             final int hue = (int) (rainbowFirstPixelHue + (led * 180 / numberOfLEDs) % 180);
-            LED_BUFFER.setHSV(led + indexOffset, hue, 255, 128);
+            LED_BUFFER.setHSV(led + indexOffset, hue, 255, adjustedBrightness);
         }
+
         if (inverted) {
-            rainbowFirstPixelHue -= 3;
+            rainbowFirstPixelHue -= hueIncrement;
             if (rainbowFirstPixelHue < 0)
                 rainbowFirstPixelHue += 180;
-            return;
+        } else {
+            rainbowFirstPixelHue += hueIncrement;
+            rainbowFirstPixelHue %= 180;
         }
-        rainbowFirstPixelHue += 3;
-        rainbowFirstPixelHue %= 180;
     }
 
     @Override
@@ -168,12 +172,12 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
-        int bounceModeThing = switch (bounceMode) {
+        int bounceModeAddition = switch (bounceMode) {
             case Back -> amountOfBreathingLEDs;
             case Center -> amountOfBreathingLEDs / 2;
             default -> 0;
         };
-        if (inverted ? (lastBreatheLED < indexOffset + bounceModeThing) : (lastBreatheLED >= numberOfLEDs + indexOffset + bounceModeThing)) {
+        if (inverted ? (lastBreatheLED < indexOffset + bounceModeAddition) : (lastBreatheLED >= numberOfLEDs + indexOffset + bounceModeAddition)) {
             if (!shouldLoop) {
                 getDefaultCommand().schedule();
                 return;

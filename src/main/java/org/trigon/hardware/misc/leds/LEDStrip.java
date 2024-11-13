@@ -57,7 +57,7 @@ public abstract class LEDStrip extends SubsystemBase {
      * @param cycleTimeSeconds the time it takes for a full cycle of the breathing
      * @param shouldLoop       whether the breathing should loop
      * @param inverted         whether the breathing should be inverted
-     * @param bounceMode       the bounce mode of the breathing, only for CANdleLEDStrip
+     * @param bounceMode       the bounce mode of the breathing
      */
     abstract void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean shouldLoop, boolean inverted, LarsonAnimation.BounceMode bounceMode);
 
@@ -90,8 +90,8 @@ public abstract class LEDStrip extends SubsystemBase {
     /**
      * Displays a rainbow pattern on the LED strip.
      *
-     * @param brightness the brightness of the rainbow, only for CANdleLEDStrip
-     * @param speed      the speed of the rainbow, only for CANdleLEDStrip
+     * @param brightness the brightness of the rainbow, must be a number between 0 and 1
+     * @param speed      the speed of the rainbow
      */
     abstract void rainbow(double brightness, double speed);
 
