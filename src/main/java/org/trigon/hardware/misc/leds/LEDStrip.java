@@ -44,7 +44,7 @@ public abstract class LEDStrip extends SubsystemBase {
      *
      * @param firstColor              the first color to blink
      * @param secondColor             the second color to blink
-     * @param blinkingIntervalSeconds the interval in seconds to blink between the two colors
+     * @param blinkingIntervalSeconds the interval in seconds to blink between color changes
      */
     abstract void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds);
 
@@ -53,9 +53,9 @@ public abstract class LEDStrip extends SubsystemBase {
      *
      * @param color            the color of the breathing LEDs
      * @param breathingLEDs    the amount of breathing LEDs
-     * @param cycleTimeSeconds the time it takes for a full cycle of the breathing
+     * @param cycleTimeSeconds the time it takes for a full breathing cycle
      * @param inverted         whether the breathing should be inverted
-     * @param bounceMode       the bounce mode of the breathing
+     * @param bounceMode       when the breathing LEDs should bounce back to the start of the strip
      */
     abstract void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode);
 
@@ -64,7 +64,7 @@ public abstract class LEDStrip extends SubsystemBase {
      *
      * @param color            the color to flow through the LED strip
      * @param cycleTimeSeconds the time it takes for the color to flow through the LED strip
-     * @param inverted         whether the color should be inverted
+     * @param inverted         whether the color flow should be inverted
      */
     abstract void colorFlow(Color color, double cycleTimeSeconds, boolean inverted);
 
@@ -80,15 +80,15 @@ public abstract class LEDStrip extends SubsystemBase {
     /**
      * Colors the LED strip in sections.
      *
-     * @param colors an array of the colors to color the sections with. The length of the array is the amount of sections.
+     * @param colors an array of the colors to color the sections with. The length of the array dictates the amount of sections.
      */
     abstract void sectionColor(Supplier<Color>[] colors);
 
     /**
      * Displays a rainbow pattern on the LED strip.
      *
-     * @param brightness the brightness of the rainbow, must be a number between 0 and 1
-     * @param speed      the speed of the rainbow
+     * @param brightness the brightness of the rainbow on a scale from 0 to 1
+     * @param speed      the speed of the rainbow's movement
      */
     abstract void rainbow(double brightness, double speed);
 

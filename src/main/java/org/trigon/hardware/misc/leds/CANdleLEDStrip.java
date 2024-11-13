@@ -14,7 +14,7 @@ public class CANdleLEDStrip extends LEDStrip {
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
     private final int animationSlot;
     private final AddressableLEDStrip simulationLEDStrip;
-    private boolean isAlternateColorAlternated = true;
+    private boolean areAlternateColorLEDsAlternated = true;
     private double lastAlternateColorTime = 0;
 
     /**
@@ -125,10 +125,10 @@ public class CANdleLEDStrip extends LEDStrip {
             return;
         }
         if (Timer.getFPGATimestamp() - lastAlternateColorTime > intervalSeconds) {
-            isAlternateColorAlternated = !isAlternateColorAlternated;
+            areAlternateColorLEDsAlternated = !areAlternateColorLEDsAlternated;
             lastAlternateColorTime = Timer.getFPGATimestamp();
         }
-        if (isAlternateColorAlternated) {
+        if (areAlternateColorLEDsAlternated) {
             for (int i = 0; i < numberOfLEDs; i++)
                 CANDLE.setLEDs(
                         (int) (i % 2 == 0 ? firstColor.red : secondColor.red),

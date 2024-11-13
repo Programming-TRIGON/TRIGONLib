@@ -11,131 +11,131 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class LEDCommands {
-    public static Command getStaticColorCommand(Color color, LEDStrip... ledStrips) {
-        if (isAddressableLED(ledStrips[0]))
+    public static Command getStaticColorCommand(Color color, LEDStrip... LEDStrips) {
+        if (isAddressableLEDStrip(LEDStrips[0]))
             return new ExecuteEndCommand(
-                    () -> runForLEDs((LEDStrip -> LEDStrip.staticColor(color)), ledStrips),
-                    () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                    ledStrips
+                    () -> runForLEDs((LEDStrip -> LEDStrip.staticColor(color)), LEDStrips),
+                    () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
+                    LEDStrips
             ).ignoringDisable(true);
         return new StartEndCommand(
                 () -> {
-                    runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.staticColor(color)), ledStrips);
+                    runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
+                    runForLEDs((LEDStrip -> LEDStrip.staticColor(color)), LEDStrips);
                 },
                 () -> {
                 }
         ).ignoringDisable(true);
     }
 
-    public static Command getBlinkingCommand(Color firstColor, Color secondColor, double blinkingIntervalSeconds, LEDStrip... ledStrips) {
-        if (isAddressableLED(ledStrips[0]))
+    public static Command getBlinkingCommand(Color firstColor, Color secondColor, double blinkingIntervalSeconds, LEDStrip... LEDStrips) {
+        if (isAddressableLEDStrip(LEDStrips[0]))
             return new ExecuteEndCommand(
-                    () -> runForLEDs((LEDStrip -> LEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds)), ledStrips),
-                    () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                    ledStrips
+                    () -> runForLEDs((LEDStrip -> LEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds)), LEDStrips),
+                    () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
+                    LEDStrips
             ).ignoringDisable(true);
         return new StartEndCommand(
                 () -> {
-                    runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds)), ledStrips);
+                    runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
+                    runForLEDs((LEDStrip -> LEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds)), LEDStrips);
                 },
                 () -> {
                 }
         ).ignoringDisable(true);
     }
 
-    public static Command getBreatheCommand(Color color, int amountOfBreathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDStrip... ledStrips) {
-        if (isAddressableLED(ledStrips[0]))
+    public static Command getBreatheCommand(Color color, int amountOfBreathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDStrip... LEDStrips) {
+        if (isAddressableLEDStrip(LEDStrips[0]))
             return new ExecuteEndCommand(
-                    () -> runForLEDs((LEDStrip -> LEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode)), ledStrips),
-                    () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                    ledStrips
+                    () -> runForLEDs((LEDStrip -> LEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode)), LEDStrips),
+                    () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
+                    LEDStrips
             ).ignoringDisable(true);
         return new StartEndCommand(
                 () -> {
-                    runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode)), ledStrips);
+                    runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
+                    runForLEDs((LEDStrip -> LEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode)), LEDStrips);
                 },
                 () -> {
                 }
         ).ignoringDisable(true);
     }
 
-    public static Command getColorFlowCommand(Color color, double cycleTimeSeconds, boolean inverted, LEDStrip... ledStrips) {
-        if (isAddressableLED(ledStrips[0]))
+    public static Command getColorFlowCommand(Color color, double cycleTimeSeconds, boolean inverted, LEDStrip... LEDStrips) {
+        if (isAddressableLEDStrip(LEDStrips[0]))
             return new ExecuteEndCommand(
-                    () -> runForLEDs((LEDStrip -> LEDStrip.colorFlow(color, cycleTimeSeconds, inverted)), ledStrips),
-                    () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                    ledStrips
+                    () -> runForLEDs((LEDStrip -> LEDStrip.colorFlow(color, cycleTimeSeconds, inverted)), LEDStrips),
+                    () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
+                    LEDStrips
             ).ignoringDisable(true);
         return new StartEndCommand(
                 () -> {
-                    runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.colorFlow(color, cycleTimeSeconds, inverted)), ledStrips);
+                    runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
+                    runForLEDs((LEDStrip -> LEDStrip.colorFlow(color, cycleTimeSeconds, inverted)), LEDStrips);
                 },
                 () -> {
                 }
         ).ignoringDisable(true);
     }
 
-    public static Command getAlternateColorCommand(Color firstColor, Color secondColor, double intervalSeconds, LEDStrip... ledStrips) {
-        if (isAddressableLED(ledStrips[0]))
+    public static Command getAlternateColorCommand(Color firstColor, Color secondColor, double intervalSeconds, LEDStrip... LEDStrips) {
+        if (isAddressableLEDStrip(LEDStrips[0]))
             return new ExecuteEndCommand(
-                    () -> runForLEDs((LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds)), ledStrips),
-                    () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                    ledStrips
+                    () -> runForLEDs((LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds)), LEDStrips),
+                    () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
+                    LEDStrips
             ).ignoringDisable(true);
         return new StartEndCommand(
                 () -> {
-                    runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds)), ledStrips);
+                    runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
+                    runForLEDs((LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor, intervalSeconds)), LEDStrips);
                 },
                 () -> {
                 }
         ).ignoringDisable(true);
     }
 
-    public static Command getSectionColorCommand(Supplier<Color>[] colors, LEDStrip... ledStrips) {
-        if (isAddressableLED(ledStrips[0]))
+    public static Command getSectionColorCommand(Supplier<Color>[] colors, LEDStrip... LEDStrips) {
+        if (isAddressableLEDStrip(LEDStrips[0]))
             return new ExecuteEndCommand(
-                    () -> runForLEDs((LEDStrip -> LEDStrip.sectionColor(colors)), ledStrips),
-                    () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                    ledStrips
+                    () -> runForLEDs((LEDStrip -> LEDStrip.sectionColor(colors)), LEDStrips),
+                    () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
+                    LEDStrips
             ).ignoringDisable(true);
         return new StartEndCommand(
                 () -> {
-                    runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.sectionColor(colors)), ledStrips);
+                    runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
+                    runForLEDs((LEDStrip -> LEDStrip.sectionColor(colors)), LEDStrips);
                 },
                 () -> {
                 }
         ).ignoringDisable(true);
     }
 
-    public static Command getRainbowCommand(double brightness, double speed, LEDStrip... ledStrips) {
-        if (isAddressableLED(ledStrips[0]))
+    public static Command getRainbowCommand(double brightness, double speed, LEDStrip... LEDStrips) {
+        if (isAddressableLEDStrip(LEDStrips[0]))
             return new ExecuteEndCommand(
-                    () -> runForLEDs((LEDStrip -> LEDStrip.rainbow(brightness, speed)), ledStrips),
-                    () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                    ledStrips
+                    () -> runForLEDs((LEDStrip -> LEDStrip.rainbow(brightness, speed)), LEDStrips),
+                    () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
+                    LEDStrips
             ).ignoringDisable(true);
         return new StartEndCommand(
                 () -> {
-                    runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.rainbow(brightness, speed)), ledStrips);
+                    runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
+                    runForLEDs((LEDStrip -> LEDStrip.rainbow(brightness, speed)), LEDStrips);
                 },
                 () -> {
                 }
         ).ignoringDisable(true);
     }
 
-    private static void runForLEDs(Consumer<LEDStrip> action, LEDStrip... ledStrips) {
-        for (LEDStrip LEDStrip : ledStrips)
+    private static void runForLEDs(Consumer<LEDStrip> action, LEDStrip... LEDStrips) {
+        for (LEDStrip LEDStrip : LEDStrips)
             action.accept(LEDStrip);
     }
 
-    public static boolean isAddressableLED(LEDStrip ledStrip) {
-        return ledStrip instanceof AddressableLEDStrip || RobotHardwareStats.isSimulation();
+    public static boolean isAddressableLEDStrip(LEDStrip LEDStrip) {
+        return LEDStrip instanceof AddressableLEDStrip || RobotHardwareStats.isSimulation();
     }
 }
