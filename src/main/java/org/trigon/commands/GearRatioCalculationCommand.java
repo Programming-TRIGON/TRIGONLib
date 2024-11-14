@@ -1,7 +1,6 @@
 package org.trigon.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardBoolean;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
@@ -9,11 +8,12 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
-public class GearRatioCalculationCommand extends Command {
+public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private final DoubleSupplier rotorPositionSupplier;
     private final DoubleSupplier encoderPositionSupplier;
     private final DoubleConsumer runGearRatioCalculation;
     private final String subsystemName;
+    private final double backlashAccountabilitySeconds;
 
     private final LoggedDashboardNumber movementVoltage;
     private final LoggedDashboardBoolean shouldMoveClockwise;
@@ -22,37 +22,54 @@ public class GearRatioCalculationCommand extends Command {
     private double startingEncoderPosition;
     private double gearRatio;
 
-    public GearRatioCalculationCommand(DoubleSupplier rotorPositionSupplier, DoubleSupplier encoderPositionSupplier, DoubleConsumer runGearRatioCalculation, SubsystemBase requirement) {
+    public GearRatioCalculationCommand(
+            DoubleSupplier rotorPositionSupplier,
+            DoubleSupplier encoderPositionSupplier,
+            DoubleConsumer runGearRatioCalculation,
+            double backlashAccountabilitySeconds,
+            SubsystemBase requirement
+    ) {
         this.rotorPositionSupplier = rotorPositionSupplier;
         this.encoderPositionSupplier = encoderPositionSupplier;
         this.runGearRatioCalculation = runGearRatioCalculation;
         this.subsystemName = requirement.getName();
+        this.backlashAccountabilitySeconds = backlashAccountabilitySeconds;
 
         this.movementVoltage = new LoggedDashboardNumber("GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
         this.shouldMoveClockwise = new LoggedDashboardBoolean("GearRatioCalculation/" + this.subsystemName + "/ShouldMoveClockwise", false);
 
         addRequirements(requirement);
+        addCommands(
+                getBacklashAccountabilityCommand(),
+                getGearRatioCalculationCommand()
+        );
     }
 
-    @Override
-    public void initialize() {
+    private Command getBacklashAccountabilityCommand() {
+        return new WaitCommand(backlashAccountabilitySeconds);
+    }
+
+    private Command getGearRatioCalculationCommand() {
+        return new FunctionalCommand(
+                this::getStartingPositions,
+                this::logGearRatio,
+                interrupted -> printResult(),
+                () -> false
+        );
+    }
+
+    private void getStartingPositions() {
         startingRotorPosition = rotorPositionSupplier.getAsDouble();
         startingEncoderPosition = encoderPositionSupplier.getAsDouble();
     }
 
-    @Override
-    public void execute() {
+    private void logGearRatio() {
         runGearRatioCalculation.accept(movementVoltage.get() * getRotationDirection());
         gearRatio = calculateGearRatio();
 
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", getEncoderDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        printResult();
     }
 
     private double calculateGearRatio() {
