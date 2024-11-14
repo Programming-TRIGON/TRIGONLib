@@ -25,7 +25,9 @@ public class WheelRadiusCharacterizationCommand extends Command {
     private static final LoggedDashboardNumber ROTATION_RATE_LIMIT = new LoggedDashboardNumber("WheelRadiusCharacterization/RotationRateLimit", 1);
     private static final LoggedDashboardBoolean SHOULD_MOVE_CLOCKWISE = new LoggedDashboardBoolean("WheelRadiusCharacterization/ShouldMoveClockwise", false);
 
-    private final double[] wheelDistancesFromCenterMeters;
+    private final double[]
+            wheelDistancesFromCenterMeters,
+            driveWheelRadii;
     private final Supplier<double[]> wheelPositionsRadiansSupplier;
     private final DoubleSupplier gyroYawRadiansSupplier;
     private final DoubleConsumer runWheelRadiusCharacterization;
@@ -34,25 +36,32 @@ public class WheelRadiusCharacterizationCommand extends Command {
     private double startingGyroYawRadians;
     private double accumulatedGyroYawRadians;
     private double[] startingWheelPositions;
-    private double driveWheelsRadius;
 
-    public WheelRadiusCharacterizationCommand(Translation2d[] wheelDistancesFromCenterMeters, Supplier<double[]> wheelPositionsRadiansSupplier,
-                                              DoubleSupplier gyroYawRadiansSupplier, DoubleConsumer runWheelRadiusCharacterization, SubsystemBase requirement
+    public WheelRadiusCharacterizationCommand(Translation2d[] wheelDistancesFromCenterMeters,
+                                              Supplier<double[]> wheelPositionsRadiansSupplier,
+                                              DoubleSupplier gyroYawRadiansSupplier,
+                                              DoubleConsumer runWheelRadiusCharacterization,
+                                              SubsystemBase requirement
     ) {
         this.wheelDistancesFromCenterMeters = Arrays.stream(wheelDistancesFromCenterMeters).mapToDouble(Translation2d::getNorm).toArray();
         this.wheelPositionsRadiansSupplier = wheelPositionsRadiansSupplier;
         this.gyroYawRadiansSupplier = gyroYawRadiansSupplier;
         this.runWheelRadiusCharacterization = runWheelRadiusCharacterization;
+        this.driveWheelRadii = new double[wheelDistancesFromCenterMeters.length];
         addRequirements(requirement);
     }
 
-    public WheelRadiusCharacterizationCommand(double[] wheelDistancesFromCenterMeters, Supplier<double[]> wheelPositionsRadiansSupplier,
-                                              DoubleSupplier gyroYawRadiansSupplier, DoubleConsumer runWheelRadiusCharacterization, SubsystemBase requirement
+    public WheelRadiusCharacterizationCommand(double[] wheelDistancesFromCenterMeters,
+                                              Supplier<double[]> wheelPositionsRadiansSupplier,
+                                              DoubleSupplier gyroYawRadiansSupplier,
+                                              DoubleConsumer runWheelRadiusCharacterization,
+                                              SubsystemBase requirement
     ) {
         this.wheelDistancesFromCenterMeters = wheelDistancesFromCenterMeters;
         this.wheelPositionsRadiansSupplier = wheelPositionsRadiansSupplier;
         this.gyroYawRadiansSupplier = gyroYawRadiansSupplier;
         this.runWheelRadiusCharacterization = runWheelRadiusCharacterization;
+        this.driveWheelRadii = new double[wheelDistancesFromCenterMeters.length];
         addRequirements(requirement);
     }
 
@@ -66,10 +75,11 @@ public class WheelRadiusCharacterizationCommand extends Command {
         driveMotors();
 
         accumulatedGyroYawRadians = getAccumulatedGyroYaw();
-        driveWheelsRadius = calculateDriveWheelRadius();
+        calculateDriveWheelRadius();
 
         Logger.recordOutput("WheelRadiusCharacterization/AccumulatedGyroYawRadians", accumulatedGyroYawRadians);
-        Logger.recordOutput("RadiusCharacterization/DriveWheelRadius", driveWheelsRadius);
+        for (int i = 0; i < driveWheelRadii.length; i++)
+            Logger.recordOutput("RadiusCharacterization/DriveWheelRadiusModule" + i, driveWheelRadii[i]);
     }
 
     @Override
@@ -94,24 +104,23 @@ public class WheelRadiusCharacterizationCommand extends Command {
         return Math.abs(startingGyroYawRadians - gyroYawRadiansSupplier.getAsDouble());
     }
 
-    private double calculateDriveWheelRadius() {
-        driveWheelsRadius = 0;
+    private void calculateDriveWheelRadius() {
         final double[] wheelPositionsRadians = wheelPositionsRadiansSupplier.get();
 
         for (int i = 0; i < 4; i++) {
             final double accumulatedWheelRadians = Math.abs(wheelPositionsRadians[i] - startingWheelPositions[i]);
-            driveWheelsRadius += (accumulatedGyroYawRadians * wheelDistancesFromCenterMeters[i]) / accumulatedWheelRadians;
-            Logger.recordOutput("RadiusCharacterization/AccumulatedWheelRadians" + i, accumulatedWheelRadians);
+            driveWheelRadii[i] = (accumulatedGyroYawRadians * wheelDistancesFromCenterMeters[i]) / accumulatedWheelRadians;
+            Logger.recordOutput("RadiusCharacterization/AccumulatedWheelRadians" + i, driveWheelRadii[i]);
         }
-
-        return driveWheelsRadius /= 4;
     }
 
     private void printResults() {
-        if (accumulatedGyroYawRadians <= Math.PI * 2.0)
+        if (accumulatedGyroYawRadians <= Math.PI * 2.0) {
             System.out.println("Not enough data for characterization");
-        else
-            System.out.println("Drive Wheel Radius: " + driveWheelsRadius + " meters");
+            return;
+        }
+        for (int i = 0; i < driveWheelRadii.length; i++)
+            System.out.println("Drive Wheel Radius for Module " + i + ": " + driveWheelRadii[i] + " meters");
     }
 
     private int getRotationDirection() {
