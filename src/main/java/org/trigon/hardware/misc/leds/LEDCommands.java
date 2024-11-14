@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A class with static functions for getting LED commands. These commands work with both types of LEDStrips.
+ */
 public class LEDCommands {
     public static Command getStaticColorCommand(Color color, LEDStrip... LEDStrips) {
         return new FunctionalCommand(

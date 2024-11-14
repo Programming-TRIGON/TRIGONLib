@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.util.Color;
 
 import java.util.function.Supplier;
 
+/**
+ * A LED strip that is controlled by an AddressableLED.
+ */
 public class AddressableLEDStrip extends LEDStrip {
     private static AddressableLED LED;
     private static AddressableLEDBuffer LED_BUFFER;

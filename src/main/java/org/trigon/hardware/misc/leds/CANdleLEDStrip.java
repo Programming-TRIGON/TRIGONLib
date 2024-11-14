@@ -8,6 +8,9 @@ import org.trigon.hardware.RobotHardwareStats;
 
 import java.util.function.Supplier;
 
+/**
+ * A LED strip that is controlled by a CANdle, and uses AddressableLED for simulation.
+ */
 public class CANdleLEDStrip extends LEDStrip {
     private static CANdle CANDLE;
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
@@ -74,6 +77,7 @@ public class CANdleLEDStrip extends LEDStrip {
     void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds) {
         if (RobotHardwareStats.isSimulation()) {
             simulationLEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds));
             return;
         }
         CANDLE.animate(
@@ -94,15 +98,17 @@ public class CANdleLEDStrip extends LEDStrip {
     void staticColor(Color color) {
         if (RobotHardwareStats.isSimulation()) {
             simulationLEDStrip.staticColor(color);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.staticColor(color));
             return;
         }
         CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, indexOffset, numberOfLEDs);
     }
 
     @Override
-    void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    void breathe(Color color, int amountOfBreathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.breathe(color, breathingLEDs, cycleTimeSeconds, inverted, bounceMode);
+            simulationLEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode));
             return;
         }
         CANDLE.animate(
@@ -114,7 +120,7 @@ public class CANdleLEDStrip extends LEDStrip {
                         cycleTimeSeconds,
                         this.numberOfLEDs,
                         bounceMode,
-                        breathingLEDs,
+                        amountOfBreathingLEDs,
                         indexOffset
                 ),
                 animationSlot
@@ -125,6 +131,7 @@ public class CANdleLEDStrip extends LEDStrip {
     void alternateColor(Color firstColor, Color secondColor) {
         if (RobotHardwareStats.isSimulation()) {
             simulationLEDStrip.alternateColor(firstColor, secondColor);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.alternateColor(firstColor, secondColor));
             return;
         }
         for (int i = 0; i < numberOfLEDs; i++)
@@ -142,6 +149,7 @@ public class CANdleLEDStrip extends LEDStrip {
     void colorFlow(Color color, double cycleTimeSeconds, boolean inverted) {
         if (RobotHardwareStats.isSimulation()) {
             simulationLEDStrip.colorFlow(color, cycleTimeSeconds, inverted);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.colorFlow(color, cycleTimeSeconds, inverted));
             return;
         }
         inverted = this.inverted != inverted;
@@ -164,6 +172,7 @@ public class CANdleLEDStrip extends LEDStrip {
     void rainbow(double brightness, double speed) {
         if (RobotHardwareStats.isSimulation()) {
             simulationLEDStrip.rainbow(brightness, speed);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.rainbow(brightness, speed));
             return;
         }
         CANDLE.animate(
@@ -182,6 +191,7 @@ public class CANdleLEDStrip extends LEDStrip {
     void sectionColor(Supplier<Color>[] colors) {
         if (RobotHardwareStats.isSimulation()) {
             simulationLEDStrip.sectionColor(colors);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.sectionColor(colors));
             return;
         }
         final int LEDSPerSection = (int) Math.floor(numberOfLEDs / colors.length);

@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.function.Supplier;
 
+/**
+ * A wrapper class for LED strips. This class provides a set of methods for controlling LED strips.
+ */
 public abstract class LEDStrip extends SubsystemBase {
     public static LEDStrip[] LED_STRIPS = new LEDStrip[0];
     final int indexOffset;
