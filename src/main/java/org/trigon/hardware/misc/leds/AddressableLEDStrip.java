@@ -26,7 +26,7 @@ public class AddressableLEDStrip extends LEDStrip {
      *
      * @param led the LED instance to be used
      */
-    public static void setLED(AddressableLED led) {
+    public static void setAddressableLED(AddressableLED led) {
         LED = led;
         LED.start();
     }
@@ -37,7 +37,7 @@ public class AddressableLEDStrip extends LEDStrip {
      *
      * @param ledBuffer the LED buffer instance to be used
      */
-    public static void setLEDBuffer(AddressableLEDBuffer ledBuffer) {
+    public static void setAddressableLEDBuffer(AddressableLEDBuffer ledBuffer) {
         LED_BUFFER = ledBuffer;
     }
 
@@ -65,46 +65,47 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds) {
+    void blink(Color firstColor, double speed) {
+        double correctedSpeed = 1 - speed;
         double currentTime = Timer.getFPGATimestamp();
-        if (currentTime - lastLEDAnimationChangeTime > blinkingIntervalSeconds) {
+        if (currentTime - lastLEDAnimationChangeTime > correctedSpeed) {
             lastLEDAnimationChangeTime = currentTime;
             isLEDAnimationChanged = !isLEDAnimationChanged;
         }
-        if (isLEDAnimationChanged)
+        if (isLEDAnimationChanged) {
             staticColor(firstColor);
-        else
-            staticColor(secondColor);
+            return;
+        }
+        clearLEDColors();
     }
 
     @Override
     void staticColor(Color color) {
-        currentAnimation = () -> staticColor(color);
         setLEDColors(color, 0, numberOfLEDs - 1);
     }
 
     @Override
-    void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
-        inverted = this.inverted != inverted;
+    void breathe(Color color, int breathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+        boolean correctedInverted = this.inverted != inverted;
         clearLEDColors();
-        double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
+        double moveLEDTimeSeconds = 1 - speed;
         double currentTime = Timer.getFPGATimestamp();
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
-            if (inverted)
+            if (correctedInverted)
                 lastBreatheLED--;
             else
                 lastBreatheLED++;
         }
-        checkIfBreathingHasHitEnd(breathingLEDs, inverted, bounceMode);
+        checkIfBreathingHasHitEnd(breathingLEDs, correctedInverted, bounceMode);
         setBreathingLEDs(color, breathingLEDs, bounceMode);
     }
 
     @Override
-    void colorFlow(Color color, double cycleTimeSeconds, boolean inverted) {
+    void colorFlow(Color color, double speed, boolean inverted) {
         clearLEDColors();
-        inverted = this.inverted != inverted;
-        double moveLEDTimeSeconds = cycleTimeSeconds / numberOfLEDs;
+        boolean correctedInverted = this.inverted != inverted;
+        double moveLEDTimeSeconds = 1 - speed;
         double currentTime = Timer.getFPGATimestamp();
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
@@ -114,7 +115,7 @@ public class AddressableLEDStrip extends LEDStrip {
                 amountOfColorFlowLEDs++;
         }
         checkIfColorFlowHasHitEnd();
-        setLEDColors(color, inverted ? numberOfLEDs - amountOfColorFlowLEDs - 1 : 0, inverted ? numberOfLEDs - 1 : amountOfColorFlowLEDs);
+        setLEDColors(color, correctedInverted ? numberOfLEDs - amountOfColorFlowLEDs - 1 : 0, correctedInverted ? numberOfLEDs - 1 : amountOfColorFlowLEDs);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void rainbow(double brightness, double speed) {
         int adjustedBrightness = (int) (brightness * 255);
-        int hueIncrement = (int) (speed * 3);
+        int hueIncrement = (int) (speed * 8);
 
         for (int led = 0; led < numberOfLEDs; led++) {
             final int hue = (int) (rainbowFirstPixelHue + (led * 180 / numberOfLEDs) % 180);

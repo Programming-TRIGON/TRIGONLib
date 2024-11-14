@@ -32,7 +32,7 @@ public class CANdleLEDStrip extends LEDStrip {
      * @param simulationLEDStrip the AddressableLED instance to be used in simulation
      */
     public static void setSimulationLED(AddressableLED simulationLEDStrip) {
-        AddressableLEDStrip.setLED(simulationLEDStrip);
+        AddressableLEDStrip.setAddressableLED(simulationLEDStrip);
     }
 
     /**
@@ -41,7 +41,7 @@ public class CANdleLEDStrip extends LEDStrip {
      * @param simulationLEDBuffer the AddressableLED buffer instance to be used in simulation
      */
     public static void setSimulationLEDBuffer(AddressableLEDBuffer simulationLEDBuffer) {
-        AddressableLEDStrip.setLEDBuffer(simulationLEDBuffer);
+        AddressableLEDStrip.setAddressableLEDBuffer(simulationLEDBuffer);
     }
 
     /**
@@ -74,10 +74,10 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds) {
+    void blink(Color firstColor, double speed) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds);
-            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.blink(firstColor, secondColor, blinkingIntervalSeconds));
+            simulationLEDStrip.blink(firstColor, speed);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.blink(firstColor, speed));
             return;
         }
         CANDLE.animate(
@@ -86,7 +86,7 @@ public class CANdleLEDStrip extends LEDStrip {
                         (int) firstColor.green,
                         (int) firstColor.blue,
                         0,
-                        blinkingIntervalSeconds,
+                        speed,
                         this.numberOfLEDs,
                         indexOffset
                 ),
@@ -105,10 +105,10 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void breathe(Color color, int amountOfBreathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    void breathe(Color color, int amountOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode);
-            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode));
+            simulationLEDStrip.breathe(color, amountOfBreathingLEDs, speed, inverted, bounceMode);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.breathe(color, amountOfBreathingLEDs, speed, inverted, bounceMode));
             return;
         }
         CANDLE.animate(
@@ -117,7 +117,7 @@ public class CANdleLEDStrip extends LEDStrip {
                         (int) color.green,
                         (int) color.blue,
                         0,
-                        cycleTimeSeconds,
+                        speed,
                         this.numberOfLEDs,
                         bounceMode,
                         amountOfBreathingLEDs,
@@ -146,22 +146,22 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void colorFlow(Color color, double cycleTimeSeconds, boolean inverted) {
+    void colorFlow(Color color, double speed, boolean inverted) {
         if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.colorFlow(color, cycleTimeSeconds, inverted);
-            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.colorFlow(color, cycleTimeSeconds, inverted));
+            simulationLEDStrip.colorFlow(color, speed, inverted);
+            simulationLEDStrip.setCurrentAnimation(() -> simulationLEDStrip.colorFlow(color, speed, inverted));
             return;
         }
-        inverted = this.inverted != inverted;
+        boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new ColorFlowAnimation(
                         (int) color.red,
                         (int) color.green,
                         (int) color.blue,
                         0,
-                        cycleTimeSeconds,
+                        speed,
                         this.numberOfLEDs,
-                        inverted ? ColorFlowAnimation.Direction.Backward : ColorFlowAnimation.Direction.Forward,
+                        correctedInverted ? ColorFlowAnimation.Direction.Backward : ColorFlowAnimation.Direction.Forward,
                         indexOffset
                 ),
                 animationSlot

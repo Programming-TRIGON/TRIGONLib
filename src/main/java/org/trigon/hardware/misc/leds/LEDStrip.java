@@ -51,45 +51,43 @@ public abstract class LEDStrip extends SubsystemBase {
     /**
      * Blinks the LED strip between two colors.
      *
-     * @param firstColor              the first color to blink
-     * @param secondColor             the second color to blink
-     * @param blinkingIntervalSeconds the interval in seconds to blink between color changes
+     * @param firstColor the first color to blink
+     * @param speed      how fast the LED strip should blink on a scale between 0 and 1
      */
-    abstract void blink(Color firstColor, Color secondColor, double blinkingIntervalSeconds);
+    abstract void blink(Color firstColor, double speed);
 
     /**
-     * "Breathes" a bunch of LEDs with a given color.
+     * "Breathes" a pocket of LEDs with a given color.
      *
-     * @param color            the color of the breathing LEDs
-     * @param breathingLEDs    the amount of breathing LEDs
-     * @param cycleTimeSeconds the time it takes for a full breathing cycle
-     * @param inverted         whether the breathing should be inverted
-     * @param bounceMode       when the breathing LEDs should bounce back to the start of the strip
+     * @param color         the color of the breathing LEDs
+     * @param breathingLEDs the amount of breathing LEDs
+     * @param speed         how fast should the color travel the strip on a scale between 0 and 1
+     * @param inverted      whether the breathing should be inverted
+     * @param bounceMode    when the breathing LEDs should restart at the start of the strip
      */
-    abstract void breathe(Color color, int breathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode);
+    abstract void breathe(Color color, int breathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode);
 
     /**
      * Flows a color through the LED strip.
      *
-     * @param color            the color to flow through the LED strip
-     * @param cycleTimeSeconds the time it takes for the color to flow through the LED strip
-     * @param inverted         whether the color flow should be inverted
+     * @param color    the color to flow through the LED strip
+     * @param speed    how fast should the color travel the strip on a scale between 0 and 1
+     * @param inverted whether the color flow should be inverted
      */
-    abstract void colorFlow(Color color, double cycleTimeSeconds, boolean inverted);
+    abstract void colorFlow(Color color, double speed, boolean inverted);
 
     /**
      * Displays two colors in an alternating pattern on the LED strip.
      *
      * @param firstColor  the first color
      * @param secondColor the second color
-     *                    =
      */
     abstract void alternateColor(Color firstColor, Color secondColor);
 
     /**
      * Colors the LED strip in sections.
      *
-     * @param colors an array of the colors to color the sections with. The length of the array dictates the amount of sections.
+     * @param colors an array of the colors to color the sections with. The length of the array dictates the amount of sections
      */
     abstract void sectionColor(Supplier<Color>[] colors);
 
@@ -97,7 +95,7 @@ public abstract class LEDStrip extends SubsystemBase {
      * Displays a rainbow pattern on the LED strip.
      *
      * @param brightness the brightness of the rainbow on a scale from 0 to 1
-     * @param speed      the speed of the rainbow's movement
+     * @param speed      the speed of the rainbow's movement on a scale from 0 to 1
      */
     abstract void rainbow(double brightness, double speed);
 
