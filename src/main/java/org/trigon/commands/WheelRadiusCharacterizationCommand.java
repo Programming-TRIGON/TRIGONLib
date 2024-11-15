@@ -78,8 +78,7 @@ public class WheelRadiusCharacterizationCommand extends Command {
         calculateDriveWheelRadius();
 
         Logger.recordOutput("WheelRadiusCharacterization/AccumulatedGyroYawRadians", accumulatedGyroYawRadians);
-        for (int i = 0; i < driveWheelRadii.length; i++)
-            Logger.recordOutput("RadiusCharacterization/DriveWheelRadiusModule" + i, driveWheelRadii[i]);
+        logWheelRadii();
     }
 
     @Override
@@ -121,6 +120,11 @@ public class WheelRadiusCharacterizationCommand extends Command {
         }
         for (int i = 0; i < driveWheelRadii.length; i++)
             System.out.println("Drive Wheel Radius for Module " + i + ": " + driveWheelRadii[i] + " meters");
+    }
+
+    private void logWheelRadii() {
+        for (int i = 0; i < driveWheelRadii.length; i++)
+            Logger.recordOutput("RadiusCharacterization/DriveWheelRadiusModule" + i, driveWheelRadii[i]);
     }
 
     private int getRotationDirection() {

@@ -13,7 +13,7 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private final DoubleSupplier encoderPositionSupplier;
     private final DoubleConsumer runGearRatioCalculation;
     private final String subsystemName;
-    private final double backlashAccountabilitySeconds;
+    private final double backlashAccountabilityTimeSeconds;
 
     private final LoggedDashboardNumber movementVoltage;
     private final LoggedDashboardBoolean shouldMoveClockwise;
@@ -26,35 +26,43 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
             DoubleSupplier rotorPositionSupplier,
             DoubleSupplier encoderPositionSupplier,
             DoubleConsumer runGearRatioCalculation,
-            double backlashAccountabilitySeconds,
+            double backlashAccountabilityTimeSeconds,
             SubsystemBase requirement
     ) {
         this.rotorPositionSupplier = rotorPositionSupplier;
         this.encoderPositionSupplier = encoderPositionSupplier;
         this.runGearRatioCalculation = runGearRatioCalculation;
         this.subsystemName = requirement.getName();
-        this.backlashAccountabilitySeconds = backlashAccountabilitySeconds;
+        this.backlashAccountabilityTimeSeconds = backlashAccountabilityTimeSeconds;
 
         this.movementVoltage = new LoggedDashboardNumber("GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
         this.shouldMoveClockwise = new LoggedDashboardBoolean("GearRatioCalculation/" + this.subsystemName + "/ShouldMoveClockwise", false);
 
         addRequirements(requirement);
         addCommands(
+                getGearRatioCalculationCommand(),
                 getBacklashAccountabilityCommand(),
-                getGearRatioCalculationCommand()
+                getLogGearRatioCommand()
         );
     }
 
     private Command getBacklashAccountabilityCommand() {
-        return new WaitCommand(backlashAccountabilitySeconds);
+        return new WaitCommand(backlashAccountabilityTimeSeconds);
     }
 
     private Command getGearRatioCalculationCommand() {
-        return new FunctionalCommand(
+        return new InitExecuteCommand(
                 this::getStartingPositions,
-                this::logGearRatio,
-                interrupted -> printResult(),
-                () -> false
+                this::runGearRatioCalculation
+        );
+    }
+
+    private Command getLogGearRatioCommand() {
+        return new InstantCommand(
+                () -> {
+                    logGearRatio();
+                    printResult();
+                }
         );
     }
 
@@ -63,9 +71,12 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
         startingEncoderPosition = encoderPositionSupplier.getAsDouble();
     }
 
-    private void logGearRatio() {
+    private void runGearRatioCalculation() {
         runGearRatioCalculation.accept(movementVoltage.get() * getRotationDirection());
         gearRatio = calculateGearRatio();
+    }
+
+    private void logGearRatio() {
 
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", getEncoderDistance());
