@@ -2,7 +2,6 @@ package org.trigon.commands;
 
 import edu.wpi.first.wpilibj2.command.*;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardBoolean;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 import java.util.function.DoubleConsumer;
@@ -16,7 +15,6 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private final double backlashAccountabilityTimeSeconds;
 
     private final LoggedDashboardNumber movementVoltage;
-    private final LoggedDashboardBoolean shouldMoveClockwise;
 
     private double startingRotorPosition;
     private double startingEncoderPosition;
@@ -36,7 +34,6 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
         this.backlashAccountabilityTimeSeconds = backlashAccountabilityTimeSeconds;
 
         this.movementVoltage = new LoggedDashboardNumber("GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
-        this.shouldMoveClockwise = new LoggedDashboardBoolean("GearRatioCalculation/" + this.subsystemName + "/ShouldMoveClockwise", false);
 
         addRequirements(requirement);
         addCommands(
@@ -72,7 +69,7 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
     }
 
     private void runGearRatioCalculation() {
-        runGearRatioCalculation.accept(movementVoltage.get() * getRotationDirection());
+        runGearRatioCalculation.accept(movementVoltage.get());
         gearRatio = calculateGearRatio();
     }
 
@@ -95,10 +92,6 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
 
     private double getEncoderDistance() {
         return startingEncoderPosition - encoderPositionSupplier.getAsDouble();
-    }
-
-    private int getRotationDirection() {
-        return shouldMoveClockwise.get() ? -1 : 1;
     }
 
     private void printResult() {
