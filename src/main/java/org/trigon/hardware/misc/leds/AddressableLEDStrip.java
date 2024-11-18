@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 public class AddressableLEDStrip extends LEDStrip {
     private static AddressableLED LED;
     private static AddressableLEDBuffer LED_BUFFER;
+
     private int lastBreatheLED;
     private double lastLEDAnimationChangeTime = 0;
     private double rainbowFirstPixelHue = 0;
@@ -22,13 +23,15 @@ public class AddressableLEDStrip extends LEDStrip {
 
     /**
      * Sets the AddressableLED instance to be used for controlling the LED strip. Must be set before using any LED strips.
-     * The LED instance be configured before being set, however it does not need to be started.
+     * The LED instance should be configured before being set, however it does not need to be started.
      *
      * @param led the LED instance to be used
      */
     public static void setAddressableLED(AddressableLED led) {
-        LED = led;
-        LED.start();
+        if (LED == null) {
+            LED = led;
+            LED.start();
+        }
     }
 
     /**
@@ -38,11 +41,12 @@ public class AddressableLEDStrip extends LEDStrip {
      * @param ledBuffer the LED buffer instance to be used
      */
     public static void setAddressableLEDBuffer(AddressableLEDBuffer ledBuffer) {
-        LED_BUFFER = ledBuffer;
+        if (LED_BUFFER == null)
+            LED_BUFFER = ledBuffer;
     }
 
     /**
-     * Constructs a new AddressableLEDStrip. Before any commands are sent to the LED strip, the setLED method must be called.
+     * Constructs a new AddressableLEDStrip. Before any commands are sent to the LED strip, the setAddressableLED and setAddressableLEDBuffer methods must be called.
      *
      * @param inverted     whether the LED strip is inverted
      * @param numberOfLEDs the amount of LEDs in the strip

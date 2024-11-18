@@ -16,7 +16,6 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.staticColor(color)), LEDStrips);
                     runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.staticColor(color)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
@@ -28,7 +27,6 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.blink(firstColor, blinkingIntervalSeconds)), LEDStrips);
                     runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.blink(firstColor, blinkingIntervalSeconds)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
@@ -40,7 +38,6 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode)), LEDStrips);
                     runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
@@ -52,7 +49,6 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.colorFlow(color, cycleTimeSeconds, inverted)), LEDStrips);
                     runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.colorFlow(color, cycleTimeSeconds, inverted)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
@@ -64,7 +60,6 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.alternateColor(firstColor, secondColor)), LEDStrips);
                     runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.alternateColor(firstColor, secondColor)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
@@ -76,7 +71,6 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.sectionColor(colors)), LEDStrips);
                     runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.sectionColor(colors)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
@@ -88,7 +82,6 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs((LEDStrip -> LEDStrip.rainbow(brightness, speed)), LEDStrips);
                     runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.rainbow(brightness, speed)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),

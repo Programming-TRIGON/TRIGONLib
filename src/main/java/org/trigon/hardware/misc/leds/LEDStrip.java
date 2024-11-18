@@ -37,6 +37,7 @@ public abstract class LEDStrip extends SubsystemBase {
 
     void setCurrentAnimation(Runnable currentAnimation) {
         this.currentAnimation = currentAnimation;
+        currentAnimation.run();
     }
 
     abstract void resetLEDSettings();
