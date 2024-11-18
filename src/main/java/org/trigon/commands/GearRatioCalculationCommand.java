@@ -50,7 +50,7 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
         addCommands(
                 getGearRatioCalculationCommand(),
                 getBacklashAccountabilityCommand(),
-                getLogGearRatioCommand()
+                getCalculateGearRatioCommand()
         );
     }
 
@@ -65,7 +65,7 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
         );
     }
 
-    private Command getLogGearRatioCommand() {
+    private Command getCalculateGearRatioCommand() {
         return new InstantCommand(
                 () -> {
                     gearRatio = calculateGearRatio();
