@@ -68,6 +68,7 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private Command getLogGearRatioCommand() {
         return new InstantCommand(
                 () -> {
+                    gearRatio = calculateGearRatio();
                     logGearRatio();
                     printResult();
                 }
@@ -81,11 +82,9 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
 
     private void runGearRatioCalculation() {
         runGearRatioCalculation.accept(movementVoltage.get());
-        gearRatio = calculateGearRatio();
     }
 
     private void logGearRatio() {
-
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", getEncoderDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
