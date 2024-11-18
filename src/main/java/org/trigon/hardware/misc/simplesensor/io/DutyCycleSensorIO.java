@@ -16,4 +16,3 @@ public class DutyCycleSensorIO extends SimpleSensorIO {
         inputs.value = dutyCycle.getHighTimeNanoseconds();
     }
 }
-

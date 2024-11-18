@@ -11,16 +11,32 @@ import org.trigon.hardware.phoenix6.talonfx.io.RealTalonFXIO;
 import org.trigon.hardware.phoenix6.talonfx.io.SimulationTalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
+/**
+ * A class that represents a Talon FX motor. Used to control the motor and get the values of the motor.
+ */
 public class TalonFXMotor {
     private final String motorName;
     private final TalonFXIO motorIO;
     private final Phoenix6Inputs motorInputs;
     private final int id;
 
+    /**
+     * Creates a new Talon FX motor.
+     *
+     * @param id        the motor ID
+     * @param motorName the name of the motor
+     */
     public TalonFXMotor(int id, String motorName) {
         this(id, motorName, "");
     }
 
+    /**
+     * Creates a new Talon FX motor.
+     *
+     * @param id        the motor ID
+     * @param motorName the name of the motor
+     * @param canbus    the canivore name
+     */
     public TalonFXMotor(int id, String motorName, String canbus) {
         this.motorName = motorName;
         this.motorIO = generateIO(id, canbus);
@@ -29,19 +45,38 @@ public class TalonFXMotor {
         motorIO.optimizeBusUsage();
     }
 
+    /**
+     * Updates the motor, and logs the inputs.
+     */
     public void update() {
         motorIO.updateMotor();
         Logger.processInputs("Motors/" + motorName, motorInputs);
     }
 
+    /**
+     * Gets the ID of the motor.
+     *
+     * @return the ID of the motor
+     */
     public int getID() {
         return id;
     }
 
+    /**
+     * Sets the physics simulation of the motor.
+     *
+     * @param physicsSimulation the simulation
+     */
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
         motorIO.setPhysicsSimulation(physicsSimulation);
     }
 
+    /**
+     * Applies the configurations to the motor, in simulation and real life.
+     *
+     * @param realConfiguration       configuration to be used in real life
+     * @param simulationConfiguration configuration to be used in simulation
+     */
     public void applyConfigurations(TalonFXConfiguration realConfiguration, TalonFXConfiguration simulationConfiguration) {
         if (RobotHardwareStats.isSimulation())
             motorIO.applyConfiguration(simulationConfiguration);
@@ -49,36 +84,78 @@ public class TalonFXMotor {
             motorIO.applyConfiguration(realConfiguration);
     }
 
+    /**
+     * Applies the configuration to be used both in real life and in simulation.
+     *
+     * @param simulationAndRealConfiguration the configuration
+     */
     public void applyConfiguration(TalonFXConfiguration simulationAndRealConfiguration) {
         motorIO.applyConfiguration(simulationAndRealConfiguration);
     }
 
+    /**
+     * Applies the configuration to be used in real life.
+     *
+     * @param realConfiguration the configuration
+     */
     public void applyRealConfiguration(TalonFXConfiguration realConfiguration) {
         if (!RobotHardwareStats.isSimulation())
             motorIO.applyConfiguration(realConfiguration);
     }
 
+    /**
+     * Applies the configuration to be used in simulation.
+     *
+     * @param simulationConfiguration the configuration
+     */
     public void applySimulationConfiguration(TalonFXConfiguration simulationConfiguration) {
         if (RobotHardwareStats.isSimulation())
             motorIO.applyConfiguration(simulationConfiguration);
     }
 
+    /**
+     * Stops the motor.
+     */
     public void stopMotor() {
         motorIO.stopMotor();
     }
 
+    /**
+     * Gets a signal from the motor.
+     *
+     * @param signal the type of signal to get
+     * @return the signal
+     */
     public double getSignal(TalonFXSignal signal) {
         return motorInputs.getSignal(signal.name);
     }
 
+    /**
+     * Gets a threaded signal from the motor.
+     *
+     * @param signal the type of signal to get
+     * @return the signal
+     */
     public double[] getThreadedSignal(TalonFXSignal signal) {
         return motorInputs.getThreadedSignal(signal.name);
     }
 
+    /**
+     * Registers a signal to the motor.
+     *
+     * @param signal               the signal to register
+     * @param updateFrequencyHertz the frequency to update the signal
+     */
     public void registerSignal(TalonFXSignal signal, double updateFrequencyHertz) {
         motorInputs.registerSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
+    /**
+     * Registers a threaded signal to the motor.
+     *
+     * @param signal               the signal to register
+     * @param updateFrequencyHertz the frequency to update the signal
+     */
     public void registerThreadedSignal(TalonFXSignal signal, double updateFrequencyHertz) {
         motorInputs.registerThreadedSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
     }
