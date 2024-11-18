@@ -7,6 +7,9 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
+/**
+ * A command that calculates and logs the gear ratio of a subsystem by comparing the positions of a rotor and an encoder..
+ */
 public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private final DoubleSupplier rotorPositionSupplier;
     private final DoubleSupplier encoderPositionSupplier;
@@ -20,13 +23,21 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private double startingEncoderPosition;
     private double gearRatio;
 
+    /**
+     * Creates a new GearRatioCalculationCommand.
+     *
+     * @param rotorPositionSupplier             a supplier that returns the current position of the rotor
+     * @param encoderPositionSupplier           a supplier that returns the current position of the encoder
+     * @param runGearRatioCalculation           a consumer that runs the gear ratio calculation with a given voltage
+     * @param backlashAccountabilityTimeSeconds the time to wait before logging the gear ratio in order to account for backlash
+     * @param requirement                       the subsystem that this command requires
+     */
     public GearRatioCalculationCommand(
             DoubleSupplier rotorPositionSupplier,
             DoubleSupplier encoderPositionSupplier,
             DoubleConsumer runGearRatioCalculation,
             double backlashAccountabilityTimeSeconds,
-            SubsystemBase requirement
-    ) {
+            SubsystemBase requirement) {
         this.rotorPositionSupplier = rotorPositionSupplier;
         this.encoderPositionSupplier = encoderPositionSupplier;
         this.runGearRatioCalculation = runGearRatioCalculation;

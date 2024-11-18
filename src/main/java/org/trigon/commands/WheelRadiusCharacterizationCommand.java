@@ -19,6 +19,9 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+/**
+ * A command for characterizing the wheel radius of each module of a swerve drive system by calculating, the radius of each drive wheel based on rotational data and robot yaw during operation.
+ */
 public class WheelRadiusCharacterizationCommand extends Command {
     private static final LoggedDashboardNumber CHARACTERIZATION_SPEED = new LoggedDashboardNumber("WheelRadiusCharacterization/SpeedRadiansPerSecond", 1);
     private static final LoggedDashboardNumber ROTATION_RATE_LIMIT = new LoggedDashboardNumber("WheelRadiusCharacterization/RotationRateLimit", 1);
@@ -35,6 +38,38 @@ public class WheelRadiusCharacterizationCommand extends Command {
     private double accumulatedGyroYawRadians;
     private double[] startingWheelPositions;
 
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistanceFromCenterMeters  an array of the distances of each wheel from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
+    public WheelRadiusCharacterizationCommand(Translation2d wheelDistanceFromCenterMeters,
+                                              Supplier<double[]> wheelPositionsRadiansSupplier,
+                                              DoubleSupplier gyroYawRadiansSupplier,
+                                              DoubleConsumer runWheelRadiusCharacterization,
+                                              SubsystemBase requirement) {
+        this(
+                new Translation2d[]{wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters},
+                wheelPositionsRadiansSupplier,
+                gyroYawRadiansSupplier,
+                runWheelRadiusCharacterization,
+                requirement
+        );
+    }
+
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistancesFromCenterMeters an array of the distances of each wheel from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
     public WheelRadiusCharacterizationCommand(
             Translation2d[] wheelDistancesFromCenterMeters,
             Supplier<double[]> wheelPositionsRadiansSupplier,
@@ -50,14 +85,23 @@ public class WheelRadiusCharacterizationCommand extends Command {
         );
     }
 
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistanceFromCenterMeters  the distance of the wheels from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
     public WheelRadiusCharacterizationCommand(
-            double wheelDistancFromCenterMeters,
+            double wheelDistanceFromCenterMeters,
             Supplier<double[]> wheelPositionsRadiansSupplier,
             DoubleSupplier gyroYawRadiansSupplier,
             DoubleConsumer runWheelRadiusCharacterization,
             SubsystemBase requirement) {
         this(
-                new double[]{wheelDistancFromCenterMeters, wheelDistancFromCenterMeters, wheelDistancFromCenterMeters, wheelDistancFromCenterMeters},
+                new double[]{wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters},
                 wheelPositionsRadiansSupplier,
                 gyroYawRadiansSupplier,
                 runWheelRadiusCharacterization,
@@ -65,21 +109,15 @@ public class WheelRadiusCharacterizationCommand extends Command {
         );
     }
 
-    public WheelRadiusCharacterizationCommand(Translation2d wheelDistanceFromCenterMeters,
-                                              Supplier<double[]> wheelPositionsRadiansSupplier,
-                                              DoubleSupplier gyroYawRadiansSupplier,
-                                              DoubleConsumer runWheelRadiusCharacterization,
-                                              SubsystemBase requirement) {
-        this(
-                new Translation2d[]{wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters},
-                wheelPositionsRadiansSupplier,
-                gyroYawRadiansSupplier,
-                runWheelRadiusCharacterization,
-                requirement
-        );
-    }
-
-
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistancesFromCenterMeters an array of the distances of each wheel from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
     public WheelRadiusCharacterizationCommand(double[] wheelDistancesFromCenterMeters,
                                               Supplier<double[]> wheelPositionsRadiansSupplier,
                                               DoubleSupplier gyroYawRadiansSupplier,
