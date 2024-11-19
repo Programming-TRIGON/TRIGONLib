@@ -66,16 +66,15 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void clearLEDColors() {
-        if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.clearLEDColors();
+        if (runIfInSimulation(simulationLEDStrip::clearLEDColors))
             return;
-        }
+
         CANDLE.clearAnimation(animationSlot);
     }
 
     @Override
     void blink(Color firstColor, double speed) {
-        if (isSimulation(() -> simulationLEDStrip.blink(firstColor, speed)))
+        if (runIfInSimulation(() -> simulationLEDStrip.blink(firstColor, speed)))
             return;
 
         CANDLE.animate(
@@ -94,7 +93,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void staticColor(Color color) {
-        if (isSimulation(() -> simulationLEDStrip.staticColor(color)))
+        if (runIfInSimulation(() -> simulationLEDStrip.staticColor(color)))
             return;
 
         CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, indexOffset, numberOfLEDs);
@@ -102,7 +101,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void breathe(Color color, int amountOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
-        if (isSimulation(() -> simulationLEDStrip.breathe(color, amountOfBreathingLEDs, speed, inverted, bounceMode)))
+        if (runIfInSimulation(() -> simulationLEDStrip.breathe(color, amountOfBreathingLEDs, speed, inverted, bounceMode)))
             return;
 
         CANDLE.animate(
@@ -123,7 +122,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void alternateColor(Color firstColor, Color secondColor) {
-        if (isSimulation(() -> simulationLEDStrip.alternateColor(firstColor, secondColor)))
+        if (runIfInSimulation(() -> simulationLEDStrip.alternateColor(firstColor, secondColor)))
             return;
 
         for (int i = 0; i < numberOfLEDs; i++)
@@ -139,7 +138,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void colorFlow(Color color, double speed, boolean inverted) {
-        if (isSimulation(() -> simulationLEDStrip.colorFlow(color, speed, inverted)))
+        if (runIfInSimulation(() -> simulationLEDStrip.colorFlow(color, speed, inverted)))
             return;
 
         boolean correctedInverted = this.inverted != inverted;
@@ -160,7 +159,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void rainbow(double brightness, double speed) {
-        if (isSimulation(() -> simulationLEDStrip.rainbow(brightness, speed)))
+        if (runIfInSimulation(() -> simulationLEDStrip.rainbow(brightness, speed)))
             return;
 
         CANDLE.animate(
@@ -177,7 +176,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void sectionColor(Supplier<Color>[] colors) {
-        if (isSimulation(() -> simulationLEDStrip.sectionColor(colors)))
+        if (runIfInSimulation(() -> simulationLEDStrip.sectionColor(colors)))
             return;
 
         final int LEDSPerSection = (int) Math.floor(numberOfLEDs / colors.length);
@@ -203,7 +202,7 @@ public class CANdleLEDStrip extends LEDStrip {
         }
     }
 
-    private boolean isSimulation(Runnable simulationAction) {
+    private boolean runIfInSimulation(Runnable simulationAction) {
         if (RobotHardwareStats.isSimulation()) {
             setCurrentAnimation(simulationAction);
             return true;
