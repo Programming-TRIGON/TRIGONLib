@@ -21,9 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LimelightHelpers {
-
     private static final Map<String, DoubleArrayEntry> doubleArrayEntries = new ConcurrentHashMap<>();
-
 
     public static class LimelightTarget_Retro {
 

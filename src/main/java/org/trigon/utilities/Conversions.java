@@ -2,6 +2,9 @@ package org.trigon.utilities;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
+/**
+ * A class that contains various conversion methods.
+ */
 public class Conversions {
     public static final double
             MAG_TICKS = 4096,

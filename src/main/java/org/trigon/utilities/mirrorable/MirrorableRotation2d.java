@@ -2,11 +2,20 @@ package org.trigon.utilities.mirrorable;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
+/**
+ * A class that represents a {@link Rotation2d} that can be mirrored.
+ */
 public class MirrorableRotation2d extends Mirrorable<Rotation2d> {
     public MirrorableRotation2d(Rotation2d nonMirroredRotation, boolean mirrorWhenRedAlliance) {
         super(nonMirroredRotation, mirrorWhenRedAlliance);
     }
 
+    /**
+     * Creates a new MirrorableRotation2d with the given rotation value.
+     *
+     * @param radians               the value of the angle in radians
+     * @param mirrorWhenRedAlliance whether to mirror the object when the robot is on the red alliance
+     */
     public MirrorableRotation2d(double radians, boolean mirrorWhenRedAlliance) {
         this(new Rotation2d(radians), mirrorWhenRedAlliance);
     }
