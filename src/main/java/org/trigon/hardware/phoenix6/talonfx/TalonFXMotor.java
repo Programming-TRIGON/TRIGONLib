@@ -160,14 +160,29 @@ public class TalonFXMotor {
         motorInputs.registerThreadedSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
     }
 
+    /**
+     * Sends a request to the motor.
+     *
+     * @param request the request to send
+     */
     public void setControl(ControlRequest request) {
         motorIO.setControl(request);
     }
 
+    /**
+     * Sets the motor's current position.
+     *
+     * @param positionRotations the position to set
+     */
     public void setPosition(double positionRotations) {
         motorIO.setPosition(positionRotations);
     }
 
+    /**
+     * Sets the motors Neutral Mode.
+     *
+     * @param brake should the motor brake
+     */
     public void setBrake(boolean brake) {
         motorIO.setBrake(brake);
     }

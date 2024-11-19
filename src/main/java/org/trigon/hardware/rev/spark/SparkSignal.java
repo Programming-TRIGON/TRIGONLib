@@ -7,6 +7,9 @@ import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
 
 import java.util.function.Function;
 
+/**
+ * Enum for the different signals that can be read from a Spark motor.
+ */
 public enum SparkSignal {
     POSITION(null, SparkEncoder::getPositionRotations),
     VELOCITY(null, SparkEncoder::getVelocityRotationsPerSecond),
