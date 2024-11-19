@@ -20,7 +20,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 /**
- * A command for characterizing the wheel radius of each module of a swerve drive system by calculating, the radius of each drive wheel based on rotational data and robot yaw during operation.
+ * A command for characterizing the wheel radius of each module of a swerve drive system by calculating the radius of each drive wheel based on rotational data and robot yaw during operation.
  */
 public class WheelRadiusCharacterizationCommand extends Command {
     private static final LoggedDashboardNumber CHARACTERIZATION_SPEED = new LoggedDashboardNumber("WheelRadiusCharacterization/SpeedRadiansPerSecond", 1);

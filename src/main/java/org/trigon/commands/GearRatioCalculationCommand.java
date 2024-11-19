@@ -8,7 +8,7 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 /**
- * A command that calculates and logs the gear ratio of a subsystem by comparing the positions of a rotor and an encoder..
+ * A command that calculates and logs the gear ratio of a subsystem by comparing the positions of a rotor and an encoder.
  */
 public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private final DoubleSupplier rotorPositionSupplier;
@@ -48,19 +48,17 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
 
         addRequirements(requirement);
         addCommands(
-                getGearRatioCalculationCommand(),
-                getBacklashAccountabilityCommand(),
+                getGearRatioCalculationCommand().alongWith(getBacklashAccountabilityCommand()),
                 getCalculateGearRatioCommand()
         );
     }
 
     private Command getBacklashAccountabilityCommand() {
-        return new WaitCommand(backlashAccountabilityTimeSeconds);
+        return new WaitCommand(backlashAccountabilityTimeSeconds).andThen(getStartingPositionsCommand());
     }
 
     private Command getGearRatioCalculationCommand() {
-        return new InitExecuteCommand(
-                this::getStartingPositions,
+        return new RunCommand(
                 this::runGearRatioCalculation
         );
     }
@@ -72,6 +70,12 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
                     logGearRatio();
                     printResult();
                 }
+        );
+    }
+
+    private Command getStartingPositionsCommand() {
+        return new InstantCommand(
+                this::getStartingPositions
         );
     }
 
