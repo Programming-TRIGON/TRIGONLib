@@ -12,7 +12,7 @@ import org.trigon.hardware.phoenix6.talonfx.io.SimulationTalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
- * A class that represents a Talon FX motor. Used to control the motor and get the values of the motor.
+ * A class that represents a Talon FX motor. Used to control and and get the values of the motor.
  */
 public class TalonFXMotor {
     private final String motorName;
@@ -46,7 +46,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Updates the motor, and logs the inputs.
+     * Updates the motor and logs the inputs.
      */
     public void update() {
         motorIO.updateMotor();
@@ -72,7 +72,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Applies the configurations to the motor, in simulation and real life.
+     * Applies both the real and simulation configurations to the motor
      *
      * @param realConfiguration       configuration to be used in real life
      * @param simulationConfiguration configuration to be used in simulation
@@ -161,7 +161,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Sends a request to the motor.
+     * Sends a control request to the motor.
      *
      * @param request the request to send
      */
@@ -170,7 +170,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Sets the motor's current position.
+     * Sets the motor's current position in rotations.
      *
      * @param positionRotations the position to set
      */
@@ -179,7 +179,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Sets the motors Neutral Mode.
+     * Sets the motors neutral Mode.
      *
      * @param brake should the motor brake
      */

@@ -14,9 +14,9 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new SimpleMotorSimulation.
      *
-     * @param gearbox         The type of motor
-     * @param gearRatio       The gear ratio
-     * @param momentOfInertia The motors moment of inertia
+     * @param gearbox         the type of motor
+     * @param gearRatio       the motor's gear ratio
+     * @param momentOfInertia the motor's moment of inertia
      */
     public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
         super(gearRatio);

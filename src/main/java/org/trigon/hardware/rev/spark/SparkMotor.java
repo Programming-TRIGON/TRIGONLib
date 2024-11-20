@@ -143,10 +143,11 @@ public class SparkMotor {
     }
 
     /**
-     * Set the rate of transmission for periodic frames from the SPARK motor.
+     * Sets the transmission period for a specific periodic frame on the motor controller.
+     * This method adjusts the rate at which the controller sends the frame, but the change is not saved permanently and will reset on powerup.
      *
-     * @param frame    the frame to set the period for
-     * @param periodMs the period in milliseconds
+     * @param frame    The periodic frame to modify
+     * @param periodMs The new transmission period in milliseconds.
      */
     public void setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame frame, int periodMs) {
         motorIO.setPeriodicFramePeriod(frame, periodMs);
@@ -160,7 +161,7 @@ public class SparkMotor {
     }
 
     /**
-     * Sets the motors neutral value.
+     * Sets the motors neutral mode.
      *
      * @param brake should the motor brake
      */
@@ -169,7 +170,7 @@ public class SparkMotor {
     }
 
     /**
-     * Sets the motors inverted value.
+     * Sets the motor's inverted value.
      *
      * @param inverted should the motor be inverted
      */
@@ -180,7 +181,7 @@ public class SparkMotor {
     /**
      * Enables and sets the voltage compensation.
      *
-     * @param voltage the voltage to set
+     * @param voltage the voltage compensation to set
      */
     public void enableVoltageCompensation(double voltage) {
         motorIO.enableVoltageCompensation(voltage);
@@ -251,7 +252,7 @@ public class SparkMotor {
     }
 
     /**
-     * Writes all settings to flash
+     * Saves the current motor controller configuration to non-volatile memory to retain settings after power cycles.
      */
     public void burnFlash() {
         CompletableFuture.runAsync(() -> {

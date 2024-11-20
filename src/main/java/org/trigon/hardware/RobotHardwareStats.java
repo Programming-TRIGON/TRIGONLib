@@ -12,7 +12,7 @@ public class RobotHardwareStats {
      * Sets the current robot stats.
      *
      * @param isReal     whether the robot is real
-     * @param replayType the replay type
+     * @param replayType the type of replay
      */
     public static void setCurrentRobotStats(boolean isReal, ReplayType replayType) {
         if (isReal || replayType.equals(ReplayType.NONE)) {
@@ -55,14 +55,14 @@ public class RobotHardwareStats {
     /**
      * Gets whether the robot is in simulation mode.
      *
-     * @return whether the robot is in simulation mode
+     * @return whether the robot is running in simulation
      */
     public static boolean isSimulation() {
         return IS_SIMULATION;
     }
 
     /**
-     * An enum that represents the replay type.
+     * An enum that represents type of replay.
      */
     public enum ReplayType {
         NONE,

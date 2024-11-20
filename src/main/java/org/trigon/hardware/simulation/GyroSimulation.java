@@ -18,10 +18,10 @@ public class GyroSimulation {
     }
 
     /**
-     * Updates the gyro simulation.
+     * Updates the simulation's current angle in radians based on the angular velocity.
      *
-     * @param omegaRadiansPerSecond The angular velocity of the gyro in radians per second
-     * @param timeSeconds           The time in seconds
+     * @param omegaRadiansPerSecond the angular velocity in radians per second
+     * @param timeSeconds           the time elapsed in seconds since the last update
      */
     public void update(double omegaRadiansPerSecond, double timeSeconds) {
         simulationRadians += omegaRadiansPerSecond * timeSeconds;

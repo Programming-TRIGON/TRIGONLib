@@ -7,7 +7,7 @@ import org.trigon.hardware.SignalUtilities;
 import java.util.function.Function;
 
 /**
- * An enum that represents the different signals that can be gotten from a Talon FX motor.
+ * An enum that represents the different signals that can be sent from a TalonFX motor.
  */
 public enum TalonFXSignal {
     POSITION(TalonFX::getPosition),

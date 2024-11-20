@@ -16,9 +16,9 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new FlywheelSimulation.
      *
-     * @param gearbox         The motor used to control the flywheel
-     * @param gearRatio       The gear ratio
-     * @param momentOfInertia The moment of inertia of the flywheel
+     * @param gearbox         the motor used to control the flywheel
+     * @param gearRatio       the motor's gear ratio
+     * @param momentOfInertia the moment of inertia of the flywheel
      */
     public FlywheelSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
         super(gearRatio);
@@ -28,10 +28,10 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new FlywheelSimulation.
      *
-     * @param gearbox   The motor used to control the flywheel
-     * @param gearRatio The gear ratio
-     * @param kv        The velocity gain of the flywheel
-     * @param ka        The acceleration gain of the flywheel
+     * @param gearbox   the motor used to control the flywheel
+     * @param gearRatio the motor's gear ratio
+     * @param kv        voltage needed to maintain constant velocity
+     * @param ka        voltage needed to induce a specific acceleration
      */
     public FlywheelSimulation(DCMotor gearbox, double gearRatio, double kv, double ka) {
         super(gearRatio);
@@ -41,7 +41,7 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     /**
      * Gets the current draw of the flywheel in amperes.
      *
-     * @return The current in amperes
+     * @return the current in amperes
      */
     @Override
     public double getCurrent() {

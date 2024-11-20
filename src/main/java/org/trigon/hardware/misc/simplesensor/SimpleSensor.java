@@ -83,7 +83,7 @@ public class SimpleSensor {
     }
 
     /**
-     * Gets the binary value of the sensor.
+     * Gets the binary value of the sensor. A binary value is a boolean value that is true if the sensor has a value greater than 0.
      *
      * @return The binary value of the sensor.
      */
@@ -110,7 +110,7 @@ public class SimpleSensor {
     }
 
     /**
-     * Updates the sensor inputs and logs them.
+     * Updates and logs the sensor's inputs.
      */
     public void updateSensor() {
         sensorIO.updateInputs(sensorInputs);

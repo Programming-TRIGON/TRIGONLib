@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMax;
 import java.util.function.Function;
 
 /**
- * Enum for the different types of Spark motors.
+ * An enum that represents the different types of Spark motors.
  */
 public enum SparkType {
     SPARK_MAX((id -> new CANSparkMax(id, CANSparkMax.MotorType.kBrushless))),

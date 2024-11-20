@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
- * A class that represents an Xbox controller. Used to get the values of the sticks and buttons on the controller.
+ * A class that represents an Xbox controller. Used to get the values of the sticks and buttons on a controller.
  */
 public class XboxController extends CommandXboxController {
     private int exponent = 1;

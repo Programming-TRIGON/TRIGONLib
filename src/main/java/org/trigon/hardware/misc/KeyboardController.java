@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardBoolean;
 
 /**
- * A class that represents a keyboard controller. Used to get input from the keyboard.
+ * A class that represents a keyboard controller. Used to get input a keyboard.
  */
 public class KeyboardController {
     private final LoggedDashboardBoolean

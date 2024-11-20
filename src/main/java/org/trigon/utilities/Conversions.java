@@ -3,7 +3,7 @@ package org.trigon.utilities;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 /**
- * A class that contains various conversion methods.
+ * A class that contains various methods for unit conversions.
  */
 public class Conversions {
     public static final double
