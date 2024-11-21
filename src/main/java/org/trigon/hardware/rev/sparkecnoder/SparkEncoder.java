@@ -1,10 +1,10 @@
 package org.trigon.hardware.rev.sparkecnoder;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkBase;
 
 public abstract class SparkEncoder {
-    public static SparkEncoder createEncoder(CANSparkBase spark) {
+    public static SparkEncoder createEncoder(SparkBase spark) {
         final SparkAbsoluteEncoder absoluteEncoder = spark.getAbsoluteEncoder();
         if (absoluteEncoder != null)
             return new AbsoluteSparkEncoder(absoluteEncoder);
@@ -12,13 +12,11 @@ public abstract class SparkEncoder {
             return new RelativeSparkEncoder(spark.getEncoder());
     }
 
-    public static SparkEncoder createRelativeEncoder(CANSparkBase spark) {
+    public static SparkEncoder createRelativeEncoder(SparkBase spark) {
         return new RelativeSparkEncoder(spark.getEncoder());
     }
 
     public abstract double getPositionRotations();
 
     public abstract double getVelocityRotationsPerSecond();
-
-    public abstract void setConversionsFactor(double conversionsFactor);
 }

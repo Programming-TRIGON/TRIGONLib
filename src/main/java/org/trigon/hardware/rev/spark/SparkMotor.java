@@ -1,16 +1,13 @@
 package org.trigon.hardware.rev.spark;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.io.RealSparkIO;
 import org.trigon.hardware.rev.spark.io.SimulationSparkIO;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * A class the represents a Spark motor. Used to control and read data from a Spark motor.
@@ -102,7 +99,7 @@ public class SparkMotor {
      * @param value       the value to set
      * @param controlType the control type
      */
-    public void setReference(double value, CANSparkBase.ControlType controlType) {
+    public void setReference(double value, SparkBase.ControlType controlType) {
         motorIO.setReference(value, controlType);
     }
 
@@ -113,7 +110,7 @@ public class SparkMotor {
      * @param controlType the control type
      * @param pidSlot     the PID slot to use
      */
-    public void setReference(double value, CANSparkBase.ControlType controlType, int pidSlot) {
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
         motorIO.setReference(value, controlType, pidSlot);
     }
 
@@ -125,7 +122,7 @@ public class SparkMotor {
      * @param pidSlot        the PID slot to use
      * @param arbFeedForward the feed forward value
      */
-    public void setReference(double value, CANSparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
         motorIO.setReference(value, controlType, pidSlot, arbFeedForward);
     }
 
@@ -138,7 +135,7 @@ public class SparkMotor {
      * @param arbFeedForward      the feed forward value
      * @param arbFeedForwardUnits the units of the feed forward value
      */
-    public void setReference(double value, CANSparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkPIDController.ArbFFUnits arbFeedForwardUnits) {
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
         motorIO.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
     }
 
@@ -146,11 +143,10 @@ public class SparkMotor {
      * Sets the transmission period for a specific periodic frame on the motor controller.
      * This method adjusts the rate at which the controller sends the frame, but the change is not saved permanently and will reset on powerup.
      *
-     * @param frame    The periodic frame to modify
      * @param periodMs The new transmission period in milliseconds.
      */
-    public void setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame frame, int periodMs) {
-        motorIO.setPeriodicFramePeriod(frame, periodMs);
+    public void setPeriodicFramePeriod(int periodMs) {
+        motorIO.setPeriodicFrameTimeout(periodMs);
     }
 
     /**
@@ -158,15 +154,6 @@ public class SparkMotor {
      */
     public void stopMotor() {
         motorIO.stopMotor();
-    }
-
-    /**
-     * Sets the motors neutral mode.
-     *
-     * @param brake should the motor brake
-     */
-    public void setBrake(boolean brake) {
-        motorIO.setBrake(brake);
     }
 
     /**
@@ -179,86 +166,14 @@ public class SparkMotor {
     }
 
     /**
-     * Enables and sets the voltage compensation.
+     * Applies the configuration to the motor.
      *
-     * @param voltage the voltage compensation to set
+     * @param configuration the configuration to apply
+     * @param resetMode     whether to reset safe parameters before setting the configuration
+     * @param persistMode   whether to persist the parameters after setting the configuration
      */
-    public void enableVoltageCompensation(double voltage) {
-        motorIO.enableVoltageCompensation(voltage);
-    }
-
-    /**
-     * Sets the ramp rate for closed loop control.
-     *
-     * @param rampRate the ramp rate to set
-     */
-    public void setClosedLoopRampRate(double rampRate) {
-        motorIO.setClosedLoopRampRate(rampRate);
-    }
-
-    /**
-     * Sets the smart current limitAmperes in amperes.
-     *
-     * @param limitAmperes the limitAmperes to set
-     */
-    public void setSmartCurrentLimit(int limitAmperes) {
-        motorIO.setSmartCurrentLimit(limitAmperes);
-    }
-
-    /**
-     * Sets the ramp rate for open loop control.
-     *
-     * @param rampRate the ramp rate to set
-     */
-    public void setOpenLoopRampRate(double rampRate) {
-        motorIO.setOpenLoopRampRate(rampRate);
-    }
-
-    /**
-     * Sets the PID values for the motor.
-     *
-     * @param p the proportional value
-     * @param i the integral value
-     * @param d the derivative value
-     */
-    public void setPID(double p, double i, double d) {
-        motorIO.setPID(p, i, d);
-    }
-
-    /**
-     * Sets the conversion factor for values received the motor.
-     *
-     * @param conversionsFactor the conversion factor to set
-     */
-    public void setConversionsFactor(double conversionsFactor) {
-        motorIO.setConversionsFactor(conversionsFactor);
-    }
-
-    /**
-     * Restores the motor settings to factory defaults.
-     */
-    public void restoreFactoryDefaults() {
-        motorIO.restoreFactoryDefaults();
-    }
-
-    /**
-     * Enables PID wrapping.
-     *
-     * @param minimumInput the minimum input
-     * @param maximumInput the maximum input
-     */
-    public void enablePIDWrapping(double minimumInput, double maximumInput) {
-        motorIO.enablePIDWrapping(minimumInput, maximumInput);
-    }
-
-    /**
-     * Saves the current motor controller configuration to non-volatile memory to retain settings after power cycles.
-     */
-    public void burnFlash() {
-        CompletableFuture.runAsync(() -> {
-            Timer.delay(5);
-            motorIO.burnFlash();
-        });
+    public void configure(SparkMaxConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        motorIO.configure(configuration, resetMode, persistMode);
     }
 
     private SparkIO createSparkIO(int id, SparkType sparkType, DCMotor simulationMotor) {

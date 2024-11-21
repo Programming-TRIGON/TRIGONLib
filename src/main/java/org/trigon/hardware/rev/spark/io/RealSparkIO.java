@@ -1,31 +1,30 @@
 package org.trigon.hardware.rev.spark.io;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.spark.SparkType;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
 
 public class RealSparkIO extends SparkIO {
-    private final CANSparkBase motor;
-    private final SparkPIDController pidController;
+    private final SparkBase motor;
+    private final SparkClosedLoopController pidController;
     private final SparkEncoder encoder;
 
     public RealSparkIO(int id, SparkType sparkType) {
         motor = sparkType.sparkCreator.apply(id);
-        pidController = motor.getPIDController();
+        pidController = motor.getClosedLoopController();
         encoder = SparkEncoder.createEncoder(motor);
     }
 
     @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl) {
+    public void setReference(double value, SparkBase.ControlType ctrl) {
         pidController.setReference(value, ctrl);
     }
 
     @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot) {
+    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot) {
         pidController.setReference(value, ctrl, pidSlot);
     }
 
@@ -35,7 +34,7 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public CANSparkBase getMotor() {
+    public SparkBase getMotor() {
         return motor;
     }
 
@@ -45,76 +44,27 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public void setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame frame, int periodMs) {
-        motor.setPeriodicFramePeriod(frame, periodMs);
+    public void setPeriodicFrameTimeout(int periodMs) {
+        motor.setPeriodicFrameTimeout(periodMs);
     }
 
     @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
+    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
         pidController.setReference(value, ctrl, pidSlot, arbFeedForward);
     }
 
     @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkPIDController.ArbFFUnits arbFFUnits) {
+    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
         pidController.setReference(value, ctrl, pidSlot, arbFeedForward, arbFFUnits);
     }
 
     @Override
-    public void setBrake(boolean brake) {
-        motor.setIdleMode(brake ? CANSparkMax.IdleMode.kBrake : CANSparkMax.IdleMode.kCoast);
+    public void configure(SparkMaxConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        motor.configure(configuration, resetMode, persistMode);
     }
 
     @Override
     public void setInverted(boolean inverted) {
         motor.setInverted(inverted);
-    }
-
-    @Override
-    public void enableVoltageCompensation(double voltage) {
-        motor.enableVoltageCompensation(voltage);
-    }
-
-    @Override
-    public void setClosedLoopRampRate(double rampRate) {
-        motor.setClosedLoopRampRate(rampRate);
-    }
-
-    @Override
-    public void setSmartCurrentLimit(int limit) {
-        motor.setSmartCurrentLimit(limit);
-    }
-
-    @Override
-    public void setOpenLoopRampRate(double rampRate) {
-        motor.setOpenLoopRampRate(rampRate);
-    }
-
-    @Override
-    public void setPID(double p, double i, double d) {
-        pidController.setP(p);
-        pidController.setI(i);
-        pidController.setD(d);
-    }
-
-    @Override
-    public void setConversionsFactor(double conversionsFactor) {
-        encoder.setConversionsFactor(conversionsFactor);
-    }
-
-    @Override
-    public void restoreFactoryDefaults() {
-        motor.restoreFactoryDefaults();
-    }
-
-    @Override
-    public void burnFlash() {
-        motor.burnFlash();
-    }
-
-    @Override
-    public void enablePIDWrapping(double minInput, double maxInput) {
-        pidController.setPositionPIDWrappingEnabled(true);
-        pidController.setPositionPIDWrappingMinInput(minInput);
-        pidController.setPositionPIDWrappingMaxInput(maxInput);
     }
 }

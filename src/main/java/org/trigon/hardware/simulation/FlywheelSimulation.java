@@ -16,18 +16,6 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new FlywheelSimulation.
      *
-     * @param gearbox         the motor used to control the flywheel
-     * @param gearRatio       the motor's gear ratio
-     * @param momentOfInertia the moment of inertia of the flywheel
-     */
-    public FlywheelSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
-        super(gearRatio);
-        flywheelSimulation = new FlywheelSim(gearbox, gearRatio, momentOfInertia);
-    }
-
-    /**
-     * Creates a new FlywheelSimulation.
-     *
      * @param gearbox   the motor used to control the flywheel
      * @param gearRatio the motor's gear ratio
      * @param kv        voltage needed to maintain constant velocity
@@ -36,6 +24,18 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     public FlywheelSimulation(DCMotor gearbox, double gearRatio, double kv, double ka) {
         super(gearRatio);
         flywheelSimulation = new FlywheelSim(LinearSystemId.identifyVelocitySystem(kv, ka), gearbox, gearRatio);
+    }
+
+    /**
+     * Creates a new FlywheelSimulation.
+     *
+     * @param gearbox         the motor used to control the flywheel
+     * @param gearRatio       the motor's gear ratio
+     * @param momentOfInertia the flywheel's moment of inertia
+     */
+    public FlywheelSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+        super(gearRatio);
+        flywheelSimulation = new FlywheelSim(LinearSystemId.createFlywheelSystem(gearbox, momentOfInertia, gearRatio), gearbox, gearRatio);
     }
 
     /**

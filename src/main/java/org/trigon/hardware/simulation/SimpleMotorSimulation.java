@@ -1,6 +1,7 @@
 package org.trigon.hardware.simulation;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import org.trigon.hardware.RobotHardwareStats;
@@ -14,13 +15,14 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new SimpleMotorSimulation.
      *
-     * @param gearbox         the type of motor
-     * @param gearRatio       the motor's gear ratio
-     * @param momentOfInertia the motor's moment of inertia
+     * @param gearbox   The gearbox of the motor
+     * @param gearRatio The gear ratio of the motor
+     * @param kv        voltage needed to maintain constant velocity
+     * @param ka        voltage needed to induce a specific acceleration
      */
-    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double kv, double ka) {
         super(gearRatio);
-        motorSimulation = new DCMotorSim(gearbox, gearRatio, momentOfInertia);
+        motorSimulation = new DCMotorSim(LinearSystemId.createDCMotorSystem(kv, ka), gearbox, gearRatio);
     }
 
     /**

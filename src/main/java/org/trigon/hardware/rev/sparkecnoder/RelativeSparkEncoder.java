@@ -15,7 +15,6 @@ public class RelativeSparkEncoder extends SparkEncoder {
      */
     public RelativeSparkEncoder(RelativeEncoder encoder) {
         this.encoder = encoder;
-        setConversionsFactor(1);
     }
 
     /**
@@ -34,16 +33,5 @@ public class RelativeSparkEncoder extends SparkEncoder {
      */
     public double getVelocityRotationsPerSecond() {
         return encoder.getVelocity();
-    }
-
-    /**
-     * Sets the conversion factor for values received the encoder.
-     *
-     * @param conversionsFactor The conversion factor to use.
-     */
-    @Override
-    public void setConversionsFactor(double conversionsFactor) {
-        encoder.setPositionConversionFactor(conversionsFactor);
-        encoder.setVelocityConversionFactor(conversionsFactor / 60);
     }
 }
