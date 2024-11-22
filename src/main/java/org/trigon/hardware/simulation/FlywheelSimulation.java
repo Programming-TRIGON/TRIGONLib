@@ -16,7 +16,7 @@ public class FlywheelSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new FlywheelSimulation.
      *
-     * @param gearbox   the motor used to control the flywheel
+     * @param gearbox   the motor(s) used to control the flywheel
      * @param gearRatio the motor's gear ratio
      * @param kv        voltage needed to maintain constant velocity
      * @param ka        voltage needed to induce a specific acceleration

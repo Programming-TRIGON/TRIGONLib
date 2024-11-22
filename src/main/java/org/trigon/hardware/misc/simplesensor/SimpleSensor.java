@@ -92,7 +92,7 @@ public class SimpleSensor {
     }
 
     /**
-     * Gets the scaled value using the scaling constants.
+     * Gets the scaled value from the sensor using the scaling constants.
      *
      * @return The scaled value.
      */

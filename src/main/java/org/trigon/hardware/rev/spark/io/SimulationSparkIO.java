@@ -17,7 +17,7 @@ public class SimulationSparkIO extends SparkIO {
 
     public SimulationSparkIO(int id, DCMotor gearbox) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
-        simulation = new SparkMaxSim(motor, DCMotor.getNeo550(1));
+        simulation = new SparkMaxSim(motor, gearbox);
         pidController = motor.getClosedLoopController();
         encoder = SparkEncoder.createRelativeEncoder(motor);
     }

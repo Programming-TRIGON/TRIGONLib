@@ -35,13 +35,13 @@ public abstract class Mirrorable<T> {
     /**
      * Creates a new mirrorable object.
      *
-     * @param nonMirroredObject     the object when the robot is on the blue alliance, or the non-mirrored object
-     * @param mirrorWhenRedAlliance whether to mirror the object when the robot is on the red alliance
+     * @param nonMirroredObject           the object when the robot is on the blue alliance, or the non-mirrored object
+     * @param shouldMirrorWhenRedAlliance whether to mirror the object when the robot is on the red alliance
      */
-    protected Mirrorable(T nonMirroredObject, boolean mirrorWhenRedAlliance) {
+    protected Mirrorable(T nonMirroredObject, boolean shouldMirrorWhenRedAlliance) {
         this.nonMirroredObject = nonMirroredObject;
         this.mirroredObject = mirror(nonMirroredObject);
-        this.mirrorWhenRedAlliance = mirrorWhenRedAlliance;
+        this.mirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
     }
 
     /**

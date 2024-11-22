@@ -1,7 +1,7 @@
 package org.trigon.hardware;
 
 /**
- * A class that contains stats about the robot hardware.
+ * A class that contains stats about the robot's hardware.
  */
 public class RobotHardwareStats {
     private static boolean IS_SIMULATION = false;
@@ -11,7 +11,7 @@ public class RobotHardwareStats {
     /**
      * Sets the current robot stats.
      *
-     * @param isReal     whether the robot is real
+     * @param isReal     a boolean indicating whether the robot is real
      * @param replayType the type of replay
      */
     public static void setCurrentRobotStats(boolean isReal, ReplayType replayType) {
@@ -44,7 +44,7 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Gets whether the robot is in replay mode.
+     * Checks if the robot is in replay mode.
      *
      * @return whether the robot is in replay mode
      */
@@ -53,7 +53,7 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Gets whether the robot is in simulation mode.
+     * Checks if the robot is running in simulation.
      *
      * @return whether the robot is running in simulation
      */
@@ -62,7 +62,7 @@ public class RobotHardwareStats {
     }
 
     /**
-     * An enum that represents type of replay.
+     * An enum that represents the type of replay.
      */
     public enum ReplayType {
         NONE,

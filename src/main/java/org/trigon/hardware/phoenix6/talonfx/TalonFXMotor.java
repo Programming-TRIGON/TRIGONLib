@@ -12,7 +12,7 @@ import org.trigon.hardware.phoenix6.talonfx.io.SimulationTalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
- * A class that represents a Talon FX motor. Used to control and and get the values of the motor.
+ * A class that represents a Talon FX motor. Used to control and get the values of the motor.
  */
 public class TalonFXMotor {
     private final String motorName;
@@ -23,7 +23,7 @@ public class TalonFXMotor {
     /**
      * Creates a new Talon FX motor.
      *
-     * @param id        the motor ID
+     * @param id        the motor's ID
      * @param motorName the name of the motor
      */
     public TalonFXMotor(int id, String motorName) {
@@ -33,9 +33,9 @@ public class TalonFXMotor {
     /**
      * Creates a new Talon FX motor.
      *
-     * @param id        the motor ID
+     * @param id        the motor's ID
      * @param motorName the name of the motor
-     * @param canbus    the canivore name
+     * @param canbus    the canivore's name
      */
     public TalonFXMotor(int id, String motorName, String canbus) {
         this.motorName = motorName;
@@ -133,7 +133,7 @@ public class TalonFXMotor {
     /**
      * Gets a threaded signal from the motor.
      *
-     * @param signal the type of signal to get
+     * @param signal the type of threaded signal to get
      * @return the signal
      */
     public double[] getThreadedSignal(TalonFXSignal signal) {
@@ -144,7 +144,7 @@ public class TalonFXMotor {
      * Registers a signal to the motor.
      *
      * @param signal               the signal to register
-     * @param updateFrequencyHertz the frequency to update the signal
+     * @param updateFrequencyHertz The frequency at which the signal will be updated
      */
     public void registerSignal(TalonFXSignal signal, double updateFrequencyHertz) {
         motorInputs.registerSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
@@ -153,8 +153,8 @@ public class TalonFXMotor {
     /**
      * Registers a threaded signal to the motor.
      *
-     * @param signal               the signal to register
-     * @param updateFrequencyHertz the frequency to update the signal
+     * @param signal               the threaded signal to register
+     * @param updateFrequencyHertz The frequency at which the threaded signal will be updated
      */
     public void registerThreadedSignal(TalonFXSignal signal, double updateFrequencyHertz) {
         motorInputs.registerThreadedSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
@@ -179,7 +179,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Sets the motors neutral Mode.
+     * Sets the motors neutral mode.
      *
      * @param brake should the motor brake
      */

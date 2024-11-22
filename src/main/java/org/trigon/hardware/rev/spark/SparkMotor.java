@@ -21,7 +21,7 @@ public class SparkMotor {
     /**
      * Creates a new Spark motor.
      *
-     * @param id              the motor ID
+     * @param id              the motor's ID
      * @param sparkType       the type of Spark motor
      * @param motorName       the name of the motor
      * @param simulationMotor the motor to be used in simulation
@@ -50,9 +50,9 @@ public class SparkMotor {
     }
 
     /**
-     * Registers a signal to be read from the motor.
+     * Registers a signal to be logged from the motor.
      *
-     * @param signal the signal to be read
+     * @param signal the signal to be registered
      */
     public void registerSignal(SparkSignal signal) {
         this.registerSignal(signal, false);
@@ -86,8 +86,8 @@ public class SparkMotor {
     /**
      * Gets a threaded signal from the motor.
      *
-     * @param signal the signal to get
-     * @return the signal
+     * @param signal the threaded signal to get
+     * @return the threaded signal
      */
     public double[] getThreadedSignal(SparkSignal signal) {
         return motorInputs.getThreadedSignal(signal.name);
@@ -96,7 +96,7 @@ public class SparkMotor {
     /**
      * Sends a request to the motor.
      *
-     * @param value       the value to set
+     * @param value       the value to set depending on the control type
      * @param controlType the control type
      */
     public void setReference(double value, SparkBase.ControlType controlType) {
@@ -106,7 +106,7 @@ public class SparkMotor {
     /**
      * Sends a request to the motor.
      *
-     * @param value       the value to set
+     * @param value       the value to set depending on the control type
      * @param controlType the control type
      * @param pidSlot     the PID slot to use
      */
@@ -129,7 +129,7 @@ public class SparkMotor {
     /**
      * Sends a request to the motor.
      *
-     * @param value               the value to set
+     * @param value               the value to set depending on the control type
      * @param controlType         the control type
      * @param pidSlot             the PID slot to use
      * @param arbFeedForward      the feed forward value
@@ -143,7 +143,7 @@ public class SparkMotor {
      * Sets the transmission period for a specific periodic frame on the motor controller.
      * This method adjusts the rate at which the controller sends the frame, but the change is not saved permanently and will reset on powerup.
      *
-     * @param periodMs The new transmission period in milliseconds.
+     * @param periodMs the new transmission period in milliseconds
      */
     public void setPeriodicFramePeriod(int periodMs) {
         motorIO.setPeriodicFrameTimeout(periodMs);
