@@ -62,7 +62,7 @@ public class SparkMotor {
      * Registers a signal to be read from the motor.
      *
      * @param signal     the signal to be read
-     * @param isThreaded whether the signal should be read in a separate thread
+     * @param isThreaded whether the signal should be read in a separate thread or not
      */
     public void registerSignal(SparkSignal signal, boolean isThreaded) {
         final SparkStatusSignal statusSignal = signal.getStatusSignal(motorIO.getMotor(), motorIO.getEncoder());
@@ -169,8 +169,8 @@ public class SparkMotor {
      * Applies the configuration to the motor.
      *
      * @param configuration the configuration to apply
-     * @param resetMode     whether to reset safe parameters before setting the configuration
-     * @param persistMode   whether to persist the parameters after setting the configuration
+     * @param resetMode     whether to reset safe parameters before setting the configuration or not
+     * @param persistMode   whether to persist the parameters after setting the configuration or not
      */
     public void configure(SparkMaxConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
         motorIO.configure(configuration, resetMode, persistMode);

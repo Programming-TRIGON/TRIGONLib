@@ -11,7 +11,7 @@ public class RobotHardwareStats {
     /**
      * Sets the current robot stats.
      *
-     * @param isReal     a boolean indicating whether the robot is real
+     * @param isReal     whether the robot is real or simulation
      * @param replayType the type of replay
      */
     public static void setCurrentRobotStats(boolean isReal, ReplayType replayType) {
@@ -46,7 +46,7 @@ public class RobotHardwareStats {
     /**
      * Checks if the robot is in replay mode.
      *
-     * @return whether the robot is in replay mode
+     * @return whether the robot is in replay mode or not
      */
     public static boolean isReplay() {
         return IS_REPLAY;
@@ -55,7 +55,7 @@ public class RobotHardwareStats {
     /**
      * Checks if the robot is running in simulation.
      *
-     * @return whether the robot is running in simulation
+     * @return whether the robot is running in simulation or not
      */
     public static boolean isSimulation() {
         return IS_SIMULATION;
