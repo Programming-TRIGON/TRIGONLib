@@ -23,33 +23,33 @@ public class LEDCommands {
         ).ignoringDisable(true);
     }
 
-    public static Command getBlinkingCommand(Color firstColor, double blinkingIntervalSeconds, LEDStrip... LEDStrips) {
+    public static Command getBlinkingCommand(Color firstColor, double speed, LEDStrip... LEDStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.blink(firstColor, blinkingIntervalSeconds)), LEDStrips);
+                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.blink(firstColor, speed)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
                 LEDStrips
         ).ignoringDisable(true);
     }
 
-    public static Command getBreatheCommand(Color color, int amountOfBreathingLEDs, double cycleTimeSeconds, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDStrip... LEDStrips) {
+    public static Command getBreatheCommand(Color color, int amountOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDStrip... LEDStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.breathe(color, amountOfBreathingLEDs, cycleTimeSeconds, inverted, bounceMode)), LEDStrips);
+                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.breathe(color, amountOfBreathingLEDs, speed, inverted, bounceMode)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
                 LEDStrips
         ).ignoringDisable(true);
     }
 
-    public static Command getColorFlowCommand(Color color, double cycleTimeSeconds, boolean inverted, LEDStrip... LEDStrips) {
+    public static Command getColorFlowCommand(Color color, double speed, boolean inverted, LEDStrip... LEDStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), LEDStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.colorFlow(color, cycleTimeSeconds, inverted)), LEDStrips);
+                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.colorFlow(color, speed, inverted)), LEDStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, LEDStrips),
                 LEDStrips
