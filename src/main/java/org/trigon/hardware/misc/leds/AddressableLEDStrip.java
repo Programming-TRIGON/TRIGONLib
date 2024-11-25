@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
+import org.trigon.hardware.RobotHardwareStats;
 
 import java.util.function.Supplier;
 
@@ -15,6 +16,7 @@ public class AddressableLEDStrip extends LEDStrip {
     private static AddressableLED LED;
     private static AddressableLEDBuffer LED_BUFFER;
 
+    private final boolean shouldOnlyRunInSimulation;
     private int lastBreatheLED;
     private double lastLEDAnimationChangeTime = 0;
     private double rainbowFirstPixelHue = 0;
@@ -53,12 +55,20 @@ public class AddressableLEDStrip extends LEDStrip {
      * @param indexOffset  the offset of the first LED in the strip
      */
     public AddressableLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
+        this(inverted, numberOfLEDs, indexOffset, false);
+    }
+
+    AddressableLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset, boolean shouldOnlyRunInSimulation) {
         super(inverted, numberOfLEDs, indexOffset);
+        this.shouldOnlyRunInSimulation = shouldOnlyRunInSimulation;
         resetLEDSettings();
     }
 
     @Override
     public void periodic() {
+        if (shouldOnlyRunInSimulation && !RobotHardwareStats.isSimulation())
+            return;
+
         currentAnimation.run();
         LED.setData(LED_BUFFER);
     }
