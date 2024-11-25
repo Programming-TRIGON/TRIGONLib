@@ -15,8 +15,8 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new SimpleMotorSimulation.
      *
-     * @param gearbox   The gearbox of the motor
-     * @param gearRatio The gear ratio of the motor
+     * @param gearbox   The gearbox of the motor(s)
+     * @param gearRatio The gearbox's gear ratio
      * @param kv        voltage needed to maintain constant velocity
      * @param ka        voltage needed to induce a specific acceleration
      */

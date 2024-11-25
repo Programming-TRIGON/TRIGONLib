@@ -3,7 +3,7 @@ package org.trigon.utilities.mirrorable;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
- * A class that represents a {@link Rotation2d} that can be mirrored, Reversing its orientation across the center of the field when the robot is on the red alliance.
+ * A class that represents a {@link Rotation2d} that can be mirrored, reversing its orientation across the center of the field when the robot is on the red alliance.
  */
 public class MirrorableRotation2d extends Mirrorable<Rotation2d> {
     public MirrorableRotation2d(Rotation2d nonMirroredRotation, boolean shouldMirrorWhenRedAlliance) {

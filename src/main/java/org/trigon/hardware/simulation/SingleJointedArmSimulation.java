@@ -16,12 +16,12 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
      * Creates a new SingleJointedArmSimulation.
      *
      * @param gearbox          the motor(s) used to control the arm
-     * @param gearRatio        the motor's gear ratio
+     * @param gearRatio        the gearbox's gear ratio
      * @param armLengthMeters  the length of the arm in meters
      * @param armMassKilograms the mass of the arm in kilograms
      * @param minimumAngle     the minimum angle of the arm
      * @param maximumAngle     the maximum angle of the arm
-     * @param simulateGravity  whether to simulate gravity
+     * @param simulateGravity  whether to simulate gravity or not
      */
     public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMassKilograms, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity) {
         super(gearRatio);

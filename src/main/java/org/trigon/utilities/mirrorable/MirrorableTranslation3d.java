@@ -3,7 +3,7 @@ package org.trigon.utilities.mirrorable;
 import edu.wpi.first.math.geometry.Translation3d;
 
 /**
- * A class that represents a {@link Translation3d} that can be mirrored reversing its position across the center of the field when the robot is on the red alliance.
+ * A class that represents a {@link Translation3d} that can be mirrored by reversing its position across the center of the field when the robot is on the red alliance.
  */
 public class MirrorableTranslation3d extends Mirrorable<Translation3d> {
     /**

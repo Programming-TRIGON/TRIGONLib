@@ -11,7 +11,7 @@ public class RobotHardwareStats {
     /**
      * Sets the current robot stats.
      *
-     * @param isReal     whether the robot is real or simulation
+     * @param isReal     whether the robot is real or a simulation
      * @param replayType the type of replay
      */
     public static void setCurrentRobotStats(boolean isReal, ReplayType replayType) {
