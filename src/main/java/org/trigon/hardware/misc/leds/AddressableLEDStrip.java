@@ -24,7 +24,7 @@ public class AddressableLEDStrip extends LEDStrip {
     private int amountOfColorFlowLEDs = 0;
 
     /**
-     * Sets the AddressableLED instance to be used for controlling the LED strip. Must be set before using any LED strips.
+     * Sets the AddressableLED instance to be used for controlling the LED strip. Must be set before using any LED strips. Should only be called once.
      * The LED instance should be configured before being set, however it does not need to be started.
      *
      * @param led the LED instance to be used
@@ -37,8 +37,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     /**
-     * Sets the AddressableLEDBuffer instance to be used for controlling the LED strip. Must be set before using any LED strips.
-     * The LED buffer instance must be configured before being set.
+     * Sets the AddressableLEDBuffer instance to be used for controlling the LED strip. Must be set before using any LED strips. Should only be called once.
      *
      * @param ledBuffer the LED buffer instance to be used
      */
@@ -80,8 +79,8 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     void blink(Color firstColor, double speed) {
-        double correctedSpeed = 1 - speed;
-        double currentTime = Timer.getFPGATimestamp();
+        final double correctedSpeed = 1 - speed;
+        final double currentTime = Timer.getFPGATimestamp();
         if (currentTime - lastLEDAnimationChangeTime > correctedSpeed) {
             lastLEDAnimationChangeTime = currentTime;
             isLEDAnimationChanged = !isLEDAnimationChanged;
@@ -100,10 +99,10 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     void breathe(Color color, int breathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
-        boolean correctedInverted = this.inverted != inverted;
+        final boolean correctedInverted = this.inverted != inverted;
         clearLEDColors();
-        double moveLEDTimeSeconds = 1 - speed;
-        double currentTime = Timer.getFPGATimestamp();
+        final double moveLEDTimeSeconds = 1 - speed;
+        final double currentTime = Timer.getFPGATimestamp();
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
             if (correctedInverted)
@@ -118,9 +117,9 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void colorFlow(Color color, double speed, boolean inverted) {
         clearLEDColors();
-        boolean correctedInverted = this.inverted != inverted;
-        double moveLEDTimeSeconds = 1 - speed;
-        double currentTime = Timer.getFPGATimestamp();
+        final boolean correctedInverted = this.inverted != inverted;
+        final double moveLEDTimeSeconds = 1 - speed;
+        final double currentTime = Timer.getFPGATimestamp();
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
             if (isLEDAnimationChanged)
@@ -139,23 +138,24 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void rainbow(double brightness, double speed) {
-        int adjustedBrightness = (int) (brightness * 255);
-        int hueIncrement = (int) (speed * 8);
+    void rainbow(double brightness, double speed, boolean inverted) {
+        final boolean correctedInverted = this.inverted != inverted;
+        final int adjustedBrightness = (int) (brightness * 255);
+        final int hueIncrement = (int) (speed * 8);
 
         for (int led = 0; led < numberOfLEDs; led++) {
             final int hue = (int) (rainbowFirstPixelHue + (led * 180 / numberOfLEDs) % 180);
             LED_BUFFER.setHSV(led + indexOffset, hue, 255, adjustedBrightness);
         }
 
-        if (inverted) {
+        if (correctedInverted) {
             rainbowFirstPixelHue -= hueIncrement;
             if (rainbowFirstPixelHue < 0)
                 rainbowFirstPixelHue += 180;
-        } else {
-            rainbowFirstPixelHue += hueIncrement;
-            rainbowFirstPixelHue %= 180;
+            return;
         }
+        rainbowFirstPixelHue += hueIncrement;
+        rainbowFirstPixelHue %= 180;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CANdleLEDStrip extends LEDStrip {
     private final AddressableLEDStrip simulationLEDStrip;
 
     /**
-     * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips.
+     * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips. Should only be called once
      *
      * @param candle the CANdle instance to be used
      */
@@ -28,7 +28,8 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     /**
-     * Sets the simulation AddressableLED instance to be used for testing in simulation. Must be set before using any LED strips in simulation.
+     * Sets the simulation AddressableLED instance to be used for testing in simulation. Must be set before using any LED strips in simulation. Should only be called once.
+     * The LED instance should be configured before being set, however it does not need to be started.
      *
      * @param simulationLEDStrip the AddressableLED instance to be used in simulation
      */
@@ -37,7 +38,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     /**
-     * Sets the simulation AddressableLEDBuffer instance to be used for testing in simulation. Must be set before using any LED strips in simulation.
+     * Sets the simulation AddressableLEDBuffer instance to be used for testing in simulation. Must be set before using any LED strips in simulation. Should only be called once.
      *
      * @param simulationLEDBuffer the AddressableLED buffer instance to be used in simulation
      */
@@ -128,7 +129,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void colorFlow(Color color, double speed, boolean inverted) {
-        boolean correctedInverted = this.inverted != inverted;
+        final boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new ColorFlowAnimation(
                         (int) color.red,
@@ -145,13 +146,14 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void rainbow(double brightness, double speed) {
+    void rainbow(double brightness, double speed, boolean inverted) {
+        final boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new RainbowAnimation(
                         brightness,
                         speed,
                         this.numberOfLEDs,
-                        inverted,
+                        correctedInverted,
                         indexOffset
                 ),
                 animationSlot

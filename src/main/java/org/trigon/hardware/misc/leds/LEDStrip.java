@@ -50,9 +50,9 @@ public abstract class LEDStrip extends SubsystemBase {
     abstract void staticColor(Color color);
 
     /**
-     * Blinks the LED strip between two colors.
+     * Blinks the LED strip with a specific color.
      *
-     * @param firstColor the first color to blink
+     * @param firstColor the color to blink
      * @param speed      how fast the LED strip should blink on a scale between 0 and 1
      */
     abstract void blink(Color firstColor, double speed);
@@ -97,8 +97,9 @@ public abstract class LEDStrip extends SubsystemBase {
      *
      * @param brightness the brightness of the rainbow on a scale from 0 to 1
      * @param speed      the speed of the rainbow's movement on a scale from 0 to 1
+     * @param inverted   whether the rainbow should be inverted
      */
-    abstract void rainbow(double brightness, double speed);
+    abstract void rainbow(double brightness, double speed, boolean inverted);
 
     abstract void clearLEDColors();
 
