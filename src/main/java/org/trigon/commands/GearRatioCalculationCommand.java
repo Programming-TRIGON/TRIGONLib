@@ -1,6 +1,8 @@
 package org.trigon.commands;
 
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
@@ -8,9 +10,9 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 /**
- * A command that calculates and logs the gear ratio of a subsystem by comparing the positions of a rotor and an encoder.
+ * A command that calculates and logs the gear ratio of a subsystem by comparing the distance traveled of a rotor and an encoder.
  */
-public class GearRatioCalculationCommand extends SequentialCommandGroup {
+public class GearRatioCalculationCommand extends Command {
     private final DoubleSupplier rotorPositionSupplier;
     private final DoubleSupplier encoderPositionSupplier;
     private final DoubleConsumer runGearRatioCalculation;
@@ -22,6 +24,7 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
     private double startingRotorPosition;
     private double startingEncoderPosition;
     private double gearRatio;
+    private double startTime;
 
     /**
      * Creates a new GearRatioCalculationCommand.
@@ -47,36 +50,25 @@ public class GearRatioCalculationCommand extends SequentialCommandGroup {
         this.movementVoltage = new LoggedDashboardNumber("GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
 
         addRequirements(requirement);
-        addCommands(
-                getGearRatioCalculationCommand().alongWith(getBacklashAccountabilityCommand()),
-                getCalculateGearRatioCommand()
-        );
     }
 
-    private Command getBacklashAccountabilityCommand() {
-        return new WaitCommand(backlashAccountabilityTimeSeconds).andThen(getStartingPositionsCommand());
+    @Override
+    public void initialize() {
+        startTime = Timer.getFPGATimestamp();
     }
 
-    private Command getGearRatioCalculationCommand() {
-        return new RunCommand(
-                this::runGearRatioCalculation
-        );
+    @Override
+    public void execute() {
+        runGearRatioCalculation();
+        if (Timer.getFPGATimestamp() - startTime > backlashAccountabilityTimeSeconds)
+            getStartingPositions();
     }
 
-    private Command getCalculateGearRatioCommand() {
-        return new InstantCommand(
-                () -> {
-                    gearRatio = calculateGearRatio();
-                    logGearRatio();
-                    printResult();
-                }
-        );
-    }
-
-    private Command getStartingPositionsCommand() {
-        return new InstantCommand(
-                this::getStartingPositions
-        );
+    @Override
+    public void end(boolean interrupted) {
+        gearRatio = calculateGearRatio();
+        logGearRatio();
+        printResult();
     }
 
     private void getStartingPositions() {
