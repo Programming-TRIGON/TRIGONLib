@@ -22,13 +22,13 @@ public abstract class Mirrorable<T> {
     private static boolean IS_RED_ALLIANCE = isRedAlliance();
 
     protected final T nonMirroredObject, mirroredObject;
-    protected final boolean mirrorWhenRedAlliance;
+    protected final boolean shouldMirrorWhenRedAlliance;
 
     static {
         UPDATE_ALLIANCE_TIMER.start();
 
         new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(
-                new InstantCommand(() -> IS_RED_ALLIANCE = notCachedIsRedAlliance())
+                new InstantCommand(() -> IS_RED_ALLIANCE = notCachedIsRedAlliance()).ignoringDisable(true)
         );
     }
 
@@ -41,7 +41,7 @@ public abstract class Mirrorable<T> {
     protected Mirrorable(T nonMirroredObject, boolean shouldMirrorWhenRedAlliance) {
         this.nonMirroredObject = nonMirroredObject;
         this.mirroredObject = mirror(nonMirroredObject);
-        this.mirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
+        this.shouldMirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
     }
 
     /**
@@ -65,7 +65,7 @@ public abstract class Mirrorable<T> {
      * Otherwise, the non-mirrored object is returned.
      */
     public T get() {
-        return isRedAlliance() && mirrorWhenRedAlliance ? mirroredObject : nonMirroredObject;
+        return isRedAlliance() && shouldMirrorWhenRedAlliance ? mirroredObject : nonMirroredObject;
     }
 
     /**

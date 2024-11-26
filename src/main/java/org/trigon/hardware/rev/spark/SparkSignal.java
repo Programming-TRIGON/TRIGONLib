@@ -2,8 +2,8 @@ package org.trigon.hardware.rev.spark;
 
 import com.revrobotics.spark.SparkBase;
 import org.trigon.hardware.RobotHardwareStats;
-import org.trigon.hardware.SignalUtilities;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.utilities.StringUtilities;
 
 import java.util.function.Function;
 
@@ -22,7 +22,7 @@ public enum SparkSignal {
     final Function<SparkEncoder, Double> encoderSignalFunction;
 
     SparkSignal(Function<SparkBase, Double> motorSignalFunction, Function<SparkEncoder, Double> encoderSignalFunction) {
-        this.name = SignalUtilities.enumNameToSignalName(name());
+        this.name = StringUtilities.toCamelCase(name());
         this.motorSignalFunction = motorSignalFunction;
         this.encoderSignalFunction = encoderSignalFunction;
     }

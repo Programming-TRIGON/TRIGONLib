@@ -12,7 +12,9 @@ import org.trigon.hardware.phoenix6.talonfx.io.SimulationTalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
- * A class that represents a Talon FX motor. Used to control and get the values of the motor.
+ * A class that represents a Talon FX motor controller.
+ * This class provides a structured interface to control and monitor Talon FX motors both in real-world deployment, and physics-based simulation.
+ * It incorporates features for signal management, configuration handling, and threaded processing to ensure efficient and robust motor control
  */
 public class TalonFXMotor {
     private final String motorName;
@@ -21,7 +23,7 @@ public class TalonFXMotor {
     private final int id;
 
     /**
-     * Creates a new Talon FX motor.
+     * Creates a new TalonFX motor.
      *
      * @param id        the motor's ID
      * @param motorName the name of the motor
@@ -31,7 +33,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Creates a new Talon FX motor.
+     * Creates a new TalonFX motor.
      *
      * @param id        the motor's ID
      * @param motorName the name of the motor
@@ -63,7 +65,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Sets the physics simulation of the motor.
+     * Sets the physics simulation of the motor. Needed for the motor to be used in simulation with accurate physics.
      *
      * @param physicsSimulation the simulation
      */
@@ -72,7 +74,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Applies both the real and simulation configurations to the motor
+     * Applies both the real and simulation configurations to the motor.
      *
      * @param realConfiguration       configuration to be used in real life
      * @param simulationConfiguration configuration to be used in simulation
@@ -94,7 +96,7 @@ public class TalonFXMotor {
     }
 
     /**
-     * Applies the configuration to be used in real life.
+     * Applies the configuration to be used when {@link RobotHardwareStats#isSimulation()} is false.
      *
      * @param realConfiguration the configuration
      */
@@ -152,6 +154,8 @@ public class TalonFXMotor {
 
     /**
      * Registers a threaded signal to the motor.
+     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
+     * This avoids slowing down the main program, unlike simpler signals that run directly in it.
      *
      * @param signal               the threaded signal to register
      * @param updateFrequencyHertz The frequency at which the threaded signal will be updated
@@ -181,7 +185,7 @@ public class TalonFXMotor {
     /**
      * Sets the motors neutral mode.
      *
-     * @param brake should the motor brake
+     * @param brake true if the motor should brake, false if it should coast
      */
     public void setBrake(boolean brake) {
         motorIO.setBrake(brake);

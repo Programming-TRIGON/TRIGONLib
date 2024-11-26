@@ -25,7 +25,9 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-
+/**
+ * Provides an interface for asynchronously reading high-frequency measurements to a set of queues.
+ */
 public class Phoenix6SignalThread extends SignalThreadBase {
     public static ReentrantLock SIGNALS_LOCK = new ReentrantLock();
     private final List<Queue<Double>> queues = new ArrayList<>();
@@ -33,10 +35,12 @@ public class Phoenix6SignalThread extends SignalThreadBase {
 
     private static Phoenix6SignalThread INSTANCE = null;
 
+    /**
+     * @return The instance of the Phoenix6SignalThread
+     */
     public static Phoenix6SignalThread getInstance() {
-        if (INSTANCE == null) {
+        if (INSTANCE == null)
             INSTANCE = new Phoenix6SignalThread();
-        }
         return INSTANCE;
     }
 
@@ -49,6 +53,12 @@ public class Phoenix6SignalThread extends SignalThreadBase {
         start();
     }
 
+    /**
+     * Registers a signal to be read asynchronously.
+     *
+     * @param signal The signal to register
+     * @return The queue that the signal's values will be written to
+     */
     public Queue<Double> registerSignal(BaseStatusSignal signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         SIGNALS_LOCK.lock();

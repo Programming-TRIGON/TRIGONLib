@@ -41,7 +41,7 @@ public class MirrorablePose2d extends Mirrorable<Pose2d> {
      * @return the rotation value of the pose.
      */
     public MirrorableRotation2d getRotation() {
-        return new MirrorableRotation2d(nonMirroredObject.getRotation(), mirrorWhenRedAlliance);
+        return new MirrorableRotation2d(nonMirroredObject.getRotation(), shouldMirrorWhenRedAlliance);
     }
 
     @Override

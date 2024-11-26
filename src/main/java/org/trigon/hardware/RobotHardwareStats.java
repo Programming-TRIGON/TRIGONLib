@@ -9,9 +9,10 @@ public class RobotHardwareStats {
     private static double PERIODIC_TIME_SECONDS = 0.02;
 
     /**
-     * Sets the current robot stats.
+     * Sets the current robot stats. This should be called in the robot's init method.
+     * We use this structure to avoid using static variables in the Robot class.
      *
-     * @param isReal     whether the robot is real or a simulation
+     * @param isReal     whether the robot is real or a simulation. This should be taken from the Robot class.
      * @param replayType the type of replay
      */
     public static void setCurrentRobotStats(boolean isReal, ReplayType replayType) {
@@ -26,7 +27,7 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Sets the periodic time in seconds.
+     * Sets how frequently the periodic method is called in seconds.
      *
      * @param periodicTimeSeconds the periodic time in seconds
      */
@@ -35,8 +36,6 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Gets the periodic time in seconds.
-     *
      * @return the periodic time in seconds
      */
     public static double getPeriodicTimeSeconds() {
@@ -44,8 +43,6 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Checks if the robot is in replay mode.
-     *
      * @return whether the robot is in replay mode or not
      */
     public static boolean isReplay() {
@@ -53,8 +50,6 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Checks if the robot is running in simulation.
-     *
      * @return whether the robot is running in simulation or not
      */
     public static boolean isSimulation() {
@@ -63,6 +58,9 @@ public class RobotHardwareStats {
 
     /**
      * An enum that represents the type of replay.
+     * NONE - the robot is not in replay mode
+     * SIMULATION_REPLAY - the robot is in simulation replay mode
+     * REAL_REPLAY - the robot is in real replay mode
      */
     public enum ReplayType {
         NONE,

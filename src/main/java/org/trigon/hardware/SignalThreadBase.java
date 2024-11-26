@@ -28,6 +28,9 @@ public class SignalThreadBase extends Thread {
 
     /**
      * Sets the odometry frequency in hertz.
+     * The odometry frequency determines how often the robot's position and motion data are updated.
+     * A higher frequency will result in more frequent updates, but may also demand more processing power.
+     * Only used for Spark motors.
      *
      * @param odometryFrequencyHertz The odometry frequency in hertz
      */
@@ -47,7 +50,7 @@ public class SignalThreadBase extends Thread {
     }
 
     /**
-     * Gets the latest timestamps.
+     * Gets the latest timestamps when events occurred within the thread's execution.
      *
      * @return The latest timestamps
      */

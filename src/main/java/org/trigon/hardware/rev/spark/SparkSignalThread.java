@@ -35,10 +35,12 @@ public class SparkSignalThread extends SignalThreadBase {
     private final List<Queue<Double>> queues = new ArrayList<>();
     private static SparkSignalThread instance = null;
 
+    /**
+     * @return The instance of the SparkSignalThread
+     */
     public static SparkSignalThread getInstance() {
-        if (instance == null) {
+        if (instance == null)
             instance = new SparkSignalThread();
-        }
         return instance;
     }
 
@@ -51,6 +53,12 @@ public class SparkSignalThread extends SignalThreadBase {
         }
     }
 
+    /**
+     * Registers a signal to be read asynchronously.
+     *
+     * @param signal The signal to register
+     * @return The queue that the signal's values will be written to
+     */
     public Queue<Double> registerSignal(DoubleSupplier signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         SIGNALS_LOCK.lock();
