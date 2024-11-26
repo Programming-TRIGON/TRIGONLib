@@ -53,11 +53,11 @@ public class CANdleLEDStrip extends LEDStrip {
      * @param numberOfLEDs the amount of LEDs in the strip
      * @param indexOffset  the offset of the first LED in the strip
      */
-    public CANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
+    CANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
         super(inverted, numberOfLEDs, indexOffset);
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
         LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
-        this.simulationLEDStrip = new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset, true);
+        this.simulationLEDStrip = new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
     }
 
     @Override

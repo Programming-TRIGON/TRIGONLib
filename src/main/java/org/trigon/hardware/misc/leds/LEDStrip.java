@@ -4,6 +4,7 @@ import com.ctre.phoenix.led.LarsonAnimation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.trigon.hardware.RobotHardwareStats;
 
 import java.util.function.Supplier;
 
@@ -24,6 +25,16 @@ public abstract class LEDStrip extends SubsystemBase {
         this.indexOffset = indexOffset;
 
         addLEDStripToLEDStripsArray(this);
+    }
+
+    public static AddressableLEDStrip createAddressableLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
+        return new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
+    }
+
+    public static LEDStrip createCANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
+        if (RobotHardwareStats.isReplay() || RobotHardwareStats.isSimulation())
+            return new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
+        return new CANdleLEDStrip(inverted, numberOfLEDs, indexOffset);
     }
 
     public static void setDefaultCommandForAllLEDS(Command command) {
