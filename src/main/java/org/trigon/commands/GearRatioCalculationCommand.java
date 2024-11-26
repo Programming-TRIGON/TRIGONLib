@@ -10,7 +10,7 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 /**
- * A command that calculates and logs the gear ratio of a subsystem by comparing the distance traveled of a rotor and an encoder.
+ * A command that calculates and logs the gear ratio of a subsystem by comparing the distance traveled by a rotor and an encoder.
  */
 public class GearRatioCalculationCommand extends Command {
     private final DoubleSupplier rotorPositionSupplier;
@@ -25,6 +25,7 @@ public class GearRatioCalculationCommand extends Command {
     private double startingEncoderPosition;
     private double gearRatio;
     private double startTime;
+    private boolean hasSetStartingPositions = false;
 
     /**
      * Creates a new GearRatioCalculationCommand.
@@ -60,7 +61,7 @@ public class GearRatioCalculationCommand extends Command {
     @Override
     public void execute() {
         runGearRatioCalculation();
-        if (Timer.getFPGATimestamp() - startTime > backlashAccountabilityTimeSeconds)
+        if (Timer.getFPGATimestamp() - startTime > backlashAccountabilityTimeSeconds && !hasSetStartingPositions)
             getStartingPositions();
     }
 
@@ -74,6 +75,7 @@ public class GearRatioCalculationCommand extends Command {
     private void getStartingPositions() {
         startingRotorPosition = rotorPositionSupplier.getAsDouble();
         startingEncoderPosition = encoderPositionSupplier.getAsDouble();
+        hasSetStartingPositions = true;
     }
 
     private void runGearRatioCalculation() {
