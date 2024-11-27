@@ -15,15 +15,14 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new SimpleMotorSimulation.
      *
-     * @param gearbox            The gearbox of the motor(s)
-     * @param gearRatio          The gearbox's gear ratio
-     * @param kv                 voltage needed to maintain constant velocity
-     * @param ka                 voltage needed to induce a specific acceleration
-     * @param measurementStdDevs The standard deviations of the measurements
+     * @param gearbox   The gearbox of the motor(s)
+     * @param gearRatio The gearbox's gear ratio
+     * @param kv        voltage needed to maintain constant velocity
+     * @param ka        voltage needed to induce a specific acceleration
      */
-    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double kv, double ka, double... measurementStdDevs) {
+    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double kv, double ka) {
         super(gearRatio);
-        motorSimulation = new DCMotorSim(LinearSystemId.createDCMotorSystem(kv, ka), gearbox, measurementStdDevs);
+        motorSimulation = new DCMotorSim(LinearSystemId.createDCMotorSystem(kv, ka), gearbox);
     }
 
     /**
