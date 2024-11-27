@@ -30,6 +30,9 @@ public class SparkIO {
     public void setInverted(boolean inverted) {
     }
 
+    public void updateSimulation() {
+    }
+
     public SparkBase getMotor() {
         return null;
     }

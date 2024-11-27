@@ -176,6 +176,13 @@ public class SparkMotor {
         motorIO.configure(configuration, resetMode, persistMode);
     }
 
+    /**
+     * Updates the motor simulation. Only used in simulation. Should be called periodically.
+     */
+    public void updateSimulation() {
+        motorIO.updateSimulation();
+    }
+
     private SparkIO createSparkIO(int id, SparkType sparkType, DCMotor simulationMotor) {
         if (RobotHardwareStats.isReplay())
             return new SparkIO();
