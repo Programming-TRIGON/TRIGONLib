@@ -1,8 +1,6 @@
 package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.*;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import org.trigon.hardware.RobotHardwareStats;
 
@@ -15,7 +13,6 @@ public class CANdleLEDStrip extends LEDStrip {
     private static CANdle CANDLE;
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
     private final int animationSlot;
-    private final AddressableLEDStrip simulationLEDStrip;
 
     /**
      * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips. Should only be called once
@@ -27,23 +24,9 @@ public class CANdleLEDStrip extends LEDStrip {
             CANDLE = candle;
     }
 
-    /**
-     * Sets the simulation AddressableLED instance to be used for testing in simulation. Must be set before using any LED strips in simulation. Should only be called once.
-     * The LED instance should be configured before being set, however it does not need to be started.
-     *
-     * @param simulationLEDStrip the AddressableLED instance to be used in simulation
-     */
-    public static void setSimulationLED(AddressableLED simulationLEDStrip) {
-        AddressableLEDStrip.setAddressableLED(simulationLEDStrip);
-    }
-
-    /**
-     * Sets the simulation AddressableLEDBuffer instance to be used for testing in simulation. Must be set before using any LED strips in simulation. Should only be called once.
-     *
-     * @param simulationLEDBuffer the AddressableLED buffer instance to be used in simulation
-     */
-    public static void setSimulationLEDBuffer(AddressableLEDBuffer simulationLEDBuffer) {
-        AddressableLEDStrip.setAddressableLEDBuffer(simulationLEDBuffer);
+    public static void setTotalAmountOfLEDs(int totalAmountOfLEDs) {
+        if (RobotHardwareStats.isSimulation() || RobotHardwareStats.isReplay())
+            AddressableLEDStrip.initiateAddressableLED(0, totalAmountOfLEDs);
     }
 
     /**
@@ -57,21 +40,10 @@ public class CANdleLEDStrip extends LEDStrip {
         super(inverted, numberOfLEDs, indexOffset);
         animationSlot = LAST_CREATED_LED_STRIP_ANIMATION_SLOT;
         LAST_CREATED_LED_STRIP_ANIMATION_SLOT++;
-        this.simulationLEDStrip = new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
-    }
-
-    @Override
-    public void simulationPeriodic() {
-        simulationLEDStrip.periodic();
     }
 
     @Override
     void clearLEDColors() {
-        if (RobotHardwareStats.isSimulation()) {
-            simulationLEDStrip.clearLEDColors();
-            return;
-        }
-
         CANDLE.clearAnimation(animationSlot);
     }
 
@@ -164,12 +136,6 @@ public class CANdleLEDStrip extends LEDStrip {
     void sectionColor(Supplier<Color>[] colors) {
         final int LEDSPerSection = (int) Math.floor(numberOfLEDs / colors.length);
         setSectionColor(colors.length, LEDSPerSection, colors);
-    }
-
-    @Override
-    void resetLEDSettings() {
-        if (RobotHardwareStats.isSimulation())
-            simulationLEDStrip.resetLEDSettings();
     }
 
     private void setSectionColor(int amountOfSections, int LEDSPerSection, Supplier<Color>[] colors) {

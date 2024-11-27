@@ -22,26 +22,20 @@ public class AddressableLEDStrip extends LEDStrip {
     private int amountOfColorFlowLEDs = 0;
 
     /**
-     * Sets the AddressableLED instance to be used for controlling the LED strip. Must be set before using any LED strips. Should only be called once.
-     * The LED instance should be configured before being set, however it does not need to be started.
+     * Sets and configures the AddressableLED and AddressableLEDBuffer instances to be used for controlling the LED strip.
+     * Must be set before using any LED strips. Should only be called once.
      *
-     * @param led the LED instance to be used
+     * @param port              the port of the LED strip
+     * @param totalAmountOfLEDs the total amount of LEDs in all LED strips
      */
-    public static void setAddressableLED(AddressableLED led) {
+    public static void initiateAddressableLED(int port, int totalAmountOfLEDs) {
+        if (LED_BUFFER == null)
+            LED_BUFFER = new AddressableLEDBuffer(totalAmountOfLEDs);
         if (LED == null) {
-            LED = led;
+            LED = new AddressableLED(port);
+            LED.setLength(totalAmountOfLEDs);
             LED.start();
         }
-    }
-
-    /**
-     * Sets the AddressableLEDBuffer instance to be used for controlling the LED strip. Must be set before using any LED strips. Should only be called once.
-     *
-     * @param ledBuffer the LED buffer instance to be used
-     */
-    public static void setAddressableLEDBuffer(AddressableLEDBuffer ledBuffer) {
-        if (LED_BUFFER == null)
-            LED_BUFFER = ledBuffer;
     }
 
     /**

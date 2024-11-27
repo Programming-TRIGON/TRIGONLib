@@ -19,18 +19,26 @@ public abstract class LEDStrip extends SubsystemBase {
     Runnable currentAnimation = () -> {
     };
 
-    public LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
-        this.inverted = inverted;
-        this.numberOfLEDs = numberOfLEDs;
-        this.indexOffset = indexOffset;
-
-        addLEDStripToLEDStripsArray(this);
-    }
-
+    /**
+     * Creates a new AddressableLEDStrip.
+     *
+     * @param inverted     whether the LED strip is inverted
+     * @param numberOfLEDs the amount of LEDs in the strip
+     * @param indexOffset  the offset of the first LED in the strip
+     * @return the created AddressableLEDStrip
+     */
     public static AddressableLEDStrip createAddressableLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
         return new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
     }
 
+    /**
+     * Creates a new CANdleLEDStrip. In simulation or replay mode, an AddressableLEDStrip is created instead.
+     *
+     * @param inverted     whether the LED strip is inverted
+     * @param numberOfLEDs the amount of LEDs in the strip
+     * @param indexOffset  the offset of the first LED in the strip
+     * @return the created LEDStrip
+     */
     public static LEDStrip createCANdleLEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
         if (RobotHardwareStats.isReplay() || RobotHardwareStats.isSimulation())
             return new AddressableLEDStrip(inverted, numberOfLEDs, indexOffset);
@@ -42,6 +50,14 @@ public abstract class LEDStrip extends SubsystemBase {
             ledStrip.setDefaultCommand(command);
     }
 
+    public LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
+        this.inverted = inverted;
+        this.numberOfLEDs = numberOfLEDs;
+        this.indexOffset = indexOffset;
+
+        addLEDStripToLEDStripsArray(this);
+    }
+
     public int getNumberOfLEDS() {
         return numberOfLEDs;
     }
@@ -51,7 +67,8 @@ public abstract class LEDStrip extends SubsystemBase {
         currentAnimation.run();
     }
 
-    abstract void resetLEDSettings();
+    void resetLEDSettings() {
+    }
 
     /**
      * Sets the color of the LED strip to the given color.
