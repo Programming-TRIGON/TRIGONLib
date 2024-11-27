@@ -33,7 +33,7 @@ public class GearRatioCalculationCommand extends Command {
      * @param rotorPositionSupplier             a supplier that returns the current position of the rotor
      * @param encoderPositionSupplier           a supplier that returns the current position of the encoder
      * @param runGearRatioCalculation           a consumer that runs the gear ratio calculation with a given voltage
-     * @param backlashAccountabilityTimeSeconds the time to wait before logging the gear ratio in order to account for backlash
+     * @param backlashAccountabilityTimeSeconds the time to wait before setting the starting positions in order to account for backlash
      * @param requirement                       the subsystem that this command requires
      */
     public GearRatioCalculationCommand(
@@ -62,17 +62,18 @@ public class GearRatioCalculationCommand extends Command {
     public void execute() {
         runGearRatioCalculation();
         if (Timer.getFPGATimestamp() - startTime > backlashAccountabilityTimeSeconds && !hasSetStartingPositions)
-            getStartingPositions();
+            setStartingPositions();
+        log();
     }
 
     @Override
     public void end(boolean interrupted) {
         gearRatio = calculateGearRatio();
-        logGearRatio();
+        log();
         printResult();
     }
 
-    private void getStartingPositions() {
+    private void setStartingPositions() {
         startingRotorPosition = rotorPositionSupplier.getAsDouble();
         startingEncoderPosition = encoderPositionSupplier.getAsDouble();
         hasSetStartingPositions = true;
@@ -82,7 +83,7 @@ public class GearRatioCalculationCommand extends Command {
         runGearRatioCalculation.accept(movementVoltage.get());
     }
 
-    private void logGearRatio() {
+    private void log() {
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", getEncoderDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
