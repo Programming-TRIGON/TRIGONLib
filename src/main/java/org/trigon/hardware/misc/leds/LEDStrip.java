@@ -13,10 +13,10 @@ import java.util.function.Supplier;
  */
 public abstract class LEDStrip extends SubsystemBase {
     public static LEDStrip[] LED_STRIPS = new LEDStrip[0];
-    final int indexOffset;
-    final boolean inverted;
-    final int numberOfLEDs;
-    Runnable currentAnimation = () -> {
+    protected final int indexOffset;
+    protected final boolean inverted;
+    protected final int numberOfLEDs;
+    protected Runnable currentAnimation = () -> {
     };
 
     /**
@@ -45,6 +45,11 @@ public abstract class LEDStrip extends SubsystemBase {
         return new CANdleLEDStrip(inverted, numberOfLEDs, indexOffset);
     }
 
+    /**
+     * Sets the default command for all LED strips.
+     *
+     * @param command the default command to be set
+     */
     public static void setDefaultCommandForAllLEDS(Command command) {
         for (LEDStrip ledStrip : LED_STRIPS)
             ledStrip.setDefaultCommand(command);
@@ -114,7 +119,7 @@ public abstract class LEDStrip extends SubsystemBase {
     abstract void alternateColor(Color firstColor, Color secondColor);
 
     /**
-     * Colors the LED strip in sections.
+     * Splits the LED strip into different sections.
      *
      * @param colors an array of the colors to color the sections with. The length of the array dictates the amount of sections
      */

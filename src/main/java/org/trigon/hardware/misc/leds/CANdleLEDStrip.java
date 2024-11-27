@@ -24,6 +24,12 @@ public class CANdleLEDStrip extends LEDStrip {
             CANDLE = candle;
     }
 
+    /**
+     * Sets the total amount of LEDs in all LED strips for simulation.
+     * Must be set before using any LED strips in simulation. Should only be called once.
+     *
+     * @param totalAmountOfLEDs the total amount of LEDs in all LED strips
+     */
     public static void setTotalAmountOfLEDs(int totalAmountOfLEDs) {
         if (RobotHardwareStats.isSimulation() || RobotHardwareStats.isReplay())
             AddressableLEDStrip.initiateAddressableLED(0, totalAmountOfLEDs);

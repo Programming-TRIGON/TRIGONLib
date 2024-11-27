@@ -111,7 +111,7 @@ public class LEDCommands {
     }
 
     /**
-     * Gets a command that colors the LED strips in sections.
+     * Gets a command that splits the LED strip into different sections.
      *
      * @param colors    an array of colors to set the sections to. The length of the array dictates the amount of sections
      * @param ledStrips the LED strips to be used

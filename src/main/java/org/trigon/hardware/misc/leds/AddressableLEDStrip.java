@@ -31,6 +31,7 @@ public class AddressableLEDStrip extends LEDStrip {
     public static void initiateAddressableLED(int port, int totalAmountOfLEDs) {
         if (LED_BUFFER == null)
             LED_BUFFER = new AddressableLEDBuffer(totalAmountOfLEDs);
+
         if (LED == null) {
             LED = new AddressableLED(port);
             LED.setLength(totalAmountOfLEDs);
@@ -65,10 +66,12 @@ public class AddressableLEDStrip extends LEDStrip {
     void blink(Color firstColor, double speed) {
         final double correctedSpeed = 1 - speed;
         final double currentTime = Timer.getFPGATimestamp();
+
         if (currentTime - lastLEDAnimationChangeTime > correctedSpeed) {
             lastLEDAnimationChangeTime = currentTime;
             isLEDAnimationChanged = !isLEDAnimationChanged;
         }
+
         if (isLEDAnimationChanged) {
             staticColor(firstColor);
             return;
@@ -87,6 +90,7 @@ public class AddressableLEDStrip extends LEDStrip {
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
         final double currentTime = Timer.getFPGATimestamp();
+
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
             if (correctedInverted)
@@ -94,6 +98,7 @@ public class AddressableLEDStrip extends LEDStrip {
             else
                 lastBreatheLED++;
         }
+
         checkIfBreathingHasHitEnd(breathingLEDs, correctedInverted, bounceMode);
         setBreathingLEDs(color, breathingLEDs, bounceMode);
     }
@@ -104,6 +109,7 @@ public class AddressableLEDStrip extends LEDStrip {
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
         final double currentTime = Timer.getFPGATimestamp();
+
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
             if (isLEDAnimationChanged)
@@ -111,6 +117,7 @@ public class AddressableLEDStrip extends LEDStrip {
             else
                 amountOfColorFlowLEDs++;
         }
+
         checkIfColorFlowHasHitEnd();
         setLEDColors(color, correctedInverted ? numberOfLEDs - amountOfColorFlowLEDs - 1 : 0, correctedInverted ? numberOfLEDs - 1 : amountOfColorFlowLEDs);
     }
@@ -165,11 +172,12 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
-        int bounceModeAddition = switch (bounceMode) {
+        final int bounceModeAddition = switch (bounceMode) {
             case Back -> amountOfBreathingLEDs;
             case Center -> amountOfBreathingLEDs / 2;
             default -> 0;
         };
+
         if (inverted ? (lastBreatheLED < indexOffset + bounceModeAddition) : (lastBreatheLED >= numberOfLEDs + indexOffset + bounceModeAddition))
             lastBreatheLED = inverted ? indexOffset + numberOfLEDs : indexOffset;
     }
@@ -178,6 +186,7 @@ public class AddressableLEDStrip extends LEDStrip {
         for (int i = 0; i < breathingLEDs; i++) {
             if (lastBreatheLED - i >= indexOffset && lastBreatheLED - i < indexOffset + numberOfLEDs)
                 LED_BUFFER.setLED(lastBreatheLED - i, color);
+            
             else if (lastBreatheLED - i < indexOffset + numberOfLEDs) {
                 if (bounceMode.equals(LarsonAnimation.BounceMode.Back) || bounceMode.equals(LarsonAnimation.BounceMode.Center) && i > breathingLEDs / 2)
                     return;
