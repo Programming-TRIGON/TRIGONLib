@@ -2,7 +2,7 @@ package org.trigon.hardware.phoenix6.cancoder;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
-import org.trigon.utilities.StringUtilities;
+import org.trigon.utilities.Conversions;
 
 import java.util.function.Function;
 
@@ -14,7 +14,7 @@ public enum CANcoderSignal {
     final Function<CANcoder, BaseStatusSignal> signalFunction;
 
     CANcoderSignal(Function<CANcoder, BaseStatusSignal> signalFunction) {
-        this.name = StringUtilities.toCamelCase(name());
+        this.name = Conversions.snakeCaseToCamelCase(name());
         this.signalFunction = signalFunction;
     }
 }

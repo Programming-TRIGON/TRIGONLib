@@ -12,9 +12,10 @@ import org.trigon.hardware.phoenix6.talonfx.io.SimulationTalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
- * A class that represents a Talon FX motor controller.
+ * A class that represents a TalonFX motor controller.
  * This class provides a structured interface to control and monitor Talon FX motors both in real-world deployment, and physics-based simulation.
  * It incorporates features for signal management, configuration handling, and threaded processing to ensure efficient and robust motor control
+ * It's incorporated with advantage kit logging.
  */
 public class TalonFXMotor {
     private final String motorName;
@@ -48,18 +49,13 @@ public class TalonFXMotor {
     }
 
     /**
-     * Updates the motor and logs the inputs.
+     * Updates the motor and logs its inputs.
      */
     public void update() {
         motorIO.updateMotor();
         Logger.processInputs("Motors/" + motorName, motorInputs);
     }
 
-    /**
-     * Gets the ID of the motor.
-     *
-     * @return the ID of the motor
-     */
     public int getID() {
         return id;
     }
@@ -146,7 +142,7 @@ public class TalonFXMotor {
      * Registers a signal to the motor.
      *
      * @param signal               the signal to register
-     * @param updateFrequencyHertz The frequency at which the signal will be updated
+     * @param updateFrequencyHertz the frequency at which the signal will be updated
      */
     public void registerSignal(TalonFXSignal signal, double updateFrequencyHertz) {
         motorInputs.registerSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);

@@ -63,7 +63,8 @@ public class SimpleSensor {
     }
 
     /**
-     * Creates a non-real sensor to be used if the robot is in replay or simulation.
+     * Creates a non-real sensor to be used if the robot is in replay or simulation. Returns null if the robot is real.
+     * This is used in the create methods to avoid creating a real sensor when the robot is in replay or simulation.
      *
      * @param name the name of the sensor
      * @return the non-real sensor

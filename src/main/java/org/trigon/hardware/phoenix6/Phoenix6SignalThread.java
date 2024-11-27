@@ -14,6 +14,7 @@
 package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusCode;
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
@@ -35,9 +36,6 @@ public class Phoenix6SignalThread extends SignalThreadBase {
 
     private static Phoenix6SignalThread INSTANCE = null;
 
-    /**
-     * @return The instance of the Phoenix6SignalThread
-     */
     public static Phoenix6SignalThread getInstance() {
         if (INSTANCE == null)
             INSTANCE = new Phoenix6SignalThread();
@@ -56,8 +54,8 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     /**
      * Registers a signal to be read asynchronously.
      *
-     * @param signal The signal to register
-     * @return The queue that the signal's values will be written to
+     * @param signal the signal to register
+     * @return the queue that the signal's values will be written to
      */
     public Queue<Double> registerSignal(BaseStatusSignal signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
@@ -80,8 +78,9 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     }
 
     private void updateValues() {
-        BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals);
-        final double updateTimestamp = (Logger.getRealTimestamp() / 1.0e6) - signals[0].getTimestamp().getLatency();
+        if (BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals) != StatusCode.OK)
+            return;
+        final double updateTimestamp = (Logger.getRealTimestamp() / 1e6) - signals[0].getTimestamp().getLatency();
 
         SIGNALS_LOCK.lock();
         try {

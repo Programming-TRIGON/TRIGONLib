@@ -3,7 +3,7 @@ package org.trigon.hardware.phoenix6.pigeon2;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.core.CorePigeon2;
-import org.trigon.utilities.StringUtilities;
+import org.trigon.utilities.Conversions;
 
 import java.util.function.Function;
 
@@ -19,7 +19,7 @@ public enum Pigeon2Signal {
     final Function<Pigeon2, BaseStatusSignal> signalFunction;
 
     Pigeon2Signal(Function<Pigeon2, BaseStatusSignal> signalFunction) {
-        this.name = StringUtilities.toCamelCase(name());
+        this.name = Conversions.snakeCaseToCamelCase(name());
         this.signalFunction = signalFunction;
     }
 }

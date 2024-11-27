@@ -36,7 +36,7 @@ public class MirrorablePose2d extends Mirrorable<Pose2d> {
     }
 
     /**
-     * Gets the rotation value of the pose.
+     * Gets the rotation value of the pose. The pose will be mirrored if the robot is on the red alliance and {@link #shouldMirrorWhenRedAlliance} is true.
      *
      * @return the rotation value of the pose.
      */

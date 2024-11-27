@@ -238,4 +238,25 @@ public class Conversions {
     public static TrapezoidProfile.Constraints scaleConstraints(TrapezoidProfile.Constraints constraints, double percentage) {
         return new TrapezoidProfile.Constraints(constraints.maxVelocity * (percentage / 100), constraints.maxAcceleration * (percentage / 100));
     }
+
+    /**
+     * Converts a string in SNAKE_CASE to camelCase.
+     *
+     * @param input the string to convert
+     * @return the string in camel case
+     */
+    public static String snakeCaseToCamelCase(String input) {
+        String[] parts = input.split("_");
+        StringBuilder camelCase = new StringBuilder();
+
+        for (int i = 0; i < parts.length; i++) {
+            String part = parts[i].toLowerCase();
+            if (i == 0)
+                camelCase.append(part);
+            else
+                camelCase.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+        }
+
+        return camelCase.toString();
+    }
 }

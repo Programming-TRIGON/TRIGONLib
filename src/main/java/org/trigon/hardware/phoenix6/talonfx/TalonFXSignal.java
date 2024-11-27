@@ -2,7 +2,7 @@ package org.trigon.hardware.phoenix6.talonfx;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
-import org.trigon.utilities.StringUtilities;
+import org.trigon.utilities.Conversions;
 
 import java.util.function.Function;
 
@@ -26,7 +26,7 @@ public enum TalonFXSignal {
     final Function<TalonFX, BaseStatusSignal> signalFunction;
 
     TalonFXSignal(Function<TalonFX, BaseStatusSignal> signalFunction) {
-        this.name = StringUtilities.toCamelCase(name());
+        this.name = Conversions.snakeCaseToCamelCase(name());
         this.signalFunction = signalFunction;
     }
 }

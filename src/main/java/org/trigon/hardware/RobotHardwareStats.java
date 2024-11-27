@@ -12,7 +12,7 @@ public class RobotHardwareStats {
      * Sets the current robot stats. This should be called in the robot's init method.
      * We use this structure to avoid using static variables in the Robot class.
      *
-     * @param isReal     whether the robot is real or a simulation. This should be taken from the Robot class.
+     * @param isReal     whether the robot is real or a simulation. This should be taken from the Robot class
      * @param replayType the type of replay
      */
     public static void setCurrentRobotStats(boolean isReal, ReplayType replayType) {
@@ -58,13 +58,19 @@ public class RobotHardwareStats {
 
     /**
      * An enum that represents the type of replay.
-     * NONE - the robot is not in replay mode
-     * SIMULATION_REPLAY - the robot is in simulation replay mode
-     * REAL_REPLAY - the robot is in real replay mode
      */
     public enum ReplayType {
+        /**
+         * The robot is not in replay mode
+         */
         NONE,
+        /**
+         * The robot is in simulation replay mode
+         */
         SIMULATION_REPLAY,
+        /**
+         * The robot is in real replay mode
+         */
         REAL_REPLAY
     }
 }

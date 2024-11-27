@@ -15,7 +15,7 @@ public class SignalThreadBase extends Thread {
     protected final Queue<Double> timestamps = new ArrayBlockingQueue<>(100);
     private final ThreadInputsAutoLogged threadInputs = new ThreadInputsAutoLogged();
     private final String name;
-    protected double odometryFrequencyHertz = 50;
+    protected double threadFrequencyHertz = 50;
 
     /**
      * Creates a new SignalThreadBase.
@@ -32,10 +32,10 @@ public class SignalThreadBase extends Thread {
      * A higher frequency will result in more frequent updates, but may also demand more processing power.
      * Only used for Spark motors.
      *
-     * @param odometryFrequencyHertz The odometry frequency in hertz
+     * @param odometryFrequencyHertz the odometry frequency in hertz
      */
-    public void setOdometryFrequencyHertz(double odometryFrequencyHertz) {
-        this.odometryFrequencyHertz = odometryFrequencyHertz;
+    public void setThreadFrequencyHertz(double odometryFrequencyHertz) {
+        this.threadFrequencyHertz = odometryFrequencyHertz;
     }
 
     /**
