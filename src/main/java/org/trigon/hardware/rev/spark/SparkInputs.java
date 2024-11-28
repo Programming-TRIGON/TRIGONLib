@@ -13,6 +13,11 @@ public class SparkInputs extends BaseInputs {
     private final SparkSignalThread signalThread = SparkSignalThread.getInstance();
     private SparkStatusSignal[] signals = new SparkStatusSignal[0];
 
+    /**
+     * Creates a new SparkInputs instance.
+     *
+     * @param name the name of the instance
+     */
     public SparkInputs(String name) {
         super(name);
     }
@@ -28,6 +33,11 @@ public class SparkInputs extends BaseInputs {
         latestTable = table;
     }
 
+    /**
+     * Registers a signal.
+     *
+     * @param statusSignal the signal to register
+     */
     public void registerSignal(SparkStatusSignal statusSignal) {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;
@@ -35,6 +45,12 @@ public class SparkInputs extends BaseInputs {
         addSignalToSignalsArray(statusSignal);
     }
 
+    /**
+     * Registers a threaded signal.
+     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
+     *
+     * @param statusSignal the threaded signal to register
+     */
     public void registerThreadedSignal(SparkStatusSignal statusSignal) {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;

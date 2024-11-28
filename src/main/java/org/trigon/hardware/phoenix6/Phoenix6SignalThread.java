@@ -27,7 +27,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Provides an interface for asynchronously reading high-frequency measurements to a set of queues.
+ * Provides an interface for asynchronously reading high-frequency measurements to a set of queues for Phoenix 6.
  */
 public class Phoenix6SignalThread extends SignalThreadBase {
     public static ReentrantLock SIGNALS_LOCK = new ReentrantLock();

@@ -13,9 +13,9 @@ import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
  * A class that represents a TalonFX motor controller.
- * This class provides a structured interface to control and monitor Talon FX motors both in real-world deployment, and physics-based simulation.
+ * This class provides a structured interface to control and monitor TalonFX motors both in real-world deployment, and physics-based simulation.
  * It incorporates features for signal management, configuration handling, and threaded processing to ensure efficient and robust motor control
- * It's incorporated with advantage kit logging.
+ * It's also fully integrated with AdvantageKit logging.
  */
 public class TalonFXMotor {
     private final String motorName;
@@ -71,6 +71,7 @@ public class TalonFXMotor {
 
     /**
      * Applies both the real and simulation configurations to the motor.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
      *
      * @param realConfiguration       configuration to be used in real life
      * @param simulationConfiguration configuration to be used in simulation
@@ -93,6 +94,7 @@ public class TalonFXMotor {
 
     /**
      * Applies the configuration to be used when {@link RobotHardwareStats#isSimulation()} is false.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
      *
      * @param realConfiguration the configuration
      */
@@ -103,6 +105,7 @@ public class TalonFXMotor {
 
     /**
      * Applies the configuration to be used in simulation.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
      *
      * @param simulationConfiguration the configuration
      */
@@ -130,6 +133,7 @@ public class TalonFXMotor {
 
     /**
      * Gets a threaded signal from the motor.
+     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
      *
      * @param signal the type of threaded signal to get
      * @return the signal
@@ -152,6 +156,7 @@ public class TalonFXMotor {
      * Registers a threaded signal to the motor.
      * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
      * This avoids slowing down the main program, unlike simpler signals that run directly in it.
+     * This is also used for signals that need to be updated more frequently like for odometry.
      *
      * @param signal               the threaded signal to register
      * @param updateFrequencyHertz The frequency at which the threaded signal will be updated

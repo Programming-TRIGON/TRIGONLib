@@ -11,6 +11,11 @@ public abstract class BaseInputs implements LoggableInputs {
     private final String name;
     private double lastErrorTimestamp = 0;
 
+    /**
+     * Creates a new BaseInputs instance.
+     *
+     * @param name the name of the instance
+     */
     public BaseInputs(String name) {
         this.name = name;
     }
@@ -20,6 +25,12 @@ public abstract class BaseInputs implements LoggableInputs {
         latestTable = table;
     }
 
+    /**
+     * Gets a signal.
+     *
+     * @param signalName the name of the signal
+     * @return the signal
+     */
     public double getSignal(String signalName) {
         if (latestTable == null) {
             if (shouldPrintError())
@@ -37,6 +48,13 @@ public abstract class BaseInputs implements LoggableInputs {
         return value.getDouble();
     }
 
+    /**
+     * Gets a threaded signal.
+     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
+     *
+     * @param signalName the name of the threaded signal
+     * @return the threaded signal
+     */
     public double[] getThreadedSignal(String signalName) {
         if (latestTable == null) {
             if (shouldPrintError())

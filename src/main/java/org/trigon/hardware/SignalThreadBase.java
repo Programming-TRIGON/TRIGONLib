@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * A class that represents a base for a signal thread.
+ * Signal threads are specialized threads that run at a specific frequency to handle updating signals.
  */
 public class SignalThreadBase extends Thread {
     public static final ReentrantLock SIGNALS_LOCK = new ReentrantLock();
@@ -27,15 +28,15 @@ public class SignalThreadBase extends Thread {
     }
 
     /**
-     * Sets the odometry frequency in hertz.
-     * The odometry frequency determines how often the robot's position and motion data are updated.
+     * Sets the thread frequency in hertz.
+     * The thread frequency determines how often the robot's position and motion data are updated.
      * A higher frequency will result in more frequent updates, but may also demand more processing power.
      * Only used for Spark motors.
      *
-     * @param odometryFrequencyHertz the odometry frequency in hertz
+     * @param threadFrequencyHertz the odometry frequency in hertz
      */
-    public void setThreadFrequencyHertz(double odometryFrequencyHertz) {
-        this.threadFrequencyHertz = odometryFrequencyHertz;
+    public void setThreadFrequencyHertz(double threadFrequencyHertz) {
+        this.threadFrequencyHertz = threadFrequencyHertz;
     }
 
     /**
@@ -50,7 +51,7 @@ public class SignalThreadBase extends Thread {
     }
 
     /**
-     * Gets the latest timestamps when events occurred within the thread's execution.
+     * Gets the latest timestamps when events signals were updated.
      *
      * @return The latest timestamps
      */

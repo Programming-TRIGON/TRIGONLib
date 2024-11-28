@@ -15,6 +15,11 @@ public class Phoenix6Inputs extends BaseInputs {
     private final Phoenix6SignalThread signalThread = Phoenix6SignalThread.getInstance();
     private BaseStatusSignal[] signals = new BaseStatusSignal[0];
 
+    /**
+     * Creates a new Phoenix6Inputs instance.
+     *
+     * @param name the name of the instance
+     */
     public Phoenix6Inputs(String name) {
         super(name);
     }
@@ -30,6 +35,13 @@ public class Phoenix6Inputs extends BaseInputs {
         latestTable = table;
     }
 
+    /**
+     * Registers a threaded signal.
+     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
+     *
+     * @param statusSignal         the signal
+     * @param updateFrequencyHertz the update frequency in hertz
+     */
     public void registerThreadedSignal(BaseStatusSignal statusSignal, double updateFrequencyHertz) {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;
@@ -40,6 +52,12 @@ public class Phoenix6Inputs extends BaseInputs {
         signalToThreadedQueue.put(statusSignal.getName() + "_Threaded", signalThread.registerSignal(statusSignal));
     }
 
+    /**
+     * Registers a signal.
+     *
+     * @param statusSignal         the signal
+     * @param updateFrequencyHertz the update frequency in hertz
+     */
     public void registerSignal(BaseStatusSignal statusSignal, double updateFrequencyHertz) {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;

@@ -10,6 +10,7 @@ public class RobotHardwareStats {
 
     /**
      * Sets the current robot stats. This should be called in the robot's init method.
+     * If isReal is true both simulation and replay will be false, otherwise they will be set according to the replay type.
      * We use this structure to avoid using static variables in the Robot class.
      *
      * @param isReal     whether the robot is real or a simulation. This should be taken from the Robot class
@@ -27,7 +28,7 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Sets how frequently the periodic method is called in seconds.
+     * Sets how frequently the periodic method is called in seconds. Used for calling methods periodically.
      *
      * @param periodicTimeSeconds the periodic time in seconds
      */
