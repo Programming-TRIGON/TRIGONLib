@@ -1,5 +1,6 @@
 package org.trigon.hardware.rev.spark.io;
 
+import com.revrobotics.sim.SparkAbsoluteEncoderSim;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -14,12 +15,14 @@ public class SimulationSparkIO extends SparkIO {
     private final SparkMax motor;
     private final SparkClosedLoopController pidController;
     private final SparkEncoder encoder;
-    private SparkSim simulation;
+    private final SparkAbsoluteEncoderSim absoluteEncoderSimulation;
+    private SparkSim motorSimulation = null;
 
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
         pidController = motor.getClosedLoopController();
         encoder = SparkEncoder.createRelativeEncoder(motor);
+        absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
     }
 
     @Override
@@ -69,9 +72,10 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void updateSimulation() {
-        if (simulation == null)
+        if (motorSimulation == null)
             return;
-        simulation.iterate(motor.getAbsoluteEncoder().getVelocity(), 12, RobotHardwareStats.getPeriodicTimeSeconds());
+        absoluteEncoderSimulation.iterate(encoder.getVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
+        motorSimulation.iterate(absoluteEncoderSimulation.getVelocity(), 12, RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     @Override
@@ -81,6 +85,6 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void setSimulationGearbox(DCMotor gearbox) {
-        simulation = new SparkSim(motor, gearbox);
+        motorSimulation = new SparkSim(motor, gearbox);
     }
 }
