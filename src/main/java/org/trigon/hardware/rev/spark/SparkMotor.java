@@ -37,6 +37,7 @@ public class SparkMotor {
      */
     public void update() {
         Logger.processInputs("Motors/" + motorName, motorInputs);
+        motorIO.updateSimulation();
     }
 
     public int getID() {
@@ -168,13 +169,6 @@ public class SparkMotor {
      */
     public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
         motorIO.configure(configuration, resetMode, persistMode);
-    }
-
-    /**
-     * Updates the motor simulation. Only used in simulation. Should be called periodically.
-     */
-    public void updateSimulation() {
-        motorIO.updateSimulation();
     }
 
     public void setSimulationGearbox(DCMotor gearbox) {
