@@ -32,7 +32,7 @@ public class GearRatioCalculationCommand extends Command {
      *
      * @param rotorPositionSupplier             a supplier that returns the current position of the rotor
      * @param encoderPositionSupplier           a supplier that returns the current position of the encoder
-     * @param runGearRatioCalculation           a consumer that runs the gear ratio calculation with a given voltage
+     * @param runGearRatioCalculation           a consumer that drives the motor with a given voltage
      * @param backlashAccountabilityTimeSeconds the time to wait before setting the starting positions in order to account for backlash
      * @param requirement                       the subsystem that this command requires
      */
