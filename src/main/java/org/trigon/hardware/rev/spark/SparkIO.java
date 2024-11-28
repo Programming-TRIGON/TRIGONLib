@@ -3,6 +3,7 @@ package org.trigon.hardware.rev.spark;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.system.plant.DCMotor;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
 
 public class SparkIO {
@@ -31,6 +32,9 @@ public class SparkIO {
     }
 
     public void updateSimulation() {
+    }
+
+    public void setSimulationGearbox(DCMotor gearbox) {
     }
 
     public SparkBase getMotor() {

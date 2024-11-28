@@ -14,23 +14,22 @@ public class SimulationSparkIO extends SparkIO {
     private final SparkMax motor;
     private final SparkClosedLoopController pidController;
     private final SparkEncoder encoder;
-    private final SparkSim simulation;
+    private SparkSim simulation;
 
-    public SimulationSparkIO(int id, DCMotor gearbox) {
+    public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
-        simulation = new SparkSim(motor, gearbox);
         pidController = motor.getClosedLoopController();
         encoder = SparkEncoder.createRelativeEncoder(motor);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl) {
-        pidController.setReference(value, ctrl);
+    public void setReference(double value, SparkBase.ControlType controlType) {
+        pidController.setReference(value, controlType);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot) {
-        pidController.setReference(value, ctrl, pidSlot);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
+        pidController.setReference(value, controlType, pidSlot);
     }
 
     @Override
@@ -54,13 +53,13 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, ctrl, pidSlot, arbFeedForward);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
-        pidController.setReference(value, ctrl, pidSlot, arbFeedForward, arbFFUnits);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFFUnits);
     }
 
     @Override
@@ -70,11 +69,20 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void updateSimulation() {
+        if (simulation == null)
+            return;
         simulation.iterate(motor.getAbsoluteEncoder().getVelocity(), motor.getBusVoltage(), Timer.getFPGATimestamp());
+        simulation.setAppliedOutput(motor.getAppliedOutput());
+        simulation.setMotorCurrent(motor.getOutputCurrent());
     }
 
     @Override
     public void configure(SparkMaxConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
         motor.configure(configuration, resetMode, persistMode);
+    }
+
+    @Override
+    public void setSimulationGearbox(DCMotor gearbox) {
+        simulation = new SparkSim(motor, gearbox);
     }
 }

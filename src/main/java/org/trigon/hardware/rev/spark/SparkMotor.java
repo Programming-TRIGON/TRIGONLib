@@ -21,16 +21,15 @@ public class SparkMotor {
     /**
      * Creates a new Spark motor.
      *
-     * @param id              the motor's ID
-     * @param sparkType       the type of Spark motor
-     * @param motorName       the name of the motor
-     * @param simulationMotor the motor to be used in simulation
+     * @param id        the motor's ID
+     * @param sparkType the type of Spark motor
+     * @param motorName the name of the motor
      */
-    public SparkMotor(int id, SparkType sparkType, String motorName, DCMotor simulationMotor) {
+    public SparkMotor(int id, SparkType sparkType, String motorName) {
         this.id = id;
         this.motorName = motorName;
         motorInputs = new SparkInputs(motorName);
-        motorIO = createSparkIO(id, sparkType, simulationMotor);
+        motorIO = createSparkIO(id, sparkType);
     }
 
     /**
@@ -183,11 +182,15 @@ public class SparkMotor {
         motorIO.updateSimulation();
     }
 
-    private SparkIO createSparkIO(int id, SparkType sparkType, DCMotor simulationMotor) {
+    public void setSimulationGearbox(DCMotor gearbox) {
+        motorIO.setSimulationGearbox(gearbox);
+    }
+
+    private SparkIO createSparkIO(int id, SparkType sparkType) {
         if (RobotHardwareStats.isReplay())
             return new SparkIO();
         if (RobotHardwareStats.isSimulation())
-            return new SimulationSparkIO(id, simulationMotor);
+            return new SimulationSparkIO(id);
         return new RealSparkIO(id, sparkType);
     }
 }
