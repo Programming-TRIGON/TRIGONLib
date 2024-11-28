@@ -9,9 +9,7 @@ public class GyroSimulation {
     private double simulationRadians = 0;
 
     /**
-     * Gets the yaw of the gyro in degrees.
-     *
-     * @return The yaw in degrees
+     * @return the yaw in degrees
      */
     public double getGyroYawDegrees() {
         return Math.toDegrees(simulationRadians);
@@ -30,7 +28,7 @@ public class GyroSimulation {
     /**
      * Sets the yaw of the gyro.
      *
-     * @param heading The yaw to set
+     * @param heading the yaw to set
      */
     public void setYaw(Rotation2d heading) {
         simulationRadians = heading.getRadians();

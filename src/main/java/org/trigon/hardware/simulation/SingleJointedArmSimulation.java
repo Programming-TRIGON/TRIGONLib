@@ -38,9 +38,7 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the current draw of the arm in amperes.
-     *
-     * @return The current in amperes
+     * @return the current in amperes
      */
     @Override
     public double getCurrent() {
@@ -48,9 +46,7 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the position of the arm in rotations.
-     *
-     * @return The position in rotations
+     * @return the position in rotations
      */
     @Override
     public double getSystemPositionRotations() {
@@ -58,9 +54,7 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the velocity of the arm in rotations per second.
-     *
-     * @return The velocity in rotations per second
+     * @return the velocity in rotations per second
      */
     @Override
     public double getSystemVelocityRotationsPerSecond() {
@@ -70,7 +64,7 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
     /**
      * Sets the input voltage of the arm.
      *
-     * @param voltage The voltage to set
+     * @param voltage the voltage to set
      */
     @Override
     public void setInputVoltage(double voltage) {

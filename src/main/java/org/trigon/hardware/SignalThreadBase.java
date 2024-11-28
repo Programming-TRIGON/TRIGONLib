@@ -21,7 +21,7 @@ public class SignalThreadBase extends Thread {
     /**
      * Creates a new SignalThreadBase.
      *
-     * @param name The name of the thread
+     * @param name the name of the thread
      */
     public SignalThreadBase(String name) {
         this.name = name;
@@ -51,9 +51,9 @@ public class SignalThreadBase extends Thread {
     }
 
     /**
-     * Gets the latest timestamps when events signals were updated.
+     * Gets the latest timestamps when signals were updated.
      *
-     * @return The latest timestamps
+     * @return the latest timestamps
      */
     public double[] getLatestTimestamps() {
         return threadInputs.timestamps;

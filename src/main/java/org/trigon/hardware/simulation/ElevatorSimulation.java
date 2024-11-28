@@ -41,9 +41,7 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the current draw of the elevator in amperes.
-     *
-     * @return The current in amperes
+     * @return the current in amperes
      */
     @Override
     public double getCurrent() {
@@ -51,9 +49,7 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the position of the elevator in meters.
-     *
-     * @return The position in meters
+     * @return the position in meters
      */
     @Override
     public double getSystemPositionRotations() {
@@ -61,9 +57,7 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the velocity of the elevator in meters per second.
-     *
-     * @return The velocity in meters per second
+     * @return the velocity in meters per second
      */
     @Override
     public double getSystemVelocityRotationsPerSecond() {
@@ -73,7 +67,7 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
     /**
      * Sets the input voltage of the elevator.
      *
-     * @param voltage The voltage to set
+     * @param voltage the voltage to set
      */
     @Override
     public void setInputVoltage(double voltage) {

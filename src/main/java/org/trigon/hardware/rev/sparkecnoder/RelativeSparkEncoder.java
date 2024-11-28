@@ -11,7 +11,7 @@ public class RelativeSparkEncoder extends SparkEncoder {
     /**
      * Creates a new RelativeSparkEncoder.
      *
-     * @param encoder The RelativeEncoder to use.
+     * @param encoder the RelativeEncoder to use.
      */
     public RelativeSparkEncoder(RelativeEncoder encoder) {
         this.encoder = encoder;
@@ -20,7 +20,7 @@ public class RelativeSparkEncoder extends SparkEncoder {
     /**
      * Gets the position of the encoder in rotations.
      *
-     * @return The position of the encoder in rotations.
+     * @return the position of the encoder in rotations.
      */
     public double getPositionRotations() {
         return encoder.getPosition();
@@ -29,7 +29,7 @@ public class RelativeSparkEncoder extends SparkEncoder {
     /**
      * Gets the velocity of the encoder in rotations per second.
      *
-     * @return The velocity of the encoder in rotations per second.
+     * @return the velocity of the encoder in rotations per second.
      */
     public double getVelocityRotationsPerSecond() {
         return encoder.getVelocity();

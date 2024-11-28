@@ -15,6 +15,18 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     /**
      * Creates a new SimpleMotorSimulation.
      *
+     * @param gearbox         the gearbox of the motor(s)
+     * @param gearRatio       the gearbox's gear ratio
+     * @param momentOfInertia the moment of inertia of the motor(s)
+     */
+    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+        super(gearRatio);
+        motorSimulation = new DCMotorSim(LinearSystemId.createDCMotorSystem(gearbox, momentOfInertia, gearRatio), gearbox);
+    }
+
+    /**
+     * Creates a new SimpleMotorSimulation.
+     *
      * @param gearbox   The gearbox of the motor(s)
      * @param gearRatio The gearbox's gear ratio
      * @param kv        voltage needed to maintain constant velocity
@@ -26,9 +38,7 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the current draw of the motor in amperes.
-     *
-     * @return The current in amperes
+     * @return the current in amperes
      */
     @Override
     public double getCurrent() {
@@ -36,9 +46,7 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the position of the motor in rotations.
-     *
-     * @return The position in rotations
+     * @return the position in rotations
      */
     @Override
     public double getSystemPositionRotations() {
@@ -46,9 +54,7 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     }
 
     /**
-     * Gets the velocity of the motor in rotations per second.
-     *
-     * @return The velocity in rotations per second
+     * @return the velocity in rotations per second
      */
     @Override
     public double getSystemVelocityRotationsPerSecond() {
@@ -58,7 +64,7 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     /**
      * Sets the input voltage of the motor.
      *
-     * @param voltage The voltage to set
+     * @param voltage the voltage to set
      */
     @Override
     public void setInputVoltage(double voltage) {

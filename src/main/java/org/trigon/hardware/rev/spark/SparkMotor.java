@@ -39,11 +39,6 @@ public class SparkMotor {
         Logger.processInputs("Motors/" + motorName, motorInputs);
     }
 
-    /**
-     * Gets the ID of the motor.
-     *
-     * @return the ID
-     */
     public int getID() {
         return id;
     }

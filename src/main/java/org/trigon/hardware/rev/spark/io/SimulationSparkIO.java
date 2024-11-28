@@ -6,7 +6,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkSim;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.Timer;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
 
@@ -71,9 +71,7 @@ public class SimulationSparkIO extends SparkIO {
     public void updateSimulation() {
         if (simulation == null)
             return;
-        simulation.iterate(motor.getAbsoluteEncoder().getVelocity(), motor.getBusVoltage(), Timer.getFPGATimestamp());
-        simulation.setAppliedOutput(motor.getAppliedOutput());
-        simulation.setMotorCurrent(motor.getOutputCurrent());
+        simulation.iterate(motor.getAbsoluteEncoder().getVelocity(), motor.getBusVoltage(), RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     @Override

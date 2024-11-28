@@ -4,6 +4,12 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase;
 
 public abstract class SparkEncoder {
+    /**
+     * Creates a new Spark encoder.
+     *
+     * @param spark the Spark motor
+     * @return the Spark encoder
+     */
     public static SparkEncoder createEncoder(SparkBase spark) {
         final SparkAbsoluteEncoder absoluteEncoder = spark.getAbsoluteEncoder();
         if (absoluteEncoder != null)

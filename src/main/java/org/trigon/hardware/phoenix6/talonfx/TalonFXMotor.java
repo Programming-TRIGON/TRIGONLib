@@ -52,7 +52,8 @@ public class TalonFXMotor {
      * Updates the motor and logs its inputs.
      */
     public void update() {
-        motorIO.updateMotor();
+        if (RobotHardwareStats.isSimulation())
+            motorIO.updateMotor();
         Logger.processInputs("Motors/" + motorName, motorInputs);
     }
 
@@ -159,7 +160,7 @@ public class TalonFXMotor {
      * This is also used for signals that need to be updated more frequently like for odometry.
      *
      * @param signal               the threaded signal to register
-     * @param updateFrequencyHertz The frequency at which the threaded signal will be updated
+     * @param updateFrequencyHertz the frequency at which the threaded signal will be updated
      */
     public void registerThreadedSignal(TalonFXSignal signal, double updateFrequencyHertz) {
         motorInputs.registerThreadedSignal(motorSignalToStatusSignal(signal), updateFrequencyHertz);
