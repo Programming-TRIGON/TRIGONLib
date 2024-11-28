@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import org.trigon.hardware.RobotHardwareStats;
 
 /**
- * A class that represents a simulation of a simple motor mechanism.
+ * A class that represents a simulation of a simple motor mechanism, such as flywheels and turret mechanisms.
  */
 public class SimpleMotorSimulation extends MotorPhysicsSimulation {
     private final DCMotorSim motorSimulation;
