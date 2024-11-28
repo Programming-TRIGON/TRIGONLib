@@ -71,7 +71,7 @@ public class SimulationSparkIO extends SparkIO {
     public void updateSimulation() {
         if (simulation == null)
             return;
-        simulation.iterate(motor.getAbsoluteEncoder().getVelocity(), motor.getBusVoltage(), RobotHardwareStats.getPeriodicTimeSeconds());
+        simulation.iterate(motor.getAbsoluteEncoder().getVelocity(), 12, RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     @Override
