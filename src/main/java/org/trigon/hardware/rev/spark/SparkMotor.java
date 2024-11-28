@@ -2,7 +2,7 @@ package org.trigon.hardware.rev.spark;
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
@@ -171,7 +171,7 @@ public class SparkMotor {
      * @param resetMode     whether to reset safe parameters before setting the configuration or not
      * @param persistMode   whether to persist the parameters after setting the configuration or not
      */
-    public void configure(SparkMaxConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
         motorIO.configure(configuration, resetMode, persistMode);
     }
 

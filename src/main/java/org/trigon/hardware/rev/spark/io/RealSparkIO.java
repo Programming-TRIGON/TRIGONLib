@@ -2,7 +2,7 @@ package org.trigon.hardware.rev.spark.io;
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.spark.SparkType;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
@@ -59,7 +59,7 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public void configure(SparkMaxConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
         motor.configure(configuration, resetMode, persistMode);
     }
 
