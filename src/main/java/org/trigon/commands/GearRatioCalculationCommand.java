@@ -18,9 +18,8 @@ public class GearRatioCalculationCommand extends Command {
     private final DoubleConsumer runGearRatioCalculation;
     private final String subsystemName;
     private final double backlashAccountabilityTimeSeconds;
-
     private final LoggedDashboardNumber movementVoltage;
-
+    
     private double startingRotorPosition;
     private double startingEncoderPosition;
     private double gearRatio;
