@@ -4,6 +4,7 @@ package org.trigon.hardware;
  * A class that contains stats about the robot's hardware.
  */
 public class RobotHardwareStats {
+    public static final double SUPPLY_VOLTAGE = 12;
     private static boolean IS_SIMULATION = false;
     private static boolean IS_REPLAY = false;
     private static double PERIODIC_TIME_SECONDS = 0.02;

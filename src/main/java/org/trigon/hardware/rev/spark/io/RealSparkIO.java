@@ -3,6 +3,7 @@ package org.trigon.hardware.rev.spark.io;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.spark.SparkType;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
@@ -66,5 +67,12 @@ public class RealSparkIO extends SparkIO {
     @Override
     public void setInverted(boolean inverted) {
         motor.setInverted(inverted);
+    }
+
+    @Override
+    public void setBrake(boolean brake) {
+        SparkMaxConfig configuration = new SparkMaxConfig();
+        configuration.idleMode(brake ? SparkMaxConfig.IdleMode.kBrake : SparkMaxConfig.IdleMode.kCoast);
+        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 }

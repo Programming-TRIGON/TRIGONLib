@@ -37,9 +37,7 @@ public class Phoenix6Inputs extends BaseInputs {
 
     /**
      * Registers a threaded signal.
-     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
-     * This avoids slowing down the main program, unlike simpler signals that run directly in it.
-     * This is also used for signals that need to be updated at a high frequency like for odometry.
+     * Threaded signals use threading to process certain signals separately at a faster rate.
      *
      * @param statusSignal         the threaded signal to register
      * @param updateFrequencyHertz the frequency at which the threaded signal will be updated
@@ -49,7 +47,7 @@ public class Phoenix6Inputs extends BaseInputs {
             return;
 
         registerSignal(statusSignal, updateFrequencyHertz);
-        if (RobotHardwareStats.isSimulation()) // needed for simulation to work
+        if (RobotHardwareStats.isSimulation()) // You can't run signals at a high frequency in simulation. A fast thread slows down the simulation.
             statusSignal.setUpdateFrequency(50);
         signalToThreadedQueue.put(statusSignal.getName() + "_Threaded", signalThread.registerSignal(statusSignal));
     }

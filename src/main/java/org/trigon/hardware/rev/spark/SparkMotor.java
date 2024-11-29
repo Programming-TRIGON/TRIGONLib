@@ -3,7 +3,6 @@ package org.trigon.hardware.rev.spark;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import edu.wpi.first.math.system.plant.DCMotor;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.io.RealSparkIO;
@@ -47,7 +46,7 @@ public class SparkMotor {
 
     /**
      * Registers a threaded signal to be logged from the motor.
-     * Threaded signals use threading to process certain signals separately. Should be used for signals that need to be updated at a high frequency such as odometry.
+     * Threaded signals use threading to process certain signals separately at a faster rate.
      *
      * @param signal the signal to be registered
      */
@@ -78,7 +77,7 @@ public class SparkMotor {
 
     /**
      * Gets a threaded signal from the motor.
-     * Threaded signals use threading to process certain signals separately. Should be used for signals that need to be updated at a high frequency such as odometry.
+     * Threaded signals use threading to process certain signals separately at a faster rate.
      *
      * @param signal the threaded signal to get
      * @return the threaded signal
@@ -160,18 +159,69 @@ public class SparkMotor {
     }
 
     /**
-     * Applies the configuration to the motor.
+     * Sets the motors neutral mode.
+     *
+     * @param brake true if the motor should brake, false if it should coast
+     */
+    public void setBrake(boolean brake) {
+        motorIO.setBrake(brake);
+    }
+
+    /**
+     * Applies both the real and simulation configurations to the motor.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
+     *
+     * @param realConfiguration       configuration to be used in real life
+     * @param simulationConfiguration configuration to be used in simulation
+     * @param resetMode               whether to reset safe parameters before setting the configuration or not
+     * @param persistMode             whether to persist the parameters after setting the configuration or not
+     */
+    public void applyConfigurations(SparkBaseConfig realConfiguration, SparkBaseConfig simulationConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        if (RobotHardwareStats.isSimulation())
+            motorIO.configure(simulationConfiguration, resetMode, persistMode);
+        else
+            motorIO.configure(realConfiguration, resetMode, persistMode);
+    }
+
+    /**
+     * Applies the configuration to be used both in real life and in simulation.
      *
      * @param configuration the configuration to apply
      * @param resetMode     whether to reset safe parameters before setting the configuration or not
      * @param persistMode   whether to persist the parameters after setting the configuration or not
      */
-    public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void applyConfiguration(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
         motorIO.configure(configuration, resetMode, persistMode);
     }
 
-    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, DCMotor gearbox) {
-        motorIO.setPhysicsSimulation(physicsSimulation, gearbox);
+    /**
+     * Applies the configuration to be used when {@link RobotHardwareStats#isSimulation()} is false.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
+     *
+     * @param realConfiguration the configuration to apply
+     * @param resetMode         whether to reset safe parameters before setting the configuration or not
+     * @param persistMode       whether to persist the parameters after setting the configuration or not
+     */
+    public void applyRealConfiguration(SparkBaseConfig realConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        if (!RobotHardwareStats.isSimulation())
+            motorIO.configure(realConfiguration, resetMode, persistMode);
+    }
+
+    /**
+     * Applies the configuration to be used in simulation.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
+     *
+     * @param simulationConfiguration the configuration to apply
+     * @param resetMode               whether to reset safe parameters before setting the configuration or not
+     * @param persistMode             whether to persist the parameters after setting the configuration or not
+     */
+    public void applySimulationConfiguration(SparkBaseConfig simulationConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        if (RobotHardwareStats.isSimulation())
+            motorIO.configure(simulationConfiguration, resetMode, persistMode);
+    }
+
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
+        motorIO.setPhysicsSimulation(physicsSimulation);
     }
 
     private SparkIO createSparkIO(int id, SparkType sparkType) {

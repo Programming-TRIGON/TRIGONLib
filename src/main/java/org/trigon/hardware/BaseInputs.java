@@ -50,7 +50,7 @@ public abstract class BaseInputs implements LoggableInputs {
 
     /**
      * Gets a threaded signal.
-     * Threaded signals use threading to process certain signals separately. Should be used for odometry and other fast signals.
+     * Threaded signals use threading to process certain signals separately at a faster rate
      *
      * @param signalName the name of the threaded signal
      * @return the threaded signal

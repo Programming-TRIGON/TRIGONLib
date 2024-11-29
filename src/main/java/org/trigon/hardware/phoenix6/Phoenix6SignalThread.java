@@ -52,7 +52,7 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     }
 
     /**
-     * Registers a status signal to be read.
+     * Registers a status signal to be read with a higher frequency.
      *
      * @param signal the signal to register
      * @return the queue that the signal's values will be written to

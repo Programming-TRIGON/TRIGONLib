@@ -52,7 +52,7 @@ public class SparkSignalThread extends SignalThreadBase {
 
     /**
      * Registers a threaded signal to be read asynchronously.
-     * Threaded signals use threading to process certain signals separately. Should be used for signals that need to be updated at a high frequency such as odometry.
+     * Threaded signals use threading to process certain signals separately at a faster rate.
      *
      * @param signal the signal to register
      * @return the queue that the signal's values will be written to

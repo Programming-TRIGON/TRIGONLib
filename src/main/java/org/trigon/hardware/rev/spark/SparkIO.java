@@ -3,7 +3,6 @@ package org.trigon.hardware.rev.spark;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import edu.wpi.first.math.system.plant.DCMotor;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
@@ -32,10 +31,13 @@ public class SparkIO {
     public void setInverted(boolean inverted) {
     }
 
+    public void setBrake(boolean brake) {
+    }
+
     public void updateSimulation() {
     }
 
-    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, DCMotor gearbox) {
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
     }
 
     public SparkBase getMotor() {

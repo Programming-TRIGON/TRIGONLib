@@ -1,12 +1,11 @@
 package org.trigon.hardware.rev.spark.io;
 
-import com.revrobotics.sim.SparkAbsoluteEncoderSim;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkSim;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import edu.wpi.first.math.system.plant.DCMotor;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
@@ -16,7 +15,6 @@ public class SimulationSparkIO extends SparkIO {
     private final SparkMax motor;
     private final SparkClosedLoopController pidController;
     private final SparkEncoder encoder;
-    private final SparkAbsoluteEncoderSim absoluteEncoderSimulation;
     private SparkSim motorSimulation = null;
     private MotorPhysicsSimulation physicsSimulation = null;
 
@@ -24,7 +22,6 @@ public class SimulationSparkIO extends SparkIO {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
         pidController = motor.getClosedLoopController();
         encoder = SparkEncoder.createRelativeEncoder(motor);
-        absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
     }
 
     @Override
@@ -73,13 +70,19 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
+    public void setBrake(boolean brake) {
+        SparkMaxConfig configuration = new SparkMaxConfig();
+        configuration.idleMode(brake ? SparkMaxConfig.IdleMode.kBrake : SparkMaxConfig.IdleMode.kCoast);
+        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+    }
+
+    @Override
     public void updateSimulation() {
         if (motorSimulation == null)
             return;
-        absoluteEncoderSimulation.iterate(encoder.getVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
-        motorSimulation.iterate(absoluteEncoderSimulation.getVelocity(), 12, RobotHardwareStats.getPeriodicTimeSeconds());
-        physicsSimulation.updateMotor();
         physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage());
+        physicsSimulation.updateMotor();
+        motorSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     @Override
@@ -88,8 +91,8 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, DCMotor gearbox) {
-        motorSimulation = new SparkSim(motor, gearbox);
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
+        motorSimulation = new SparkSim(motor, physicsSimulation.getGearbox());
         this.physicsSimulation = physicsSimulation;
     }
 }

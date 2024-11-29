@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
@@ -17,7 +18,7 @@ public class SimulationTalonFXIO extends TalonFXIO {
     public SimulationTalonFXIO(int id) {
         this.talonFX = new TalonFX(id);
         this.motorSimState = talonFX.getSimState();
-        motorSimState.setSupplyVoltage(12);
+        motorSimState.setSupplyVoltage(RobotHardwareStats.SUPPLY_VOLTAGE);
     }
 
     @Override
