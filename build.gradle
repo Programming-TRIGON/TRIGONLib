@@ -1,5 +1,5 @@
 plugins {
-    id "java"
+    id "java-library"
     id "maven-publish"
     id "edu.wpi.first.GradleRIO" version "2025.1.1-beta-1"
     id "edu.wpi.first.WpilibTools" version "2.1.0"
@@ -51,6 +51,7 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+    javadoc.options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
