@@ -5,7 +5,7 @@ import com.revrobotics.spark.SparkBase;
 
 public abstract class SparkEncoder {
     /**
-     * Creates a new Spark encoder.
+     * Creates a new Spark encoder. If the Spark motor has an absolute encoder, an AbsoluteSparkEncoder is created. Otherwise, a RelativeSparkEncoder is created.
      *
      * @param spark the Spark motor
      * @return the Spark encoder

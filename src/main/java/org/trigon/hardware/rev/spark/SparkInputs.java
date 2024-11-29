@@ -47,7 +47,7 @@ public class SparkInputs extends BaseInputs {
 
     /**
      * Registers a threaded signal.
-     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
+     * Threaded signals use threading to process certain signals separately. Should be used for signals that need to be updated at a high frequency such as odometry.
      *
      * @param statusSignal the threaded signal to register
      */
@@ -56,7 +56,7 @@ public class SparkInputs extends BaseInputs {
             return;
 
         registerSignal(statusSignal);
-        signalToThreadedQueue.put(statusSignal.getName() + "_Threaded", signalThread.registerSignal(statusSignal.getValueSupplier()));
+        signalToThreadedQueue.put(statusSignal.getName() + "_Threaded", signalThread.registerThreadedSignal(statusSignal.getValueSupplier()));
     }
 
     private void updateThreadedSignalsToTable(LogTable table) {

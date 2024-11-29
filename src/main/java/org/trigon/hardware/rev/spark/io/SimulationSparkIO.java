@@ -10,6 +10,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 public class SimulationSparkIO extends SparkIO {
     private final SparkMax motor;
@@ -17,6 +18,7 @@ public class SimulationSparkIO extends SparkIO {
     private final SparkEncoder encoder;
     private final SparkAbsoluteEncoderSim absoluteEncoderSimulation;
     private SparkSim motorSimulation = null;
+    private MotorPhysicsSimulation physicsSimulation = null;
 
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
@@ -51,8 +53,8 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setPeriodicFrameTimeout(int periodMs) {
-        motor.setPeriodicFrameTimeout(periodMs);
+    public void setPeriodicFrameTimeout(int timeoutMs) {
+        motor.setPeriodicFrameTimeout(timeoutMs);
     }
 
     @Override
@@ -76,6 +78,8 @@ public class SimulationSparkIO extends SparkIO {
             return;
         absoluteEncoderSimulation.iterate(encoder.getVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.iterate(absoluteEncoderSimulation.getVelocity(), 12, RobotHardwareStats.getPeriodicTimeSeconds());
+        physicsSimulation.updateMotor();
+        physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage());
     }
 
     @Override
@@ -84,7 +88,8 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setSimulationGearbox(DCMotor gearbox) {
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, DCMotor gearbox) {
         motorSimulation = new SparkSim(motor, gearbox);
+        this.physicsSimulation = physicsSimulation;
     }
 }

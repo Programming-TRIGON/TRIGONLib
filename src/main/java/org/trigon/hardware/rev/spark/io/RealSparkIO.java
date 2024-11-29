@@ -44,8 +44,8 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public void setPeriodicFrameTimeout(int periodMs) {
-        motor.setPeriodicFrameTimeout(periodMs);
+    public void setPeriodicFrameTimeout(int timeoutMs) {
+        motor.setPeriodicFrameTimeout(timeoutMs);
     }
 
     @Override

@@ -14,7 +14,7 @@ public abstract class BaseInputs implements LoggableInputs {
     /**
      * Creates a new BaseInputs instance.
      *
-     * @param name the name of the instance
+     * @param name the name of the instance. Used for error messages.
      */
     public BaseInputs(String name) {
         this.name = name;
@@ -26,7 +26,7 @@ public abstract class BaseInputs implements LoggableInputs {
     }
 
     /**
-     * Gets a signal.
+     * Gets a signal from the inputs.
      *
      * @param signalName the name of the signal
      * @return the signal
@@ -50,7 +50,7 @@ public abstract class BaseInputs implements LoggableInputs {
 
     /**
      * Gets a threaded signal.
-     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
+     * Threaded signals use threading to process certain signals separately. Should be used for odometry and other fast signals.
      *
      * @param signalName the name of the threaded signal
      * @return the threaded signal

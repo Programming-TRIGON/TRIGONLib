@@ -28,7 +28,7 @@ public class RobotHardwareStats {
     }
 
     /**
-     * Sets how frequently the periodic method is called in seconds. Used for calling methods periodically.
+     * Sets how frequently the simulation is updated.
      *
      * @param periodicTimeSeconds the periodic time in seconds
      */

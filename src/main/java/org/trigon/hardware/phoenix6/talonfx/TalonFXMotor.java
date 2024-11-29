@@ -134,7 +134,7 @@ public class TalonFXMotor {
 
     /**
      * Gets a threaded signal from the motor.
-     * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
+     * Threaded signals use threading to process certain signals separately. This is used for signals that need to be updated at a higher frequency such as odometry.
      *
      * @param signal the type of threaded signal to get
      * @return the signal
@@ -157,7 +157,7 @@ public class TalonFXMotor {
      * Registers a threaded signal to the motor.
      * Threaded signals use threading to process certain signals separately, keeping them running smoothly in the background.
      * This avoids slowing down the main program, unlike simpler signals that run directly in it.
-     * This is also used for signals that need to be updated more frequently like for odometry.
+     * This is also used for signals that need to be updated at a high frequency like for odometry.
      *
      * @param signal               the threaded signal to register
      * @param updateFrequencyHertz the frequency at which the threaded signal will be updated

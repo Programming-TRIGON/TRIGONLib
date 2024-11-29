@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 public class SparkIO {
     public void setReference(double value, SparkBase.ControlType ctrl) {
@@ -19,7 +20,7 @@ public class SparkIO {
     public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
     }
 
-    public void setPeriodicFrameTimeout(int periodMs) {
+    public void setPeriodicFrameTimeout(int timeoutMs) {
     }
 
     public void stopMotor() {
@@ -34,7 +35,7 @@ public class SparkIO {
     public void updateSimulation() {
     }
 
-    public void setSimulationGearbox(DCMotor gearbox) {
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, DCMotor gearbox) {
     }
 
     public SparkBase getMotor() {

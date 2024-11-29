@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.io.RealSparkIO;
 import org.trigon.hardware.rev.spark.io.SimulationSparkIO;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
  * A class the represents a Spark motor. Used to control and read data from a Spark motor.
@@ -45,26 +46,23 @@ public class SparkMotor {
     }
 
     /**
-     * Registers a signal to be logged from the motor.
+     * Registers a threaded signal to be logged from the motor.
+     * Threaded signals use threading to process certain signals separately. Should be used for signals that need to be updated at a high frequency such as odometry.
      *
      * @param signal the signal to be registered
      */
-    public void registerSignal(SparkSignal signal) {
-        this.registerSignal(signal, false);
+    public void registerThreadedSignal(SparkSignal signal) {
+        final SparkStatusSignal statusSignal = signal.getStatusSignal(motorIO.getMotor(), motorIO.getEncoder());
+        motorInputs.registerThreadedSignal(statusSignal);
     }
 
     /**
      * Registers a signal to be read from the motor.
      *
-     * @param signal     the signal to be read
-     * @param isThreaded whether the signal should be read in a separate thread or not
+     * @param signal the signal to be read
      */
-    public void registerSignal(SparkSignal signal, boolean isThreaded) {
+    public void registerSignal(SparkSignal signal) {
         final SparkStatusSignal statusSignal = signal.getStatusSignal(motorIO.getMotor(), motorIO.getEncoder());
-        if (isThreaded) {
-            motorInputs.registerThreadedSignal(statusSignal);
-            return;
-        }
         motorInputs.registerSignal(statusSignal);
     }
 
@@ -80,6 +78,7 @@ public class SparkMotor {
 
     /**
      * Gets a threaded signal from the motor.
+     * Threaded signals use threading to process certain signals separately. Should be used for signals that need to be updated at a high frequency such as odometry.
      *
      * @param signal the threaded signal to get
      * @return the threaded signal
@@ -135,13 +134,13 @@ public class SparkMotor {
     }
 
     /**
-     * Sets the transmission period for a specific periodic frame on the motor controller.
-     * This method adjusts the rate at which the controller sends the frame, but the change is not saved permanently and will reset on powerup.
+     * Set the amount of time to wait for a periodic status frame before returning a timeout error.
+     * This timeout will apply to all periodic status frames for the SPARK motor controller.
      *
-     * @param periodMs the new transmission period in milliseconds
+     * @param timeoutMs the new transmission period in milliseconds
      */
-    public void setPeriodicFramePeriod(int periodMs) {
-        motorIO.setPeriodicFrameTimeout(periodMs);
+    public void setPeriodicFrameTimeout(int timeoutMs) {
+        motorIO.setPeriodicFrameTimeout(timeoutMs);
     }
 
     /**
@@ -171,8 +170,8 @@ public class SparkMotor {
         motorIO.configure(configuration, resetMode, persistMode);
     }
 
-    public void setSimulationGearbox(DCMotor gearbox) {
-        motorIO.setSimulationGearbox(gearbox);
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, DCMotor gearbox) {
+        motorIO.setPhysicsSimulation(physicsSimulation, gearbox);
     }
 
     private SparkIO createSparkIO(int id, SparkType sparkType) {

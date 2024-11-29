@@ -240,14 +240,14 @@ public class Conversions {
     }
 
     /**
-     * Converts a string in SNAKE_CASE to camelCase.
+     * Converts a string from SNAKE_CASE to camelCase.
      *
      * @param input the string to convert
      * @return the string in camel case
      */
     public static String snakeCaseToCamelCase(String input) {
-        String[] parts = input.split("_");
-        StringBuilder camelCase = new StringBuilder();
+        final String[] parts = input.split("_");
+        final StringBuilder camelCase = new StringBuilder();
 
         for (int i = 0; i < parts.length; i++) {
             String part = parts[i].toLowerCase();
