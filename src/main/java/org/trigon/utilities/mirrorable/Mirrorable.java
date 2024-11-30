@@ -25,11 +25,6 @@ public abstract class Mirrorable<T> {
     protected final T nonMirroredObject, mirroredObject;
     protected final boolean shouldMirrorWhenRedAlliance;
 
-//    static {
-//        UPDATE_ALLIANCE_TIMER.start();
-//        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(getUpdateAllianceCommand());
-//    }
-
     /**
      * Creates a new mirrorable object.
      *
@@ -42,7 +37,10 @@ public abstract class Mirrorable<T> {
         this.shouldMirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
     }
 
-    public static void initializeMirrorable() {
+    /**
+     * Initializes the mirrorable object. This should be called once in robot container's constructor.
+     */
+    public static void init() {
         UPDATE_ALLIANCE_TIMER.start();
         new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(getUpdateAllianceCommand());
     }
