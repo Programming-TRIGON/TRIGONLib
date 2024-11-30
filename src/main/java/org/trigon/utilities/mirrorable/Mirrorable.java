@@ -3,6 +3,7 @@ package org.trigon.utilities.mirrorable;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -26,10 +27,7 @@ public abstract class Mirrorable<T> {
 
     static {
         UPDATE_ALLIANCE_TIMER.start();
-
-        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(
-                new InstantCommand(() -> IS_RED_ALLIANCE = notCachedIsRedAlliance())//.ignoringDisable(true)
-        );
+        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(getUpdateAllianceCommand());
     }
 
     /**
@@ -42,6 +40,11 @@ public abstract class Mirrorable<T> {
         this.nonMirroredObject = nonMirroredObject;
         this.mirroredObject = mirror(nonMirroredObject);
         this.shouldMirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
+    }
+
+    public static void initializeMirrorable() {
+        UPDATE_ALLIANCE_TIMER.start();
+        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(getUpdateAllianceCommand());
     }
 
     /**
@@ -57,6 +60,15 @@ public abstract class Mirrorable<T> {
     private static boolean notCachedIsRedAlliance() {
         final Optional<DriverStation.Alliance> optionalAlliance = DriverStation.getAlliance();
         return optionalAlliance.orElse(DriverStation.Alliance.Red).equals(DriverStation.Alliance.Red);
+    }
+
+    /**
+     * Gets a command that updates the alliance. This is used to cache the alliance every 0.5 seconds. Ignoring disable is used to allow this command to run when the robot is disabled.
+     *
+     * @return the command
+     */
+    private static Command getUpdateAllianceCommand() {
+        return new InstantCommand(() -> IS_RED_ALLIANCE = notCachedIsRedAlliance()).ignoringDisable(true);
     }
 
     /**

@@ -44,6 +44,11 @@ public class SimulationCANcoderIO extends CANcoderIO {
     }
 
     @Override
+    protected void setPosition(double positionRotations) {
+        cancoder.setPosition(positionRotations);
+    }
+
+    @Override
     public CANcoder getCANcoder() {
         return cancoder;
     }

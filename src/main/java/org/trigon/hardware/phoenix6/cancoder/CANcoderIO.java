@@ -18,6 +18,9 @@ public class CANcoderIO {
     protected void setSimulationInputSuppliers(DoubleSupplier positionSupplierRotations, DoubleSupplier velocitySupplierRotationsPerSecond) {
     }
 
+    protected void setPosition(double positionRotations) {
+    }
+
     protected CANcoder getCANcoder() {
         return null;
     }
