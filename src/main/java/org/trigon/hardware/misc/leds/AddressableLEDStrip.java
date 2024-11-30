@@ -152,13 +152,13 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void sectionColor(Supplier<Color>[] colors) {
         final int amountOfSections = colors.length;
-        final int LEDsPerSection = (int) Math.floor(numberOfLEDs / amountOfSections);
+        final int ledsPerSection = (int) Math.floor(numberOfLEDs / amountOfSections);
 
         for (int i = 0; i < amountOfSections; i++)
             setLEDColors(
                     inverted ? colors[amountOfSections - i - 1].get() : colors[i].get(),
-                    LEDsPerSection * i,
-                    i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDsPerSection * (i + 1) - 1
+                    ledsPerSection * i,
+                    i == amountOfSections - 1 ? numberOfLEDs - 1 : ledsPerSection * (i + 1) - 1
             );
     }
 
@@ -186,7 +186,7 @@ public class AddressableLEDStrip extends LEDStrip {
         for (int i = 0; i < breathingLEDs; i++) {
             if (lastBreatheLED - i >= indexOffset && lastBreatheLED - i < indexOffset + numberOfLEDs)
                 LED_BUFFER.setLED(lastBreatheLED - i, color);
-            
+
             else if (lastBreatheLED - i < indexOffset + numberOfLEDs) {
                 if (bounceMode.equals(LarsonAnimation.BounceMode.Back) || bounceMode.equals(LarsonAnimation.BounceMode.Center) && i > breathingLEDs / 2)
                     return;

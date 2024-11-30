@@ -78,7 +78,7 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void updateSimulation() {
-        if (motorSimulation == null)
+        if (physicsSimulation == null)
             return;
         physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage());
         physicsSimulation.updateMotor();

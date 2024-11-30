@@ -140,19 +140,19 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void sectionColor(Supplier<Color>[] colors) {
-        final int LEDSPerSection = (int) Math.floor(numberOfLEDs / colors.length);
-        setSectionColor(colors.length, LEDSPerSection, colors);
+        final int ledsPerSection = (int) Math.floor(numberOfLEDs / colors.length);
+        setSectionColor(colors.length, ledsPerSection, colors);
     }
 
-    private void setSectionColor(int amountOfSections, int LEDSPerSection, Supplier<Color>[] colors) {
+    private void setSectionColor(int amountOfSections, int ledsPerSection, Supplier<Color>[] colors) {
         for (int i = 0; i < amountOfSections; i++) {
             CANDLE.setLEDs(
                     (int) (inverted ? colors[amountOfSections - i - 1].get().red : colors[i].get().red),
                     (int) (inverted ? colors[amountOfSections - i - 1].get().green : colors[i].get().green),
                     (int) (inverted ? colors[amountOfSections - i - 1].get().blue : colors[i].get().blue),
                     0,
-                    LEDSPerSection * i + indexOffset,
-                    i == amountOfSections - 1 ? numberOfLEDs - 1 : LEDSPerSection * (i + 1) - 1
+                    ledsPerSection * i + indexOffset,
+                    i == amountOfSections - 1 ? numberOfLEDs - 1 : ledsPerSection * (i + 1) - 1
             );
         }
     }

@@ -23,7 +23,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.staticColor(color)), ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.staticColor(color)), ledStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
@@ -42,7 +42,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.blink(firstColor, speed)), ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.blink(firstColor, speed)), ledStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
@@ -64,7 +64,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.breathe(color, amountOfBreathingLEDs, speed, inverted, bounceMode)), ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.breathe(color, amountOfBreathingLEDs, speed, inverted, bounceMode)), ledStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
@@ -84,7 +84,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.colorFlow(color, speed, inverted)), ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.colorFlow(color, speed, inverted)), ledStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
@@ -103,7 +103,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.alternateColor(firstColor, secondColor)), ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.alternateColor(firstColor, secondColor)), ledStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
@@ -121,7 +121,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.sectionColor(colors)), ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.sectionColor(colors)), ledStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
@@ -141,7 +141,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> {
                     runForLEDs((LEDStrip::clearLEDColors), ledStrips);
-                    runForLEDs(LEDStrip -> LEDStrip.setCurrentAnimation(() -> LEDStrip.rainbow(brightness, speed, inverted)), ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.rainbow(brightness, speed, inverted)), ledStrips);
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
@@ -149,7 +149,7 @@ public class LEDCommands {
     }
 
     private static void runForLEDs(Consumer<LEDStrip> action, LEDStrip... ledStrips) {
-        for (LEDStrip LEDStrip : ledStrips)
-            action.accept(LEDStrip);
+        for (LEDStrip ledStrip : ledStrips)
+            action.accept(ledStrip);
     }
 }
