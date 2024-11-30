@@ -11,8 +11,8 @@ import java.util.function.Function;
  * An enum that represents the different signals that can be sent from a Spark motor.
  */
 public enum SparkSignal {
-    POSITION(null, SparkEncoder::getPositionRotations),
-    VELOCITY(null, SparkEncoder::getVelocityRotationsPerSecond),
+    POSITION(null, SparkEncoder::getPosition),
+    VELOCITY(null, SparkEncoder::getVelocity),
     OUTPUT_CURRENT(SparkBase::getOutputCurrent, null),
     APPLIED_OUTPUT(SparkBase::getAppliedOutput, null),
     BUS_VOLTAGE(SparkBase::getBusVoltage, null);

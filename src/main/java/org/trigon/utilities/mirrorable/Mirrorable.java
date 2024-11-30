@@ -28,7 +28,7 @@ public abstract class Mirrorable<T> {
         UPDATE_ALLIANCE_TIMER.start();
 
         new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(
-                new InstantCommand(() -> IS_RED_ALLIANCE = notCachedIsRedAlliance()).ignoringDisable(true)
+                new InstantCommand(() -> IS_RED_ALLIANCE = notCachedIsRedAlliance())//.ignoringDisable(true)
         );
     }
 
