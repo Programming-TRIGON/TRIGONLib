@@ -19,8 +19,7 @@ public abstract class Mirrorable<T> {
     protected static final Rotation2d HALF_ROTATION = new Rotation2d(Math.PI);
     protected static final double FIELD_LENGTH_METERS = 16.54175;
     private static final Timer UPDATE_ALLIANCE_TIMER = new Timer();
-
-    private static boolean IS_RED_ALLIANCE;
+    private static boolean IS_RED_ALLIANCE = notCachedIsRedAlliance();
     protected final T nonMirroredObject, mirroredObject;
     protected final boolean shouldMirrorWhenRedAlliance;
 
@@ -40,14 +39,6 @@ public abstract class Mirrorable<T> {
         this.mirroredObject = mirror(nonMirroredObject);
         this.shouldMirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
     }
-
-//    /**
-//     * Initializes the mirrorable object. This should be called once in robot container's constructor.
-//     */
-//    public static void init() {
-//        UPDATE_ALLIANCE_TIMER.start();
-//        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(getUpdateAllianceCommand());
-//    }
 
     /**
      * @return whether the robot is on the red alliance. This is cached every 0.5 seconds
