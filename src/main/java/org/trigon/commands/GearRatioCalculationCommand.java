@@ -119,6 +119,8 @@ public class GearRatioCalculationCommand extends Command {
     private double calculateGearRatio() {
         final double currentRotorPosition = getRotorDistance();
         final double currentEncoderPosition = getEncoderDistance();
+        if (currentEncoderPosition == 0)
+            return 0;
         return currentRotorPosition / currentEncoderPosition;
     }
 
