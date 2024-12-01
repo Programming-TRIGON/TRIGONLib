@@ -23,21 +23,14 @@ public abstract class Mirrorable<T> {
     protected final T nonMirroredObject, mirroredObject;
     protected final boolean shouldMirrorWhenRedAlliance;
 
-    static {
+//    static {
+//        UPDATE_ALLIANCE_TIMER.start();
+//        new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(getUpdateAllianceCommand());
+//    }
+
+    public static void init() {
         UPDATE_ALLIANCE_TIMER.start();
         new Trigger(() -> UPDATE_ALLIANCE_TIMER.advanceIfElapsed(0.5)).onTrue(getUpdateAllianceCommand());
-    }
-
-    /**
-     * Creates a new mirrorable object.
-     *
-     * @param nonMirroredObject           the object when the robot is on the blue alliance, or the non-mirrored object
-     * @param shouldMirrorWhenRedAlliance whether the object should be mirrored when the robot is on the red alliance
-     */
-    protected Mirrorable(T nonMirroredObject, boolean shouldMirrorWhenRedAlliance) {
-        this.nonMirroredObject = nonMirroredObject;
-        this.mirroredObject = mirror(nonMirroredObject);
-        this.shouldMirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
     }
 
     /**
@@ -65,9 +58,22 @@ public abstract class Mirrorable<T> {
     }
 
     /**
-     * @return the current object.
+     * Creates a new mirrorable object.
+     *
+     * @param nonMirroredObject           the object when the robot is on the blue alliance, or the non-mirrored object
+     * @param shouldMirrorWhenRedAlliance whether the object should be mirrored when the robot is on the red alliance
+     */
+    protected Mirrorable(T nonMirroredObject, boolean shouldMirrorWhenRedAlliance) {
+        this.nonMirroredObject = nonMirroredObject;
+        this.mirroredObject = mirror(nonMirroredObject);
+        this.shouldMirrorWhenRedAlliance = shouldMirrorWhenRedAlliance;
+    }
+
+    /**
      * If the robot is on the red alliance and the object should be mirrored, the mirrored object is returned.
      * Otherwise, the non-mirrored object is returned.
+     *
+     * @return the current object
      */
     public T get() {
         return isRedAlliance() && shouldMirrorWhenRedAlliance ? mirroredObject : nonMirroredObject;
