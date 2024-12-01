@@ -30,6 +30,16 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
+    }
+
+    @Override
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
+    }
+
+    @Override
     public SparkEncoder getEncoder() {
         return encoder;
     }
@@ -47,16 +57,6 @@ public class RealSparkIO extends SparkIO {
     @Override
     public void setPeriodicFrameTimeout(int timeoutMs) {
         motor.setPeriodicFrameTimeout(timeoutMs);
-    }
-
-    @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
-    }
-
-    @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
     }
 
     @Override

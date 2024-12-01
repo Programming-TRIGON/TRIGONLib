@@ -220,6 +220,11 @@ public class SparkMotor {
             motorIO.configure(simulationConfiguration, resetMode, persistMode);
     }
 
+    /**
+     * Sets the physics simulation to be used by the motor. Needs to be called for the motor to work in simulation.
+     *
+     * @param physicsSimulation the physics simulation to be used
+     */
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
         motorIO.setPhysicsSimulation(physicsSimulation);
     }

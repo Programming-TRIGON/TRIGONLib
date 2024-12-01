@@ -16,7 +16,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     /**
      * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips. Should only be called once.
-     * Should be configured before being set.
+     * Must be configured before being set.
      *
      * @param candle the CANdle instance to be used
      */

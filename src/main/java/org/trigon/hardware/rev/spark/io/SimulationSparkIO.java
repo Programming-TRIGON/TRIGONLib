@@ -35,6 +35,16 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
+    }
+
+    @Override
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFFUnits);
+    }
+
+    @Override
     public SparkEncoder getEncoder() {
         return encoder;
     }
@@ -55,16 +65,6 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
-    }
-
-    @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFFUnits);
-    }
-
-    @Override
     public void setInverted(boolean inverted) {
         motor.setInverted(inverted);
     }
@@ -80,6 +80,7 @@ public class SimulationSparkIO extends SparkIO {
     public void updateSimulation() {
         if (physicsSimulation == null)
             return;
+        
         physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage());
         physicsSimulation.updateMotor();
         motorSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
