@@ -1,10 +1,16 @@
 package org.trigon.commands;
 
+import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
+import org.trigon.hardware.phoenix6.cancoder.CANcoderEncoder;
+import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
+import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
+import org.trigon.utilities.Conversions;
 
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
@@ -19,7 +25,7 @@ public class GearRatioCalculationCommand extends Command {
     private final String subsystemName;
     private final double backlashAccountabilityTimeSeconds;
     private final LoggedDashboardNumber movementVoltage;
-    
+
     private double startingRotorPosition;
     private double startingEncoderPosition;
     private double gearRatio;
@@ -29,8 +35,26 @@ public class GearRatioCalculationCommand extends Command {
     /**
      * Creates a new GearRatioCalculationCommand.
      *
-     * @param rotorPositionSupplier             a supplier that returns the current position of the rotor
-     * @param encoderPositionSupplier           a supplier that returns the current position of the encoder
+     * @param motor                             the motor that drives the rotor
+     * @param encoder                           the encoder that measures the distance traveled
+     * @param backlashAccountabilityTimeSeconds the time to wait before setting the starting positions in order to account for backlash
+     * @param requirement                       the subsystem that this command requires
+     */
+    public GearRatioCalculationCommand(TalonFXMotor motor, CANcoderEncoder encoder, double backlashAccountabilityTimeSeconds, SubsystemBase requirement) {
+        this(
+                () -> Conversions.rotationsToDegrees(motor.getSignal(TalonFXSignal.ROTOR_POSITION)),
+                () -> Conversions.rotationsToDegrees(encoder.getSignal(CANcoderSignal.POSITION)),
+                (voltage) -> motor.setControl(new VoltageOut(voltage)),
+                backlashAccountabilityTimeSeconds,
+                requirement
+        );
+    }
+
+    /**
+     * Creates a new GearRatioCalculationCommand.
+     *
+     * @param rotorPositionSupplier             a supplier that returns the current position of the rotor in degrees
+     * @param encoderPositionSupplier           a supplier that returns the current position of the encoder in degrees
      * @param runGearRatioCalculation           a consumer that drives the motor with a given voltage
      * @param backlashAccountabilityTimeSeconds the time to wait before setting the starting positions in order to account for backlash
      * @param requirement                       the subsystem that this command requires
@@ -55,6 +79,7 @@ public class GearRatioCalculationCommand extends Command {
     @Override
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
+        gearRatio = 0;
     }
 
     @Override
@@ -62,7 +87,10 @@ public class GearRatioCalculationCommand extends Command {
         runGearRatioCalculation();
         if (Timer.getFPGATimestamp() - startTime > backlashAccountabilityTimeSeconds && !hasSetStartingPositions)
             setStartingPositions();
-        log();
+        if (hasSetStartingPositions) {
+            gearRatio = calculateGearRatio();
+            log();
+        }
     }
 
     @Override
