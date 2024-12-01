@@ -6,13 +6,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
  * A class that represents a simulation of a gyro sensor.
  */
 public class GyroSimulation {
-    private double simulationRadians = 0;
+    private double simulationYawRadians = 0;
 
     /**
      * @return the yaw in degrees
      */
     public double getGyroYawDegrees() {
-        return Math.toDegrees(simulationRadians);
+        return Math.toDegrees(simulationYawRadians);
     }
 
     /**
@@ -22,7 +22,7 @@ public class GyroSimulation {
      * @param timeSeconds           the time elapsed in seconds since the last update
      */
     public void update(double omegaRadiansPerSecond, double timeSeconds) {
-        simulationRadians += omegaRadiansPerSecond * timeSeconds;
+        simulationYawRadians += omegaRadiansPerSecond * timeSeconds;
     }
 
     /**
@@ -31,6 +31,6 @@ public class GyroSimulation {
      * @param heading the yaw to set
      */
     public void setYaw(Rotation2d heading) {
-        simulationRadians = heading.getRadians();
+        simulationYawRadians = heading.getRadians();
     }
 }

@@ -1,5 +1,7 @@
 package org.trigon.hardware.rev.spark.io;
 
+import com.revrobotics.sim.SparkAbsoluteEncoderSim;
+import com.revrobotics.sim.SparkRelativeEncoderSim;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -16,6 +18,8 @@ public class SimulationSparkIO extends SparkIO {
     private final SparkClosedLoopController pidController;
     private final SparkEncoder encoder;
     private SparkSim motorSimulation = null;
+    private SparkAbsoluteEncoderSim absoluteEncoderSimulation = null;
+    private SparkRelativeEncoderSim relativeEncoderSimulation = null;
     private MotorPhysicsSimulation physicsSimulation = null;
 
     public SimulationSparkIO(int id) {
@@ -80,10 +84,16 @@ public class SimulationSparkIO extends SparkIO {
     public void updateSimulation() {
         if (physicsSimulation == null)
             return;
-        
+
         physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage());
         physicsSimulation.updateMotor();
-        motorSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+
+        motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+        if (isUsingAbsoluteEncoder()) {
+            absoluteEncoderSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
+            return;
+        }
+        relativeEncoderSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     @Override
@@ -92,8 +102,17 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
         motorSimulation = new SparkSim(motor, physicsSimulation.getGearbox());
         this.physicsSimulation = physicsSimulation;
+        if (isUsingAbsoluteEncoder) {
+            absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
+            return;
+        }
+        relativeEncoderSimulation = new SparkRelativeEncoderSim(motor);
+    }
+
+    private boolean isUsingAbsoluteEncoder() {
+        return absoluteEncoderSimulation != null;
     }
 }

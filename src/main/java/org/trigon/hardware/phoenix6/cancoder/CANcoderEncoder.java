@@ -61,7 +61,7 @@ public class CANcoderEncoder {
     }
 
     /**
-     * Sets the simulation inputs of the encoder from a TalonFX motor.
+     * Sets the TalonFX motor used to supply the encoder's position and velocity values in simulation.
      *
      * @param motor the TalonFX motor to get the simulation inputs from
      */

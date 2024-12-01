@@ -223,10 +223,11 @@ public class SparkMotor {
     /**
      * Sets the physics simulation to be used by the motor. Needs to be called for the motor to work in simulation.
      *
-     * @param physicsSimulation the physics simulation to be used
+     * @param physicsSimulation      the physics simulation to be used
+     * @param isUsingAbsoluteEncoder whether the motor is using a relative encoder or an absolute encoder
      */
-    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
-        motorIO.setPhysicsSimulation(physicsSimulation);
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
+        motorIO.setPhysicsSimulation(physicsSimulation, isUsingAbsoluteEncoder);
     }
 
     private SparkIO createSparkIO(int id, SparkType sparkType) {

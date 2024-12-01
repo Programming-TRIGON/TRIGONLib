@@ -21,10 +21,11 @@ public abstract class Mirrorable<T> {
     private static final Timer UPDATE_ALLIANCE_TIMER = new Timer();
     private static boolean IS_RED_ALLIANCE = notCachedIsRedAlliance();
     protected final T nonMirroredObject, mirroredObject;
+
     protected final boolean shouldMirrorWhenRedAlliance;
 
     /**
-     * Initializes the mirrorable class. This should be called once in robot container's constructor.
+     * Initializes the mirrorable class. This should be called once in robotContainer.
      */
     public static void init() {
         UPDATE_ALLIANCE_TIMER.start();

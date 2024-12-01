@@ -37,7 +37,7 @@ public class SparkIO {
     public void updateSimulation() {
     }
 
-    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
     }
 
     public SparkBase getMotor() {

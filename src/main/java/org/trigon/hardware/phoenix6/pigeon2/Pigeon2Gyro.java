@@ -60,7 +60,8 @@ public class Pigeon2Gyro {
     }
 
     /**
-     * Sets the yaw velocity supplier for simulation.
+     * Sets the yaw velocity supplier used in simulation.
+     * This is used to calculate the gyro's yaw in simulation by multiplying it by the time since the last update, and adding it to the total yaw.
      *
      * @param yawVelocitySupplierDegreesPerSecond the yaw velocity supplier in degrees per second
      */
