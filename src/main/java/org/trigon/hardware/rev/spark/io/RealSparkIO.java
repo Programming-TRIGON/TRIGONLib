@@ -20,13 +20,13 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl) {
-        pidController.setReference(value, ctrl);
+    public void setReference(double value, SparkBase.ControlType controlType) {
+        pidController.setReference(value, controlType);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot) {
-        pidController.setReference(value, ctrl, pidSlot);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
+        pidController.setReference(value, controlType, pidSlot);
     }
 
     @Override
@@ -50,13 +50,13 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, ctrl, pidSlot, arbFeedForward);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
-        pidController.setReference(value, ctrl, pidSlot, arbFeedForward, arbFFUnits);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
     }
 
     @Override
