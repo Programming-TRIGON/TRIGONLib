@@ -25,7 +25,7 @@ public abstract class Mirrorable<T> {
     protected final boolean shouldMirrorWhenRedAlliance;
 
     /**
-     * Initializes the mirrorable class. This should be called once in robotContainer.
+     * Initializes the mirrorable class. This should be called once in RobotContainer.
      */
     public static void init() {
         UPDATE_ALLIANCE_TIMER.start();

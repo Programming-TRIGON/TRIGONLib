@@ -25,7 +25,7 @@ public class SimulationSparkIO extends SparkIO {
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
         pidController = motor.getClosedLoopController();
-        encoder = SparkEncoder.createRelativeEncoder(motor);
+        encoder = SparkEncoder.createEncoder(motor);
     }
 
     @Override
@@ -106,13 +106,15 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
-        motorSimulation = new SparkSim(motor, physicsSimulation.getGearbox());
         this.physicsSimulation = physicsSimulation;
-        if (isUsingAbsoluteEncoder) {
+        if (motorSimulation == null)
+            motorSimulation = new SparkSim(motor, physicsSimulation.getGearbox());
+        if (isUsingAbsoluteEncoder && absoluteEncoderSimulation == null) {
             absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
             return;
         }
-        relativeEncoderSimulation = new SparkRelativeEncoderSim(motor);
+        if (relativeEncoderSimulation == null)
+            relativeEncoderSimulation = new SparkRelativeEncoderSim(motor);
     }
 
     private boolean isUsingAbsoluteEncoder() {

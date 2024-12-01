@@ -18,7 +18,7 @@ public class GyroSimulation {
     /**
      * Updates the simulation's current angle in radians based on the angular velocity.
      *
-     * @param omegaRadiansPerSecond the angular velocity in radians per second
+     * @param omegaRadiansPerSecond the angular velocity of the robot in radians per second
      * @param timeSeconds           the time elapsed in seconds since the last update
      */
     public void update(double omegaRadiansPerSecond, double timeSeconds) {
