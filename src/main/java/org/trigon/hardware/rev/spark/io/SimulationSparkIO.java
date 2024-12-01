@@ -85,8 +85,11 @@ public class SimulationSparkIO extends SparkIO {
         if (physicsSimulation == null)
             return;
 
-        physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage());
+//        physicsSimulation.setInputVoltage(motorSimulation.getAppliedOutput());
+        physicsSimulation.setInputVoltage(motor.getBusVoltage());
         physicsSimulation.updateMotor();
+        System.out.println(motor.getBusVoltage() + " motor bus voltage");
+        System.out.println(motor.getAppliedOutput() + " motor applied output");
 
         motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         if (isUsingAbsoluteEncoder()) {

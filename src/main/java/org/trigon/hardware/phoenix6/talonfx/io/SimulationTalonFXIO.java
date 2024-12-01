@@ -45,10 +45,8 @@ public class SimulationTalonFXIO extends TalonFXIO {
     public void applyConfiguration(TalonFXConfiguration configuration) {
         configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        if (configuration.Feedback.RotorToSensorRatio != 1.0) {
-            configuration.Feedback.SensorToMechanismRatio *= configuration.Feedback.RotorToSensorRatio;
-            configuration.Feedback.RotorToSensorRatio = 1.0;
-        }
+        configuration.Feedback.SensorToMechanismRatio *= configuration.Feedback.RotorToSensorRatio;
+        configuration.Feedback.RotorToSensorRatio = 1.0;
         talonFX.getConfigurator().apply(configuration);
     }
 
