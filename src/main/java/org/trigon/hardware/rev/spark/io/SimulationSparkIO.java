@@ -22,7 +22,6 @@ public class SimulationSparkIO extends SparkIO {
     private final SparkEncoder encoder;
     private MotorPhysicsSimulation physicsSimulation = null;
     private boolean isUsingAbsoluteEncoder = false;
-    private double velocity = 0;
 
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
@@ -89,7 +88,6 @@ public class SimulationSparkIO extends SparkIO {
         if (physicsSimulation == null)
             return;
 
-        updateVelocity();
         updatePhysicsSimulation();
         updateMotorSimulation();
         updateEncoderSimulation();
@@ -112,20 +110,18 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     private void updateMotorSimulation() {
-        motorSimulation.iterate(velocity, RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+        motorSimulation.iterate(getVelocity(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
     }
 
     private void updateEncoderSimulation() {
-        absoluteEncoderSimulation.iterate(velocity, RobotHardwareStats.getPeriodicTimeSeconds());
+        absoluteEncoderSimulation.iterate(getVelocity(), RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
-    private void updateVelocity() {
-        if (isUsingAbsoluteEncoder) {
-            velocity = getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
-            return;
-        }
-        velocity = getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
+    private double getVelocity() {
+        if (isUsingAbsoluteEncoder)
+            return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
+        return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
     }
 
     private double getConversionFactor() {
