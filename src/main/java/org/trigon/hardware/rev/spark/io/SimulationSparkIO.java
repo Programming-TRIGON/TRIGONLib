@@ -93,6 +93,7 @@ public class SimulationSparkIO extends SparkIO {
 
         motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         if (isUsingAbsoluteEncoder()) {
+            System.out.println("absolute encoder simulation iterate");
             absoluteEncoderSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
             return;
         }
