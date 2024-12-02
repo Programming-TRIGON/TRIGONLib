@@ -69,13 +69,13 @@ public class SimulationTalonFXIO extends TalonFXIO {
 
     /**
      * Adapts the configuration for simulation. There are some setting that don't work well in simulation and need to be adapted.
-     * The inverted value doesn't affect the simulation, and it can sometimes cause problems so it is always set to CounterClockwise_Positive.
+     * There's no reason to use the inverted value in simulation, and it can sometimes cause problems so it is always set to CounterClockwise_Positive.
      * The feedback sensor source is set to RotorSensor to avoid delays from using a CANCoder that gets its data from the motor anyway.
      * We don't use the SensorToMechanismRatio for the same reason as it is only used for remote encoders.
      * However, if someone did set a SensorToMechanismRatio, we still want to use it as the gear ratio so we multiply it by the SensorToMechanismRatio.
      *
-     * @param configuration The configuration to adapt
-     * @return The adapted configuration
+     * @param configuration the configuration to adapt
+     * @return the adapted configuration
      */
     private TalonFXConfiguration adaptConfigurationToSimulation(TalonFXConfiguration configuration) {
         configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;

@@ -16,7 +16,7 @@ import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 public class SimulationSparkIO extends SparkIO {
     private final SparkMax motor;
     private final SparkClosedLoopController pidController;
-    private final SparkEncoder encoder;
+    private SparkEncoder encoder;
     private SparkSim motorSimulation = null;
     private SparkAbsoluteEncoderSim absoluteEncoderSimulation = null;
     private SparkRelativeEncoderSim relativeEncoderSimulation = null;
@@ -111,10 +111,13 @@ public class SimulationSparkIO extends SparkIO {
             motorSimulation = new SparkSim(motor, physicsSimulation.getGearbox());
         if (isUsingAbsoluteEncoder && absoluteEncoderSimulation == null) {
             absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
+            encoder = SparkEncoder.createEncoder(motor);
             return;
         }
-        if (relativeEncoderSimulation == null)
+        if (relativeEncoderSimulation == null) {
             relativeEncoderSimulation = new SparkRelativeEncoderSim(motor);
+            encoder = SparkEncoder.createRelativeEncoder(motor);
+        }
     }
 
     private boolean isUsingAbsoluteEncoder() {
