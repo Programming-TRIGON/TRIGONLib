@@ -10,7 +10,6 @@ import org.trigon.hardware.phoenix6.cancoder.CANcoderEncoder;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
-import org.trigon.utilities.Conversions;
 
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
@@ -34,6 +33,7 @@ public class GearRatioCalculationCommand extends Command {
 
     /**
      * Creates a new GearRatioCalculationCommand.
+     * This constructor takes a motor to run the gear ratio calculation on, and an encoder to measure the distance traveled.
      *
      * @param motor                             the motor that drives the rotor
      * @param encoder                           the encoder that measures the distance traveled
@@ -42,8 +42,8 @@ public class GearRatioCalculationCommand extends Command {
      */
     public GearRatioCalculationCommand(TalonFXMotor motor, CANcoderEncoder encoder, double backlashAccountabilityTimeSeconds, SubsystemBase requirement) {
         this(
-                () -> Conversions.rotationsToDegrees(motor.getSignal(TalonFXSignal.ROTOR_POSITION)),
-                () -> Conversions.rotationsToDegrees(encoder.getSignal(CANcoderSignal.POSITION)),
+                () -> motor.getSignal(TalonFXSignal.ROTOR_POSITION),
+                () -> encoder.getSignal(CANcoderSignal.POSITION),
                 (voltage) -> motor.setControl(new VoltageOut(voltage)),
                 backlashAccountabilityTimeSeconds,
                 requirement
@@ -85,18 +85,20 @@ public class GearRatioCalculationCommand extends Command {
     @Override
     public void execute() {
         runGearRatioCalculation();
+
         if (Timer.getFPGATimestamp() - startTime > backlashAccountabilityTimeSeconds && !hasSetStartingPositions)
             setStartingPositions();
+
         if (hasSetStartingPositions) {
             gearRatio = calculateGearRatio();
-            log();
+            logGearRatioAndDistance();
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         gearRatio = calculateGearRatio();
-        log();
+        logGearRatioAndDistance();
         printResult();
     }
 
@@ -110,18 +112,19 @@ public class GearRatioCalculationCommand extends Command {
         runGearRatioCalculation.accept(movementVoltage.get());
     }
 
-    private void log() {
+    private void logGearRatioAndDistance() {
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", getEncoderDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
     }
 
     private double calculateGearRatio() {
-        final double currentRotorPosition = getRotorDistance();
-        final double currentEncoderPosition = getEncoderDistance();
-        if (currentEncoderPosition == 0)
+        final double currentRotorDistance = getRotorDistance();
+        final double currentEncoderDistance = getEncoderDistance();
+        if (currentEncoderDistance == 0) {
             return 0;
-        return currentRotorPosition / currentEncoderPosition;
+        }
+        return currentRotorDistance / currentEncoderDistance;
     }
 
     private double getRotorDistance() {
