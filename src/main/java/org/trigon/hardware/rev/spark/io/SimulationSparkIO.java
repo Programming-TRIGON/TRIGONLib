@@ -83,7 +83,7 @@ public class SimulationSparkIO extends SparkIO {
     public void updateSimulation() {
         if (physicsSimulation == null)
             return;
-        
+
         physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage() * motorSimulation.getAppliedOutput());
         physicsSimulation.updateMotor();
 
@@ -113,6 +113,7 @@ public class SimulationSparkIO extends SparkIO {
             motorSimulation = new SparkSim(motor, physicsSimulation.getGearbox());
 
         if (isUsingAbsoluteEncoder && absoluteEncoderSimulation == null) {
+            System.out.println("create absolute encoder simulation");
             createAbsoluteEncoderSimulation();
             relativeEncoderSimulation = null;
             return;
