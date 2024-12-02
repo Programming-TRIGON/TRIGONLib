@@ -186,7 +186,7 @@ public class WheelRadiusCharacterizationCommand extends Command {
         }
         for (int i = 0; i < driveWheelRadii.length; i++)
             System.out.println("Drive Wheel Radius for Module " + i + ": " + driveWheelRadii[i] + " meters");
-        System.out.println("Average Drive Wheel Radius: " + Arrays.stream(driveWheelRadii).average() + " meters");
+        System.out.println("Average Drive Wheel Radius: " + Arrays.stream(driveWheelRadii).average().getAsDouble() + " meters");
     }
 
     private void logWheelRadii() {
