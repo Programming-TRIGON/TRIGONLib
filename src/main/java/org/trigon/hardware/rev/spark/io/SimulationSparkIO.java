@@ -30,23 +30,23 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType) {
-        pidController.setReference(value, controlType);
+        motor.setVoltage(value);
         System.out.println(value + "set reference");
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
-        pidController.setReference(value, controlType, pidSlot);
+//        pidController.setReference(value, controlType, pidSlot);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
+//        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
+//        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
     }
 
     @Override
@@ -92,13 +92,13 @@ public class SimulationSparkIO extends SparkIO {
         Logger.recordOutput("motor simulation applied output" + motor.getDeviceId(), motorSimulation.getAppliedOutput());
         Logger.recordOutput("velocity" + motor.getDeviceId(), physicsSimulation.getRotorVelocityRotationsPerSecond());
 
-        motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+        motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond() * 60, RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         if (isUsingAbsoluteEncoder()) {
             System.out.println("absolute encoder simulation iterate");
-            absoluteEncoderSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
+            absoluteEncoderSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond() * 60, RobotHardwareStats.getPeriodicTimeSeconds());
             return;
         }
-        relativeEncoderSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.getPeriodicTimeSeconds());
+        relativeEncoderSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond() * 60, RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     @Override
@@ -126,7 +126,6 @@ public class SimulationSparkIO extends SparkIO {
         absoluteEncoderSimulation = motorSimulation.getAbsoluteEncoderSim();
         System.out.println(absoluteEncoderSimulation.toString());
         encoder = SparkEncoder.createAbsoluteEncoder(motor);
-        System.out.println(encoder);
         relativeEncoderSimulation = null;
     }
 
