@@ -8,7 +8,6 @@ import com.revrobotics.spark.SparkSim;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
-import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
@@ -25,30 +24,29 @@ public class SimulationSparkIO extends SparkIO {
 
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
-        motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); /** DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do link to {@link com.revrobotics.sim.SparkMaxSim#setMotorCurrent(double)} */
         pidController = motor.getClosedLoopController();
+        motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); /** DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do link to {@link com.revrobotics.sim.SparkMaxSim#setMotorCurrent(double)} */
         absoluteEncoderSimulation = motorSimulation.getAbsoluteEncoderSim();
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType) {
-        motor.setVoltage(value);
-        System.out.println(value + "set reference");
+        pidController.setReference(value, controlType);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
-//        pidController.setReference(value, controlType, pidSlot);
+        pidController.setReference(value, controlType, pidSlot);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
-//        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
-//        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
     }
 
     @Override
@@ -90,14 +88,9 @@ public class SimulationSparkIO extends SparkIO {
 
         physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage() * motorSimulation.getAppliedOutput());
         physicsSimulation.updateMotor();
-
-        Logger.recordOutput("motor simulation applied output" + motor.getDeviceId(), motorSimulation.getAppliedOutput());
-        Logger.recordOutput("velocity" + motor.getDeviceId(), physicsSimulation.getRotorVelocityRotationsPerSecond());
-        Logger.recordOutput("system velocity" + motor.getDeviceId(), physicsSimulation.getSystemVelocityRotationsPerSecond());
-        Logger.recordOutput("rotor velocity" + motor.getDeviceId(), physicsSimulation.getRotorVelocityRotationsPerSecond());
-
         motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond() * 60 * motor.configAccessor.encoder.getVelocityConversionFactor(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
+
         if (isUsingAbsoluteEncoder()) {
             absoluteEncoderSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond() * 60 * motor.configAccessor.encoder.getVelocityConversionFactor(), RobotHardwareStats.getPeriodicTimeSeconds());
             return;

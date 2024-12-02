@@ -240,21 +240,18 @@ public class Conversions {
     }
 
     /**
-     * Converts a string from SNAKE_CASE to camelCase.
+     * Converts a string from SNAKE_CASE to CamelCase.
      *
      * @param input the string to convert
-     * @return the string in camel case
+     * @return the string in CamelCase
      */
     public static String snakeCaseToCamelCase(String input) {
         final String[] parts = input.split("_");
         final StringBuilder camelCase = new StringBuilder();
 
-        for (int i = 0; i < parts.length; i++) {
-            String part = parts[i].toLowerCase();
-            if (i == 0)
-                camelCase.append(part);
-            else
-                camelCase.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+        for (String s : parts) {
+            final String part = s.toLowerCase();
+            camelCase.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
         }
 
         return camelCase.toString();
