@@ -110,15 +110,15 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     private void updateMotorSimulation() {
-        motorSimulation.iterate(getVelocity(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+        motorSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
     }
 
     private void updateEncoderSimulation() {
-        absoluteEncoderSimulation.iterate(getVelocity(), RobotHardwareStats.getPeriodicTimeSeconds());
+        absoluteEncoderSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
-    private double getVelocity() {
+    private double getPhysicsSimulationVelocityForMotorSimulation() {
         if (isUsingAbsoluteEncoder)
             return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
         return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
