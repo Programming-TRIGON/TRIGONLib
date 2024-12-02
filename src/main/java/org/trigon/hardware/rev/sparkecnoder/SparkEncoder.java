@@ -22,6 +22,10 @@ public abstract class SparkEncoder {
         return new RelativeSparkEncoder(spark.getEncoder());
     }
 
+    public static SparkEncoder createAbsoluteEncoder(SparkBase spark) {
+        return new AbsoluteSparkEncoder(spark.getAbsoluteEncoder());
+    }
+
     public abstract double getPosition();
 
     public abstract double getVelocity();

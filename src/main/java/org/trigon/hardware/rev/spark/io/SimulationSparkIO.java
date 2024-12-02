@@ -21,6 +21,7 @@ public class SimulationSparkIO extends SparkIO {
     private SparkAbsoluteEncoderSim absoluteEncoderSimulation = null;
     private SparkRelativeEncoderSim relativeEncoderSimulation = null;
     private MotorPhysicsSimulation physicsSimulation = null;
+    private boolean isUsingAbsoluteEncoder = false;
 
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
@@ -107,20 +108,30 @@ public class SimulationSparkIO extends SparkIO {
     @Override
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
         this.physicsSimulation = physicsSimulation;
+        this.isUsingAbsoluteEncoder = isUsingAbsoluteEncoder;
+
         if (motorSimulation == null)
             motorSimulation = new SparkSim(motor, physicsSimulation.getGearbox());
+
         if (isUsingAbsoluteEncoder && absoluteEncoderSimulation == null) {
-            absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
-            encoder = SparkEncoder.createEncoder(motor);
+            createAbsoluteEncoderSimulation();
             return;
         }
-        if (relativeEncoderSimulation == null) {
-            relativeEncoderSimulation = new SparkRelativeEncoderSim(motor);
-            encoder = SparkEncoder.createRelativeEncoder(motor);
-        }
+        if (relativeEncoderSimulation == null)
+            createRelativeEncoderSimulation();
+    }
+
+    private void createAbsoluteEncoderSimulation() {
+        absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
+        encoder = SparkEncoder.createAbsoluteEncoder(motor);
+    }
+
+    private void createRelativeEncoderSimulation() {
+        relativeEncoderSimulation = new SparkRelativeEncoderSim(motor);
+        encoder = SparkEncoder.createRelativeEncoder(motor);
     }
 
     private boolean isUsingAbsoluteEncoder() {
-        return absoluteEncoderSimulation != null;
+        return isUsingAbsoluteEncoder;
     }
 }
