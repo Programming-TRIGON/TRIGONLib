@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkSim;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
@@ -87,10 +88,8 @@ public class SimulationSparkIO extends SparkIO {
         physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage() * motorSimulation.getAppliedOutput());
         physicsSimulation.updateMotor();
 
-        System.out.println(motor.getBusVoltage() + " motor bus voltage");
-        System.out.println(motorSimulation.getBusVoltage() + "motor simulation bus voltage");
-        System.out.println(motor.getAppliedOutput() + " motor applied output");
-        System.out.println(motorSimulation.getAppliedOutput() + " motor simulation applied output");
+        Logger.recordOutput("motor simulation applied output", motorSimulation.getAppliedOutput());
+        Logger.recordOutput("velocity" + motor.getDeviceId(), physicsSimulation.getRotorVelocityRotationsPerSecond());
 
         motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         if (isUsingAbsoluteEncoder()) {
@@ -115,12 +114,10 @@ public class SimulationSparkIO extends SparkIO {
         if (isUsingAbsoluteEncoder && absoluteEncoderSimulation == null) {
             System.out.println("create absolute encoder simulation");
             createAbsoluteEncoderSimulation();
-            relativeEncoderSimulation = null;
             return;
         }
         if (relativeEncoderSimulation == null)
             createRelativeEncoderSimulation();
-        absoluteEncoderSimulation = null;
     }
 
     private void createAbsoluteEncoderSimulation() {
@@ -128,11 +125,13 @@ public class SimulationSparkIO extends SparkIO {
         System.out.println(absoluteEncoderSimulation.toString());
         encoder = SparkEncoder.createAbsoluteEncoder(motor);
         System.out.println(encoder);
+        relativeEncoderSimulation = null;
     }
 
     private void createRelativeEncoderSimulation() {
         relativeEncoderSimulation = motorSimulation.getRelativeEncoderSim();
         encoder = SparkEncoder.createRelativeEncoder(motor);
+        absoluteEncoderSimulation = null;
     }
 
     private boolean isUsingAbsoluteEncoder() {
