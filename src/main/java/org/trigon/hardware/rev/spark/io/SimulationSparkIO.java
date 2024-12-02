@@ -26,7 +26,6 @@ public class SimulationSparkIO extends SparkIO {
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
         pidController = motor.getClosedLoopController();
-        encoder = SparkEncoder.createEncoder(motor);
     }
 
     @Override
@@ -45,8 +44,8 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFFUnits);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
     }
 
     @Override
@@ -87,10 +86,12 @@ public class SimulationSparkIO extends SparkIO {
             return;
 
 //        physicsSimulation.setInputVoltage(motorSimulation.getAppliedOutput());
-        physicsSimulation.setInputVoltage(motor.getBusVoltage());
+        physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage() * motorSimulation.getAppliedOutput());
         physicsSimulation.updateMotor();
         System.out.println(motor.getBusVoltage() + " motor bus voltage");
+        System.out.println(motorSimulation.getBusVoltage() + "motor simulation bus voltage");
         System.out.println(motor.getAppliedOutput() + " motor applied output");
+        System.out.println(motorSimulation.getAppliedOutput() + " motor simulation applied output");
 
         motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         if (isUsingAbsoluteEncoder()) {
@@ -122,12 +123,12 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     private void createAbsoluteEncoderSimulation() {
-        absoluteEncoderSimulation = new SparkAbsoluteEncoderSim(motor);
+        absoluteEncoderSimulation = motorSimulation.getAbsoluteEncoderSim();
         encoder = SparkEncoder.createAbsoluteEncoder(motor);
     }
 
     private void createRelativeEncoderSimulation() {
-        relativeEncoderSimulation = new SparkRelativeEncoderSim(motor);
+        relativeEncoderSimulation = motorSimulation.getRelativeEncoderSim();
         encoder = SparkEncoder.createRelativeEncoder(motor);
     }
 
