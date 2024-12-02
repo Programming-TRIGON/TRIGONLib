@@ -15,7 +15,7 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
 /**
- * A command that calculates and logs the gear ratio of a subsystem by comparing the distance traveled by a rotor and an encoder.
+ * A command that calculates and logs the gear ratio of a mechanism by comparing the distance traveled by a rotor and an encoder.
  */
 public class GearRatioCalculationCommand extends Command {
     private final DoubleSupplier rotorPositionSupplier;
