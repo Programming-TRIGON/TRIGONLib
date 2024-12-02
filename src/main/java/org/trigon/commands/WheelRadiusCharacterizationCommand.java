@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardBoolean;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 import java.util.Arrays;
@@ -20,12 +19,16 @@ import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+/**
+ * A command for characterizing the wheel radius of each module of a swerve drive system by calculating the radius of each drive wheel based on rotational data and robot yaw during operation.
+ */
 public class WheelRadiusCharacterizationCommand extends Command {
     private static final LoggedDashboardNumber CHARACTERIZATION_SPEED = new LoggedDashboardNumber("WheelRadiusCharacterization/SpeedRadiansPerSecond", 1);
     private static final LoggedDashboardNumber ROTATION_RATE_LIMIT = new LoggedDashboardNumber("WheelRadiusCharacterization/RotationRateLimit", 1);
-    private static final LoggedDashboardBoolean SHOULD_MOVE_CLOCKWISE = new LoggedDashboardBoolean("WheelRadiusCharacterization/ShouldMoveClockwise", false);
 
-    private final double[] wheelDistancesFromCenterMeters;
+    private final double[]
+            wheelDistancesFromCenterMeters,
+            driveWheelRadii;
     private final Supplier<double[]> wheelPositionsRadiansSupplier;
     private final DoubleSupplier gyroYawRadiansSupplier;
     private final DoubleConsumer runWheelRadiusCharacterization;
@@ -34,25 +37,97 @@ public class WheelRadiusCharacterizationCommand extends Command {
     private double startingGyroYawRadians;
     private double accumulatedGyroYawRadians;
     private double[] startingWheelPositions;
-    private double driveWheelsRadius;
 
-    public WheelRadiusCharacterizationCommand(Translation2d[] wheelDistancesFromCenterMeters, Supplier<double[]> wheelPositionsRadiansSupplier,
-                                              DoubleSupplier gyroYawRadiansSupplier, DoubleConsumer runWheelRadiusCharacterization, SubsystemBase requirement
-    ) {
-        this.wheelDistancesFromCenterMeters = Arrays.stream(wheelDistancesFromCenterMeters).mapToDouble(Translation2d::getNorm).toArray();
-        this.wheelPositionsRadiansSupplier = wheelPositionsRadiansSupplier;
-        this.gyroYawRadiansSupplier = gyroYawRadiansSupplier;
-        this.runWheelRadiusCharacterization = runWheelRadiusCharacterization;
-        addRequirements(requirement);
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistanceFromCenterMeters  an array of the distances of each wheel from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
+    public WheelRadiusCharacterizationCommand(Translation2d wheelDistanceFromCenterMeters,
+                                              Supplier<double[]> wheelPositionsRadiansSupplier,
+                                              DoubleSupplier gyroYawRadiansSupplier,
+                                              DoubleConsumer runWheelRadiusCharacterization,
+                                              SubsystemBase requirement) {
+        this(
+                new Translation2d[]{wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters},
+                wheelPositionsRadiansSupplier,
+                gyroYawRadiansSupplier,
+                runWheelRadiusCharacterization,
+                requirement
+        );
     }
 
-    public WheelRadiusCharacterizationCommand(double[] wheelDistancesFromCenterMeters, Supplier<double[]> wheelPositionsRadiansSupplier,
-                                              DoubleSupplier gyroYawRadiansSupplier, DoubleConsumer runWheelRadiusCharacterization, SubsystemBase requirement
-    ) {
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistancesFromCenterMeters an array of the distances of each wheel from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
+    public WheelRadiusCharacterizationCommand(
+            Translation2d[] wheelDistancesFromCenterMeters,
+            Supplier<double[]> wheelPositionsRadiansSupplier,
+            DoubleSupplier gyroYawRadiansSupplier,
+            DoubleConsumer runWheelRadiusCharacterization,
+            SubsystemBase requirement) {
+        this(
+                Arrays.stream(wheelDistancesFromCenterMeters).mapToDouble(Translation2d::getNorm).toArray(),
+                wheelPositionsRadiansSupplier,
+                gyroYawRadiansSupplier,
+                runWheelRadiusCharacterization,
+                requirement
+        );
+    }
+
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistanceFromCenterMeters  the distance of the wheels from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
+    public WheelRadiusCharacterizationCommand(
+            double wheelDistanceFromCenterMeters,
+            Supplier<double[]> wheelPositionsRadiansSupplier,
+            DoubleSupplier gyroYawRadiansSupplier,
+            DoubleConsumer runWheelRadiusCharacterization,
+            SubsystemBase requirement) {
+        this(
+                new double[]{wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters, wheelDistanceFromCenterMeters},
+                wheelPositionsRadiansSupplier,
+                gyroYawRadiansSupplier,
+                runWheelRadiusCharacterization,
+                requirement
+        );
+    }
+
+    /**
+     * Creates a new WheelRadiusCharacterizationCommand.
+     *
+     * @param wheelDistancesFromCenterMeters an array of the distances of each wheel from the center of the robot in meters
+     * @param wheelPositionsRadiansSupplier  a supplier that returns the current position of each wheel in radians
+     * @param gyroYawRadiansSupplier         a supplier that returns the current yaw of the robot in radians
+     * @param runWheelRadiusCharacterization a consumer that runs the swerve drive with a given speed
+     * @param requirement                    the subsystem that this command requires
+     */
+    public WheelRadiusCharacterizationCommand(double[] wheelDistancesFromCenterMeters,
+                                              Supplier<double[]> wheelPositionsRadiansSupplier,
+                                              DoubleSupplier gyroYawRadiansSupplier,
+                                              DoubleConsumer runWheelRadiusCharacterization,
+                                              SubsystemBase requirement) {
         this.wheelDistancesFromCenterMeters = wheelDistancesFromCenterMeters;
         this.wheelPositionsRadiansSupplier = wheelPositionsRadiansSupplier;
         this.gyroYawRadiansSupplier = gyroYawRadiansSupplier;
         this.runWheelRadiusCharacterization = runWheelRadiusCharacterization;
+        this.driveWheelRadii = new double[wheelDistancesFromCenterMeters.length];
         addRequirements(requirement);
     }
 
@@ -66,10 +141,10 @@ public class WheelRadiusCharacterizationCommand extends Command {
         driveMotors();
 
         accumulatedGyroYawRadians = getAccumulatedGyroYaw();
-        driveWheelsRadius = calculateDriveWheelRadius();
+        calculateDriveWheelRadius();
 
         Logger.recordOutput("WheelRadiusCharacterization/AccumulatedGyroYawRadians", accumulatedGyroYawRadians);
-        Logger.recordOutput("RadiusCharacterization/DriveWheelRadius", driveWheelsRadius);
+        logWheelRadii();
     }
 
     @Override
@@ -87,34 +162,36 @@ public class WheelRadiusCharacterizationCommand extends Command {
     }
 
     private void driveMotors() {
-        runWheelRadiusCharacterization.accept(rotationSlewRateLimiter.calculate(getRotationDirection() * CHARACTERIZATION_SPEED.get()));
+        runWheelRadiusCharacterization.accept(rotationSlewRateLimiter.calculate(CHARACTERIZATION_SPEED.get()));
     }
 
     private double getAccumulatedGyroYaw() {
         return Math.abs(startingGyroYawRadians - gyroYawRadiansSupplier.getAsDouble());
     }
 
-    private double calculateDriveWheelRadius() {
-        driveWheelsRadius = 0;
+    private void calculateDriveWheelRadius() {
         final double[] wheelPositionsRadians = wheelPositionsRadiansSupplier.get();
 
         for (int i = 0; i < 4; i++) {
             final double accumulatedWheelRadians = Math.abs(wheelPositionsRadians[i] - startingWheelPositions[i]);
-            driveWheelsRadius += (accumulatedGyroYawRadians * wheelDistancesFromCenterMeters[i]) / accumulatedWheelRadians;
+            driveWheelRadii[i] = (accumulatedGyroYawRadians * wheelDistancesFromCenterMeters[i]) / accumulatedWheelRadians;
             Logger.recordOutput("RadiusCharacterization/AccumulatedWheelRadians" + i, accumulatedWheelRadians);
         }
-
-        return driveWheelsRadius /= 4;
     }
 
     private void printResults() {
-        if (accumulatedGyroYawRadians <= Math.PI * 2.0)
+        if (accumulatedGyroYawRadians <= Math.PI * 2.0) {
             System.out.println("Not enough data for characterization");
-        else
-            System.out.println("Drive Wheel Radius: " + driveWheelsRadius + " meters");
+            return;
+        }
+        for (int i = 0; i < driveWheelRadii.length; i++)
+            System.out.println("Drive Wheel Radius for Module " + i + ": " + driveWheelRadii[i] + " meters");
+        System.out.println("Average Drive Wheel Radius: " + Arrays.stream(driveWheelRadii).average().getAsDouble() + " meters");
     }
 
-    private int getRotationDirection() {
-        return SHOULD_MOVE_CLOCKWISE.get() ? -1 : 1;
+    private void logWheelRadii() {
+        for (int i = 0; i < driveWheelRadii.length; i++)
+            Logger.recordOutput("RadiusCharacterization/DriveWheelRadiusModule" + i, driveWheelRadii[i]);
+        Logger.recordOutput("RadiusCharacterization/AverageDriveWheelRadius", Arrays.stream(driveWheelRadii).average().getAsDouble());
     }
 }
