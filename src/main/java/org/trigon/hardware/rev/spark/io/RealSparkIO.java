@@ -30,13 +30,13 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
+        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
     @Override

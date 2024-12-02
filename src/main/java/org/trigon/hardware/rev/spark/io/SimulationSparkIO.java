@@ -12,6 +12,7 @@ import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
+import org.trigon.utilities.Conversions;
 
 public class SimulationSparkIO extends SparkIO {
     private final SparkMax motor;
@@ -24,6 +25,7 @@ public class SimulationSparkIO extends SparkIO {
 
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
+        encoder = SparkEncoder.createAbsoluteEncoder(motor);
         pidController = motor.getClosedLoopController();
         motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); /** DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do link to {@link com.revrobotics.sim.SparkMaxSim#setMotorCurrent(double)} */
         absoluteEncoderSimulation = motorSimulation.getAbsoluteEncoderSim();
@@ -40,13 +42,13 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
+        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
-        pidController.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
     @Override
@@ -86,16 +88,9 @@ public class SimulationSparkIO extends SparkIO {
         if (physicsSimulation == null)
             return;
 
-        physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage() * motorSimulation.getAppliedOutput());
-        physicsSimulation.updateMotor();
-        motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond() * 60 * motor.configAccessor.encoder.getVelocityConversionFactor(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
-        motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
-
-        if (isUsingAbsoluteEncoder()) {
-            absoluteEncoderSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond() * 60 * motor.configAccessor.encoder.getVelocityConversionFactor(), RobotHardwareStats.getPeriodicTimeSeconds());
-            return;
-        }
-        absoluteEncoderSimulation.iterate(isUsingAbsoluteEncoder() ? physicsSimulation.getSystemVelocityRotationsPerSecond() : physicsSimulation.getRotorVelocityRotationsPerSecond() * 60 * motor.configAccessor.encoder.getVelocityConversionFactor(), RobotHardwareStats.getPeriodicTimeSeconds());
+        updatePhysicsSimulation();
+        updateMotorSimulation();
+        updateEncoderSimulation();
     }
 
     @Override
@@ -107,13 +102,27 @@ public class SimulationSparkIO extends SparkIO {
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
         this.physicsSimulation = physicsSimulation;
         this.isUsingAbsoluteEncoder = isUsingAbsoluteEncoder;
-
-        if (isUsingAbsoluteEncoder)
-            encoder = SparkEncoder.createAbsoluteEncoder(motor);
-        encoder = SparkEncoder.createRelativeEncoder(motor);
     }
 
     private boolean isUsingAbsoluteEncoder() {
         return isUsingAbsoluteEncoder;
+    }
+
+    private void updatePhysicsSimulation() {
+        physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage() * motorSimulation.getAppliedOutput());
+        physicsSimulation.updateMotor();
+    }
+
+    private void updateMotorSimulation() {
+        motorSimulation.iterate(getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond()), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+        motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
+    }
+
+    private void updateEncoderSimulation() {
+        absoluteEncoderSimulation.iterate(isUsingAbsoluteEncoder() ? getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond()) : getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond()), RobotHardwareStats.getPeriodicTimeSeconds());
+    }
+
+    private double getConversionFactor() {
+        return motor.configAccessor.encoder.getPositionConversionFactor();
     }
 }

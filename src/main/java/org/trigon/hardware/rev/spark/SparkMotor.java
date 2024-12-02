@@ -110,26 +110,26 @@ public class SparkMotor {
     /**
      * Sends a request to the motor.
      *
-     * @param value          the value to set
-     * @param controlType    the control type
-     * @param pidSlot        the PID slot to use
-     * @param arbFeedForward the feed forward value
+     * @param value                the value to set
+     * @param controlType          the control type
+     * @param pidSlot              the PID slot to use
+     * @param arbitraryFeedForward the feed forward value
      */
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward) {
-        motorIO.setReference(value, controlType, pidSlot, arbFeedForward);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
+        motorIO.setReference(value, controlType, pidSlot, arbitraryFeedForward);
     }
 
     /**
      * Sends a request to the motor.
      *
-     * @param value               the value to set depending on the control type
-     * @param controlType         the control type
-     * @param pidSlot             the PID slot to use
-     * @param arbFeedForward      the feed forward value
-     * @param arbFeedForwardUnits the units of the feed forward value
+     * @param value                     the value to set depending on the control type
+     * @param controlType               the control type
+     * @param pidSlot                   the PID slot to use
+     * @param arbitraryFeedForward      the feed forward value
+     * @param arbitraryFeedForwardUnits the units of the feed forward value
      */
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFeedForwardUnits) {
-        motorIO.setReference(value, controlType, pidSlot, arbFeedForward, arbFeedForwardUnits);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+        motorIO.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
     /**

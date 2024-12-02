@@ -249,11 +249,10 @@ public class Conversions {
         final String[] parts = input.split("_");
         final StringBuilder camelCase = new StringBuilder();
 
-        for (String s : parts) {
-            final String part = s.toLowerCase();
-            camelCase.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
+        for (String part : parts) {
+            final String lowerCasePart = part.toLowerCase();
+            camelCase.append(Character.toUpperCase(lowerCasePart.charAt(0))).append(lowerCasePart.substring(1));
         }
-
         return camelCase.toString();
     }
 }
