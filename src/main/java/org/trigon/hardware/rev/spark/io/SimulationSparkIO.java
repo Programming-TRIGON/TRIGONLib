@@ -125,7 +125,9 @@ public class SimulationSparkIO extends SparkIO {
 
     private void createAbsoluteEncoderSimulation() {
         absoluteEncoderSimulation = motorSimulation.getAbsoluteEncoderSim();
+        System.out.println(absoluteEncoderSimulation.toString());
         encoder = SparkEncoder.createAbsoluteEncoder(motor);
+        System.out.println(encoder);
     }
 
     private void createRelativeEncoderSimulation() {
