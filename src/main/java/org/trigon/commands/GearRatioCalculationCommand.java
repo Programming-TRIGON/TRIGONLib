@@ -34,7 +34,7 @@ public class GearRatioCalculationCommand extends Command {
     /**
      * Creates a new GearRatioCalculationCommand.
      * This constructor takes a motor to run the gear ratio calculation on, and to measure the distance the rotor travels.
-     * It also an encoder to measure the distance traveled.
+     * It also takes an encoder to measure the distance traveled.
      *
      * @param motor                             the motor that drives the rotor
      * @param encoder                           the encoder that measures the distance traveled
@@ -81,6 +81,9 @@ public class GearRatioCalculationCommand extends Command {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         gearRatio = 0;
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", 0);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", 0);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
     }
 
     @Override
