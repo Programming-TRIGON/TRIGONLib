@@ -81,9 +81,7 @@ public class GearRatioCalculationCommand extends Command {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         gearRatio = 0;
-        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", 0);
-        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", 0);
-        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
+        resetLogs();
     }
 
     @Override
@@ -120,6 +118,12 @@ public class GearRatioCalculationCommand extends Command {
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", getRotorDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", getEncoderDistance());
         Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", gearRatio);
+    }
+
+    private void resetLogs() {
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", 0);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", 0);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", 0);
     }
 
     private double calculateGearRatio() {
