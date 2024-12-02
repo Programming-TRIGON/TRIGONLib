@@ -26,7 +26,7 @@ public class SimulationSparkIO extends SparkIO {
 
     public SimulationSparkIO(int id) {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
-        motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); // DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do link to setCurrent
+        motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); /** DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do link to {@link com.revrobotics.sim.SparkMaxSim#setMotorCurrent(double)} */
         pidController = motor.getClosedLoopController();
     }
 
@@ -93,11 +93,12 @@ public class SimulationSparkIO extends SparkIO {
 
         Logger.recordOutput("motor simulation applied output" + motor.getDeviceId(), motorSimulation.getAppliedOutput());
         Logger.recordOutput("velocity" + motor.getDeviceId(), physicsSimulation.getRotorVelocityRotationsPerSecond());
+        Logger.recordOutput("system velocity" + motor.getDeviceId(), physicsSimulation.getSystemVelocityRotationsPerSecond());
+        Logger.recordOutput("rotor velocity" + motor.getDeviceId(), physicsSimulation.getRotorVelocityRotationsPerSecond());
 
         motorSimulation.iterate(physicsSimulation.getRotorVelocityRotationsPerSecond() * 60 * motor.configAccessor.encoder.getVelocityConversionFactor(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
         if (isUsingAbsoluteEncoder()) {
-            System.out.println("absolute encoder simulation iterate");
             absoluteEncoderSimulation.iterate(physicsSimulation.getSystemVelocityRotationsPerSecond() * 60 * motor.configAccessor.encoder.getVelocityConversionFactor(), RobotHardwareStats.getPeriodicTimeSeconds());
             return;
         }

@@ -38,7 +38,7 @@ public class RobotHardwareStats {
     }
 
     /**
-     * @return the periodic time in seconds
+     * @return the periodic time in seconds set in {@link #setPeriodicTimeSeconds(double)}
      */
     public static double getPeriodicTimeSeconds() {
         return PERIODIC_TIME_SECONDS;
