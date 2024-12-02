@@ -27,7 +27,7 @@ public class SimulationSparkIO extends SparkIO {
         motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
         encoder = SparkEncoder.createAbsoluteEncoder(motor);
         pidController = motor.getClosedLoopController();
-        motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); /** DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do link to {@link com.revrobotics.sim.SparkMaxSim#setMotorCurrent(double)} */
+        motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); /** DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do {@link com.revrobotics.sim.SparkMaxSim#setMotorCurrent} */
         absoluteEncoderSimulation = motorSimulation.getAbsoluteEncoderSim();
     }
 
@@ -114,12 +114,12 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     private void updateMotorSimulation() {
-        motorSimulation.iterate(getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond()), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+        motorSimulation.iterate(getConversionFactor() * (isUsingAbsoluteEncoder ? Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond()) : Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond())), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
     }
 
     private void updateEncoderSimulation() {
-        absoluteEncoderSimulation.iterate(isUsingAbsoluteEncoder() ? getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond()) : getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond()), RobotHardwareStats.getPeriodicTimeSeconds());
+        absoluteEncoderSimulation.iterate(getConversionFactor() * (isUsingAbsoluteEncoder() ? Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond()) : Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond())), RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     private double getConversionFactor() {

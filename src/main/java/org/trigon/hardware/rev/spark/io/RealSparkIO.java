@@ -71,7 +71,7 @@ public class RealSparkIO extends SparkIO {
 
     @Override
     public void setBrake(boolean brake) {
-        SparkMaxConfig configuration = new SparkMaxConfig();
+        final SparkMaxConfig configuration = new SparkMaxConfig();
         configuration.idleMode(brake ? SparkMaxConfig.IdleMode.kBrake : SparkMaxConfig.IdleMode.kCoast);
         motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
