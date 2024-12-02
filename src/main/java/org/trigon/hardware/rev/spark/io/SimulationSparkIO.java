@@ -31,6 +31,7 @@ public class SimulationSparkIO extends SparkIO {
     @Override
     public void setReference(double value, SparkBase.ControlType controlType) {
         pidController.setReference(value, controlType);
+        System.out.println(value + "set reference");
     }
 
     @Override
