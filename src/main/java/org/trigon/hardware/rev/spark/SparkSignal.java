@@ -2,7 +2,7 @@ package org.trigon.hardware.rev.spark;
 
 import com.revrobotics.spark.SparkBase;
 import org.trigon.hardware.RobotHardwareStats;
-import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.hardware.rev.sparkencoder.SparkEncoder;
 import org.trigon.utilities.Conversions;
 
 import java.util.function.Function;

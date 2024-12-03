@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import org.trigon.hardware.rev.spark.SparkIO;
 import org.trigon.hardware.rev.spark.SparkType;
-import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.hardware.rev.sparkencoder.SparkEncoder;
 
 public class RealSparkIO extends SparkIO {
     private final SparkBase motor;

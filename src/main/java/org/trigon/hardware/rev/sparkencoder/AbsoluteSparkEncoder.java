@@ -1,4 +1,4 @@
-package org.trigon.hardware.rev.sparkecnoder;
+package org.trigon.hardware.rev.sparkencoder;
 
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 

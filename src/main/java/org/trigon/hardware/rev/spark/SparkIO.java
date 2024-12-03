@@ -3,7 +3,7 @@ package org.trigon.hardware.rev.spark;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.hardware.rev.sparkencoder.SparkEncoder;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 public class SparkIO {

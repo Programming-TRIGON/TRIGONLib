@@ -10,7 +10,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
-import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.hardware.rev.sparkencoder.SparkEncoder;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 import org.trigon.utilities.Conversions;
 
