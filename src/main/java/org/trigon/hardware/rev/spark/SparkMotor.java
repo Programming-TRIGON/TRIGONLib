@@ -1,134 +1,240 @@
 package org.trigon.hardware.rev.spark;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.SparkPIDController;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.Timer;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.io.RealSparkIO;
 import org.trigon.hardware.rev.spark.io.SimulationSparkIO;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
-import java.util.concurrent.CompletableFuture;
-
+/**
+ * A class the represents a Spark motor. Used to control and read data from a Spark motor.
+ */
 public class SparkMotor {
     private final String motorName;
     private final SparkIO motorIO;
     private final SparkInputs motorInputs;
     private final int id;
 
-    public SparkMotor(int id, SparkType sparkType, String motorName, DCMotor simulationMotor) {
+    /**
+     * Creates a new Spark motor.
+     *
+     * @param id        the motor's ID
+     * @param sparkType the type of Spark motor
+     * @param motorName the name of the motor
+     */
+    public SparkMotor(int id, SparkType sparkType, String motorName) {
         this.id = id;
         this.motorName = motorName;
         motorInputs = new SparkInputs(motorName);
-        motorIO = createSparkIO(id, sparkType, simulationMotor);
+        motorIO = createSparkIO(id, sparkType);
     }
 
+    /**
+     * Processes the inputs of the motor.
+     */
     public void update() {
         Logger.processInputs("Motors/" + motorName, motorInputs);
+        motorIO.updateSimulation();
     }
 
     public int getID() {
         return id;
     }
 
-    public void registerSignal(SparkSignal signal) {
-        this.registerSignal(signal, false);
-    }
-
-    public void registerSignal(SparkSignal signal, boolean isThreaded) {
+    /**
+     * Registers a threaded signal to be logged from the motor.
+     * Threaded signals use threading to process certain signals separately at a faster rate.
+     *
+     * @param signal the signal to be registered
+     */
+    public void registerThreadedSignal(SparkSignal signal) {
         final SparkStatusSignal statusSignal = signal.getStatusSignal(motorIO.getMotor(), motorIO.getEncoder());
-        if (isThreaded)
-            motorInputs.registerThreadedSignal(statusSignal);
-        else
-            motorInputs.registerSignal(statusSignal);
+        motorInputs.registerThreadedSignal(statusSignal);
     }
 
+    /**
+     * Registers a signal to be read from the motor.
+     *
+     * @param signal the signal to be read
+     */
+    public void registerSignal(SparkSignal signal) {
+        final SparkStatusSignal statusSignal = signal.getStatusSignal(motorIO.getMotor(), motorIO.getEncoder());
+        motorInputs.registerSignal(statusSignal);
+    }
+
+    /**
+     * Gets a signal from the motor.
+     *
+     * @param signal the signal to get
+     * @return the signal
+     */
     public double getSignal(SparkSignal signal) {
         return motorInputs.getSignal(signal.name);
     }
 
-    public void getThreadedSignal(SparkSignal signal) {
-        motorInputs.getThreadedSignal(signal.name);
+    /**
+     * Gets a threaded signal from the motor.
+     * Threaded signals use threading to process certain signals separately at a faster rate.
+     *
+     * @param signal the threaded signal to get
+     * @return the threaded signal
+     */
+    public double[] getThreadedSignal(SparkSignal signal) {
+        return motorInputs.getThreadedSignal(signal.name);
     }
 
-    public void setReference(double value, CANSparkBase.ControlType ctrl) {
-        motorIO.setReference(value, ctrl);
+    /**
+     * Sends a request to the motor.
+     *
+     * @param value       the value to set depending on the control type
+     * @param controlType the control type
+     */
+    public void setReference(double value, SparkBase.ControlType controlType) {
+        motorIO.setReference(value, controlType);
     }
 
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot) {
-        motorIO.setReference(value, ctrl, pidSlot);
+    /**
+     * Sends a request to the motor.
+     *
+     * @param value       the value to set depending on the control type
+     * @param controlType the control type
+     * @param pidSlot     the PID slot to use
+     */
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
+        motorIO.setReference(value, controlType, pidSlot);
     }
 
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
-        motorIO.setReference(value, ctrl, pidSlot, arbFeedForward);
+    /**
+     * Sends a request to the motor.
+     *
+     * @param value                the value to set
+     * @param controlType          the control type
+     * @param pidSlot              the PID slot to use
+     * @param arbitraryFeedForward the feed forward value
+     */
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
+        motorIO.setReference(value, controlType, pidSlot, arbitraryFeedForward);
     }
 
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkPIDController.ArbFFUnits arbFFUnits) {
-        motorIO.setReference(value, ctrl, pidSlot, arbFeedForward, arbFFUnits);
+    /**
+     * Sends a request to the motor.
+     *
+     * @param value                     the value to set depending on the control type
+     * @param controlType               the control type
+     * @param pidSlot                   the PID slot to use
+     * @param arbitraryFeedForward      the feed forward value
+     * @param arbitraryFeedForwardUnits the units of the feed forward value
+     */
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+        motorIO.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
-    public void setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame frame, int periodMs) {
-        motorIO.setPeriodicFramePeriod(frame, periodMs);
+    /**
+     * Set the amount of time to wait for a periodic status frame before returning a timeout error.
+     * This timeout will apply to all periodic status frames for the SPARK motor controller.
+     *
+     * @param timeoutMs the new transmission period in milliseconds
+     */
+    public void setPeriodicFrameTimeout(int timeoutMs) {
+        motorIO.setPeriodicFrameTimeout(timeoutMs);
     }
 
+    /**
+     * Stops the motor.
+     */
     public void stopMotor() {
         motorIO.stopMotor();
     }
 
-    public void setBrake(boolean brake) {
-        motorIO.setBrake(brake);
-    }
-
+    /**
+     * Sets the motor's inverted value.
+     *
+     * @param inverted should the motor be inverted
+     */
     public void setInverted(boolean inverted) {
         motorIO.setInverted(inverted);
     }
 
-    public void enableVoltageCompensation(double voltage) {
-        motorIO.enableVoltageCompensation(voltage);
+    /**
+     * Sets the motors neutral mode.
+     *
+     * @param brake true if the motor should brake, false if it should coast
+     */
+    public void setBrake(boolean brake) {
+        motorIO.setBrake(brake);
     }
 
-    public void setClosedLoopRampRate(double rampRate) {
-        motorIO.setClosedLoopRampRate(rampRate);
+    /**
+     * Applies both the real and simulation configurations to the motor.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
+     *
+     * @param realConfiguration       configuration to be used in real life
+     * @param simulationConfiguration configuration to be used in simulation
+     * @param resetMode               whether to reset safe parameters before setting the configuration or not
+     * @param persistMode             whether to persist the parameters after setting the configuration or not
+     */
+    public void applyConfigurations(SparkBaseConfig realConfiguration, SparkBaseConfig simulationConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        if (RobotHardwareStats.isSimulation())
+            motorIO.configure(simulationConfiguration, resetMode, persistMode);
+        else
+            motorIO.configure(realConfiguration, resetMode, persistMode);
     }
 
-    public void setSmartCurrentLimit(int limit) {
-        motorIO.setSmartCurrentLimit(limit);
+    /**
+     * Applies the configuration to be used both in real life and in simulation.
+     *
+     * @param configuration the configuration to apply
+     * @param resetMode     whether to reset safe parameters before setting the configuration or not
+     * @param persistMode   whether to persist the parameters after setting the configuration or not
+     */
+    public void applyConfiguration(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        motorIO.configure(configuration, resetMode, persistMode);
     }
 
-    public void setOpenLoopRampRate(double rampRate) {
-        motorIO.setOpenLoopRampRate(rampRate);
+    /**
+     * Applies the configuration to be used when {@link RobotHardwareStats#isSimulation()} is false.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
+     *
+     * @param realConfiguration the configuration to apply
+     * @param resetMode         whether to reset safe parameters before setting the configuration or not
+     * @param persistMode       whether to persist the parameters after setting the configuration or not
+     */
+    public void applyRealConfiguration(SparkBaseConfig realConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        if (!RobotHardwareStats.isSimulation())
+            motorIO.configure(realConfiguration, resetMode, persistMode);
     }
 
-    public void setPID(double p, double i, double d) {
-        motorIO.setPID(p, i, d);
+    /**
+     * Applies the configuration to be used in simulation.
+     * Having two different configurations allows for tuning motor behavior in simulation which might not perfectly mimic real life performance.
+     *
+     * @param simulationConfiguration the configuration to apply
+     * @param resetMode               whether to reset safe parameters before setting the configuration or not
+     * @param persistMode             whether to persist the parameters after setting the configuration or not
+     */
+    public void applySimulationConfiguration(SparkBaseConfig simulationConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        if (RobotHardwareStats.isSimulation())
+            motorIO.configure(simulationConfiguration, resetMode, persistMode);
     }
 
-    public void setConversionsFactor(double conversionsFactor) {
-        motorIO.setConversionsFactor(conversionsFactor);
+    /**
+     * Sets the physics simulation to be used by the motor. Needs to be called for the motor to work in simulation.
+     *
+     * @param physicsSimulation      the physics simulation to be used
+     * @param isUsingAbsoluteEncoder whether the motor is using a relative encoder or an absolute encoder
+     */
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
+        motorIO.setPhysicsSimulation(physicsSimulation, isUsingAbsoluteEncoder);
     }
 
-    public void restoreFactoryDefaults() {
-        motorIO.restoreFactoryDefaults();
-    }
-
-    public void enablePIDWrapping(double minInput, double maxInput) {
-        motorIO.enablePIDWrapping(minInput, maxInput);
-    }
-
-    public void burnFlash() {
-        CompletableFuture.runAsync(() -> {
-            Timer.delay(5);
-            motorIO.burnFlash();
-        });
-    }
-
-    private SparkIO createSparkIO(int id, SparkType sparkType, DCMotor simulationMotor) {
+    private SparkIO createSparkIO(int id, SparkType sparkType) {
         if (RobotHardwareStats.isReplay())
             return new SparkIO();
         if (RobotHardwareStats.isSimulation())
-            return new SimulationSparkIO(id, simulationMotor);
+            return new SimulationSparkIO(id);
         return new RealSparkIO(id, sparkType);
     }
 }

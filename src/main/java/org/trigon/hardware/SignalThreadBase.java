@@ -7,21 +7,41 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * A class that represents a base for a signal thread.
+ * Signal threads are specialized threads that run at a specific frequency to handle updating signals.
+ */
 public class SignalThreadBase extends Thread {
     public static final ReentrantLock SIGNALS_LOCK = new ReentrantLock();
     protected final Queue<Double> timestamps = new ArrayBlockingQueue<>(100);
     private final ThreadInputsAutoLogged threadInputs = new ThreadInputsAutoLogged();
     private final String name;
-    protected double odometryFrequencyHertz = 50;
+    protected double threadFrequencyHertz = 50;
 
+    /**
+     * Creates a new SignalThreadBase.
+     *
+     * @param name the name of the thread
+     */
     public SignalThreadBase(String name) {
         this.name = name;
     }
 
-    public void setOdometryFrequencyHertz(double odometryFrequencyHertz) {
-        this.odometryFrequencyHertz = odometryFrequencyHertz;
+    /**
+     * Sets the thread frequency in hertz.
+     * The thread frequency determines how often the robot's position and motion data are updated.
+     * A higher frequency will result in more frequent updates, but may also demand more processing power.
+     * Only used for Spark motors.
+     *
+     * @param threadFrequencyHertz the odometry frequency in hertz
+     */
+    public void setThreadFrequencyHertz(double threadFrequencyHertz) {
+        this.threadFrequencyHertz = threadFrequencyHertz;
     }
 
+    /**
+     * Updates the latest timestamps, and processes the inputs.
+     */
     public void updateLatestTimestamps() {
         if (!RobotHardwareStats.isReplay()) {
             threadInputs.timestamps = timestamps.stream().mapToDouble(Double::doubleValue).toArray();
@@ -30,6 +50,11 @@ public class SignalThreadBase extends Thread {
         Logger.processInputs(name, threadInputs);
     }
 
+    /**
+     * Gets the latest timestamps when signals were updated.
+     *
+     * @return the latest timestamps
+     */
     public double[] getLatestTimestamps() {
         return threadInputs.timestamps;
     }

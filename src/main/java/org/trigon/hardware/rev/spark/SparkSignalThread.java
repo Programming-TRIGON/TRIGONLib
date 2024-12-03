@@ -36,9 +36,8 @@ public class SparkSignalThread extends SignalThreadBase {
     private static SparkSignalThread instance = null;
 
     public static SparkSignalThread getInstance() {
-        if (instance == null) {
+        if (instance == null)
             instance = new SparkSignalThread();
-        }
         return instance;
     }
 
@@ -47,11 +46,18 @@ public class SparkSignalThread extends SignalThreadBase {
         if (ACTIVE) {
             Notifier notifier = new Notifier(this::periodic);
             notifier.setName("SparkSignalThread");
-            notifier.startPeriodic(1.0 / super.odometryFrequencyHertz);
+            notifier.startPeriodic(1.0 / super.threadFrequencyHertz);
         }
     }
 
-    public Queue<Double> registerSignal(DoubleSupplier signal) {
+    /**
+     * Registers a threaded signal to be read asynchronously.
+     * Threaded signals use threading to process certain signals separately at a faster rate.
+     *
+     * @param signal the signal to register
+     * @return the queue that the signal's values will be written to
+     */
+    public Queue<Double> registerThreadedSignal(DoubleSupplier signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         SIGNALS_LOCK.lock();
         try {

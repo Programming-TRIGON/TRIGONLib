@@ -1,63 +1,46 @@
 package org.trigon.hardware.rev.spark;
 
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.SparkPIDController;
-import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import org.trigon.hardware.rev.sparkencoder.SparkEncoder;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 public class SparkIO {
-    public void setReference(double value, CANSparkBase.ControlType ctrl) {
+    public void setReference(double value, SparkBase.ControlType ctrl) {
     }
 
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot) {
+    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot) {
     }
 
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
+    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
     }
 
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkPIDController.ArbFFUnits arbFFUnits) {
+    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
     }
 
-    public void setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame frame, int periodMs) {
+    public void setPeriodicFrameTimeout(int timeoutMs) {
     }
 
     public void stopMotor() {
     }
 
-    public void setBrake(boolean brake) {
+    public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
     }
 
     public void setInverted(boolean inverted) {
     }
 
-    public void enableVoltageCompensation(double voltage) {
+    public void setBrake(boolean brake) {
     }
 
-    public void setClosedLoopRampRate(double rampRate) {
+    public void updateSimulation() {
     }
 
-    public void setOpenLoopRampRate(double rampRate) {
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
     }
 
-    public void setSmartCurrentLimit(int limit) {
-    }
-
-    public void setConversionsFactor(double conversionsFactor) {
-    }
-
-    public void setPID(double p, double i, double d) {
-    }
-
-    public void restoreFactoryDefaults() {
-    }
-
-    public void burnFlash() {
-    }
-
-    public void enablePIDWrapping(double minInput, double maxInput) {
-    }
-
-    public CANSparkBase getMotor() {
+    public SparkBase getMotor() {
         return null;
     }
 

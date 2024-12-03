@@ -1,30 +1,54 @@
 package org.trigon.hardware.rev.spark.io;
 
-import com.revrobotics.*;
+import com.revrobotics.sim.SparkAbsoluteEncoderSim;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkSim;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.rev.spark.SparkIO;
-import org.trigon.hardware.rev.sparkecnoder.SparkEncoder;
+import org.trigon.hardware.rev.sparkencoder.SparkEncoder;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
+import org.trigon.utilities.Conversions;
 
 public class SimulationSparkIO extends SparkIO {
-    private final CANSparkMax motor;
-    private final SparkPIDController pidController;
+    private final SparkMax motor;
+    private final SparkSim motorSimulation;
+    private final SparkClosedLoopController pidController;
+    private final SparkAbsoluteEncoderSim absoluteEncoderSimulation;
     private final SparkEncoder encoder;
+    private MotorPhysicsSimulation physicsSimulation = null;
+    private boolean isUsingAbsoluteEncoder = false;
 
-    public SimulationSparkIO(int id, DCMotor gearbox) {
-        motor = new CANSparkMax(id, CANSparkMax.MotorType.kBrushless);
-        REVPhysicsSim.getInstance().addSparkMax(motor, gearbox);
-        pidController = motor.getPIDController();
-        encoder = SparkEncoder.createRelativeEncoder(motor);
+    public SimulationSparkIO(int id) {
+        motor = new SparkMax(id, SparkMax.MotorType.kBrushless);
+        encoder = SparkEncoder.createAbsoluteEncoder(motor);
+        pidController = motor.getClosedLoopController();
+        motorSimulation = new SparkSim(motor, DCMotor.getBag(1)); /** DCMotor.getBag(1) is a placeholder, we don't actually care about this since we always do {@link com.revrobotics.sim.SparkMaxSim#setMotorCurrent} */
+        absoluteEncoderSimulation = motorSimulation.getAbsoluteEncoderSim();
     }
 
     @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl) {
-        pidController.setReference(value, ctrl);
+    public void setReference(double value, SparkBase.ControlType controlType) {
+        pidController.setReference(value, controlType);
     }
 
     @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot) {
-        pidController.setReference(value, ctrl, pidSlot);
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
+        pidController.setReference(value, controlType, pidSlot);
+    }
+
+    @Override
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
+        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward);
+    }
+
+    @Override
+    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
     @Override
@@ -33,7 +57,7 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public CANSparkBase getMotor() {
+    public SparkBase getMotor() {
         return motor;
     }
 
@@ -43,18 +67,8 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setPeriodicFramePeriod(CANSparkLowLevel.PeriodicFrame frame, int periodMs) {
-        motor.setPeriodicFramePeriod(frame, periodMs);
-    }
-
-    @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
-        pidController.setReference(value, ctrl, pidSlot, arbFeedForward);
-    }
-
-    @Override
-    public void setReference(double value, CANSparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkPIDController.ArbFFUnits arbFFUnits) {
-        pidController.setReference(value, ctrl, pidSlot, arbFeedForward, arbFFUnits);
+    public void setPeriodicFrameTimeout(int timeoutMs) {
+        motor.setPeriodicFrameTimeout(timeoutMs);
     }
 
     @Override
@@ -63,51 +77,54 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void enableVoltageCompensation(double voltage) {
-        motor.enableVoltageCompensation(voltage);
+    public void setBrake(boolean brake) {
+        final SparkMaxConfig configuration = new SparkMaxConfig();
+        configuration.idleMode(brake ? SparkMaxConfig.IdleMode.kBrake : SparkMaxConfig.IdleMode.kCoast);
+        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 
     @Override
-    public void setClosedLoopRampRate(double rampRate) {
-        motor.setClosedLoopRampRate(rampRate);
+    public void updateSimulation() {
+        if (physicsSimulation == null)
+            return;
+
+        updatePhysicsSimulation();
+        updateMotorSimulation();
+        updateEncoderSimulation();
     }
 
     @Override
-    public void setSmartCurrentLimit(int limit) {
-        motor.setSmartCurrentLimit(limit);
+    public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+        motor.configure(configuration, resetMode, persistMode);
     }
 
     @Override
-    public void setOpenLoopRampRate(double rampRate) {
-        motor.setOpenLoopRampRate(rampRate);
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation, boolean isUsingAbsoluteEncoder) {
+        this.physicsSimulation = physicsSimulation;
+        this.isUsingAbsoluteEncoder = isUsingAbsoluteEncoder;
     }
 
-    @Override
-    public void setPID(double p, double i, double d) {
-        pidController.setP(p);
-        pidController.setI(i);
-        pidController.setD(d);
+    private void updatePhysicsSimulation() {
+        physicsSimulation.setInputVoltage(motorSimulation.getBusVoltage() * motorSimulation.getAppliedOutput());
+        physicsSimulation.updateMotor();
     }
 
-    @Override
-    public void setConversionsFactor(double conversionsFactor) {
-        encoder.setConversionsFactor(conversionsFactor);
+    private void updateMotorSimulation() {
+        motorSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+        motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
     }
 
-    @Override
-    public void restoreFactoryDefaults() {
-        motor.restoreFactoryDefaults();
+    private void updateEncoderSimulation() {
+        absoluteEncoderSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
-    @Override
-    public void burnFlash() {
-        motor.burnFlash();
+    private double getPhysicsSimulationVelocityForMotorSimulation() {
+        if (isUsingAbsoluteEncoder)
+            return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
+        return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
     }
 
-    @Override
-    public void enablePIDWrapping(double minInput, double maxInput) {
-        pidController.setPositionPIDWrappingEnabled(true);
-        pidController.setPositionPIDWrappingMinInput(minInput);
-        pidController.setPositionPIDWrappingMaxInput(maxInput);
+    private double getConversionFactor() {
+        return motor.configAccessor.encoder.getPositionConversionFactor();
     }
 }

@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,7 +26,7 @@ public class DoubleJointedArmMechanism2d {
      * @param key            the key of the mechanism
      * @param mechanismColor the color of the mechanism
      */
-    public DoubleJointedArmMechanism2d(String key, Color8Bit mechanismColor) {
+    public DoubleJointedArmMechanism2d(String key, Color mechanismColor) {
         this(key, MechanismConstants.MECHANISM_LINE_LENGTH, MechanismConstants.MECHANISM_LINE_LENGTH, mechanismColor);
     }
 
@@ -37,14 +38,14 @@ public class DoubleJointedArmMechanism2d {
      * @param secondJointLength the length of the second joint
      * @param mechanismColor    the color of the mechanism
      */
-    public DoubleJointedArmMechanism2d(String name, double firstJointLength, double secondJointLength, Color8Bit mechanismColor) {
+    public DoubleJointedArmMechanism2d(String name, double firstJointLength, double secondJointLength, Color mechanismColor) {
         this.key = "Mechanisms/" + name;
         final double mechanismMiddle = MechanismConstants.LIGAMENT_END_TO_EDGE_RATIO * (firstJointLength + secondJointLength);
         this.mechanism = new Mechanism2d(2 * mechanismMiddle, 2 * mechanismMiddle);
         final MechanismRoot2d root = mechanism.getRoot("Root", mechanismMiddle, mechanismMiddle);
 
-        this.currentPositionFirstLigament = root.append(new MechanismLigament2d("ZCurrentPositionFirstLigament", firstJointLength, 0, MechanismConstants.MECHANISM_LINE_WIDTH, mechanismColor));
-        this.currentPositionSecondLigament = currentPositionFirstLigament.append(new MechanismLigament2d("ZCurrentPositionSecondLigament", secondJointLength, 0, MechanismConstants.MECHANISM_LINE_WIDTH, mechanismColor));
+        this.currentPositionFirstLigament = root.append(new MechanismLigament2d("ZCurrentPositionFirstLigament", firstJointLength, 0, MechanismConstants.MECHANISM_LINE_WIDTH, new Color8Bit(mechanismColor)));
+        this.currentPositionSecondLigament = currentPositionFirstLigament.append(new MechanismLigament2d("ZCurrentPositionSecondLigament", secondJointLength, 0, MechanismConstants.MECHANISM_LINE_WIDTH, new Color8Bit(mechanismColor)));
         this.targetPositionFirstLigament = root.append(new MechanismLigament2d("TargetPositionFirstLigament", firstJointLength, 0, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
         this.targetPositionSecondLigament = targetPositionFirstLigament.append(new MechanismLigament2d("TargetPositionSecondLigament", secondJointLength, 0, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
     }

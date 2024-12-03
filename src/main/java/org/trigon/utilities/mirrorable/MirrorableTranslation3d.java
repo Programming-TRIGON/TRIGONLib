@@ -2,14 +2,30 @@ package org.trigon.utilities.mirrorable;
 
 import edu.wpi.first.math.geometry.Translation3d;
 
-
+/**
+ * A class that represents a {@link Translation3d} that can be mirrored by reversing its position across the center of the field when the robot is on the red alliance.
+ */
 public class MirrorableTranslation3d extends Mirrorable<Translation3d> {
-    public MirrorableTranslation3d(Translation3d nonMirroredTranslation, boolean mirrorWhenRedAlliance) {
-        super(nonMirroredTranslation, mirrorWhenRedAlliance);
+    /**
+     * Creates a new MirrorableTranslation3d with the given translation.
+     *
+     * @param nonMirroredTranslation      the translation to mirror
+     * @param shouldMirrorWhenRedAlliance should the position be mirrored when the robot is on the red alliance
+     */
+    public MirrorableTranslation3d(Translation3d nonMirroredTranslation, boolean shouldMirrorWhenRedAlliance) {
+        super(nonMirroredTranslation, shouldMirrorWhenRedAlliance);
     }
 
-    public MirrorableTranslation3d(double x, double y, double z, boolean mirrorWhenRedAlliance) {
-        this(new Translation3d(x, y, z), mirrorWhenRedAlliance);
+    /**
+     * Creates a new MirrorableTranslation3d with the given x, y, and z values.
+     *
+     * @param x                           the x value of the translation
+     * @param y                           the y value of the translation
+     * @param z                           the z value of the translation
+     * @param shouldMirrorWhenRedAlliance should the position be mirrored when the robot is on the red alliance
+     */
+    public MirrorableTranslation3d(double x, double y, double z, boolean shouldMirrorWhenRedAlliance) {
+        this(new Translation3d(x, y, z), shouldMirrorWhenRedAlliance);
     }
 
     @Override

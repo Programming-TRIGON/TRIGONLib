@@ -2,10 +2,13 @@ package org.trigon.hardware.phoenix6.talonfx;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
-import org.trigon.hardware.SignalUtilities;
+import org.trigon.utilities.Conversions;
 
 import java.util.function.Function;
 
+/**
+ * An enum that represents the different signals that can be sent from a TalonFX motor.
+ */
 public enum TalonFXSignal {
     POSITION(TalonFX::getPosition),
     VELOCITY(TalonFX::getVelocity),
@@ -23,7 +26,7 @@ public enum TalonFXSignal {
     final Function<TalonFX, BaseStatusSignal> signalFunction;
 
     TalonFXSignal(Function<TalonFX, BaseStatusSignal> signalFunction) {
-        this.name = SignalUtilities.enumNameToSignalName(name());
+        this.name = Conversions.snakeCaseToCamelCase(name());
         this.signalFunction = signalFunction;
     }
 }

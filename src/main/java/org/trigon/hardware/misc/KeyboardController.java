@@ -3,6 +3,9 @@ package org.trigon.hardware.misc;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardBoolean;
 
+/**
+ * A class that represents a keyboard controller. Used to get input from a keyboard.
+ */
 public class KeyboardController {
     private final LoggedDashboardBoolean
             esc, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10,

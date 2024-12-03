@@ -2,6 +2,9 @@ package org.trigon.utilities;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
+/**
+ * A class that contains various methods for unit conversions, string conversions, and more.
+ */
 public class Conversions {
     public static final double
             MAG_TICKS = 4096,
@@ -234,5 +237,22 @@ public class Conversions {
      */
     public static TrapezoidProfile.Constraints scaleConstraints(TrapezoidProfile.Constraints constraints, double percentage) {
         return new TrapezoidProfile.Constraints(constraints.maxVelocity * (percentage / 100), constraints.maxAcceleration * (percentage / 100));
+    }
+
+    /**
+     * Converts a string from SNAKE_CASE to CamelCase.
+     *
+     * @param input the string to convert
+     * @return the string in CamelCase
+     */
+    public static String snakeCaseToCamelCase(String input) {
+        final String[] parts = input.split("_");
+        final StringBuilder camelCase = new StringBuilder();
+
+        for (String part : parts) {
+            final String lowerCasePart = part.toLowerCase();
+            camelCase.append(Character.toUpperCase(lowerCasePart.charAt(0))).append(lowerCasePart.substring(1));
+        }
+        return camelCase.toString();
     }
 }

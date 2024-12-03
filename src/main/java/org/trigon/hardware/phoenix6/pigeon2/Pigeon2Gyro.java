@@ -13,16 +13,32 @@ import org.trigon.hardware.phoenix6.pigeon2.io.SimulationPigeon2IO;
 
 import java.util.function.DoubleSupplier;
 
+/**
+ * A class that represents a Pigeon2 gyro.
+ */
 public class Pigeon2Gyro {
     private final String gyroName;
     private final Pigeon2IO gyroIO;
     private final Phoenix6Inputs gyroInputs;
     private final int id;
 
+    /**
+     * Creates a new Pigeon2 gyro.
+     *
+     * @param id       the gyro's ID
+     * @param gyroName the name of the gyro
+     */
     public Pigeon2Gyro(int id, String gyroName) {
         this(id, gyroName, "");
     }
 
+    /**
+     * Creates a new Pigeon2 gyro.
+     *
+     * @param id       the gyro's ID
+     * @param gyroName the name of the gyro
+     * @param canbus   the canivore's name
+     */
     public Pigeon2Gyro(int id, String gyroName, String canbus) {
         this.gyroName = gyroName;
         this.gyroIO = generateIO(id, canbus);
@@ -31,6 +47,9 @@ public class Pigeon2Gyro {
         gyroIO.optimizeBusUsage();
     }
 
+    /**
+     * Updates the gyro and logs its inputs. Should be called periodically.
+     */
     public void update() {
         gyroIO.updateGyro();
         Logger.processInputs("Gyros/" + gyroName, gyroInputs);
@@ -40,6 +59,12 @@ public class Pigeon2Gyro {
         return id;
     }
 
+    /**
+     * Sets the yaw velocity of the robot supplier used in simulation.
+     * This is used to calculate the gyro's yaw in simulation by multiplying it by the time since the last update, and adding it to the total yaw.
+     *
+     * @param yawVelocitySupplierDegreesPerSecond the yaw velocity supplier in degrees per second
+     */
     public void setSimulationYawVelocitySupplier(DoubleSupplier yawVelocitySupplierDegreesPerSecond) {
         gyroIO.setSimulationYawVelocitySupplier(yawVelocitySupplierDegreesPerSecond);
     }

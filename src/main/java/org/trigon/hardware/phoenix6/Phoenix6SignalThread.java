@@ -14,6 +14,7 @@
 package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusCode;
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.RobotHardwareStats;
@@ -25,7 +26,9 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-
+/**
+ * An interface for asynchronously reading high-frequency signals and adding them to queues for Phoenix 6. Used to get values from status signals.
+ */
 public class Phoenix6SignalThread extends SignalThreadBase {
     public static ReentrantLock SIGNALS_LOCK = new ReentrantLock();
     private final List<Queue<Double>> queues = new ArrayList<>();
@@ -34,9 +37,8 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     private static Phoenix6SignalThread INSTANCE = null;
 
     public static Phoenix6SignalThread getInstance() {
-        if (INSTANCE == null) {
+        if (INSTANCE == null)
             INSTANCE = new Phoenix6SignalThread();
-        }
         return INSTANCE;
     }
 
@@ -49,6 +51,12 @@ public class Phoenix6SignalThread extends SignalThreadBase {
         start();
     }
 
+    /**
+     * Registers a status signal to be read with a higher frequency.
+     *
+     * @param signal the signal to register
+     * @return the queue that the signal's values will be written to
+     */
     public Queue<Double> registerSignal(BaseStatusSignal signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
         SIGNALS_LOCK.lock();
@@ -70,8 +78,9 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     }
 
     private void updateValues() {
-        BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals);
-        final double updateTimestamp = (Logger.getRealTimestamp() / 1.0e6) - signals[0].getTimestamp().getLatency();
+        if (BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals) != StatusCode.OK)
+            return;
+        final double updateTimestamp = (Logger.getRealTimestamp() / 1e6) - signals[0].getTimestamp().getLatency();
 
         SIGNALS_LOCK.lock();
         try {

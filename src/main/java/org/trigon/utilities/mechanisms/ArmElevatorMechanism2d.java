@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
 
@@ -26,12 +27,12 @@ public class ArmElevatorMechanism2d {
      * @param minimumLength  the minimum length of the elevator
      * @param mechanismColor the color of the mechanism
      */
-    public ArmElevatorMechanism2d(String name, double maximumLength, double minimumLength, Color8Bit mechanismColor) {
+    public ArmElevatorMechanism2d(String name, double maximumLength, double minimumLength, Color mechanismColor) {
         this.key = "Mechanisms/" + name;
         this.minimumLength = minimumLength;
         this.mechanism = new Mechanism2d(2 * maximumLength, 2 * maximumLength);
         final MechanismRoot2d root = mechanism.getRoot("Root", maximumLength, maximumLength);
-        this.currentPositionLigament = root.append(new MechanismLigament2d("ZCurrentPositionLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, mechanismColor));
+        this.currentPositionLigament = root.append(new MechanismLigament2d("ZCurrentPositionLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, new Color8Bit(mechanismColor)));
         this.targetPositionLigament = root.append(new MechanismLigament2d("TargetPositionLigament", 0, 0, MechanismConstants.TARGET_ELEVATOR_POSITION_LIGAMENT_WIDTH, MechanismConstants.GRAY));
     }
 
