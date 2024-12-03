@@ -40,7 +40,7 @@ public abstract class Mirrorable<T> {
     }
 
     /**
-     * Gets a command that updates the alliance. This is used to cache the alliance every 0.5 seconds. Ignoring disable is used to update the current alliance when the robot is disabled.
+     * Gets a command that updates the current alliance. This is used to cache the alliance every 0.5 seconds. Ignoring disable is used to update the current alliance when the robot is disabled.
      *
      * @return the command
      */

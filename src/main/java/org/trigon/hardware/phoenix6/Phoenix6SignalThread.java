@@ -27,7 +27,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * An interface for asynchronously reading high-frequency signals into queues for Phoenix 6. Used to get values from status signals.
+ * An interface for asynchronously reading high-frequency signals and adding them to queues for Phoenix 6. Used to get values from status signals.
  */
 public class Phoenix6SignalThread extends SignalThreadBase {
     public static ReentrantLock SIGNALS_LOCK = new ReentrantLock();
