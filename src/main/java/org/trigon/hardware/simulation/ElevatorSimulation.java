@@ -25,7 +25,7 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
      * @param simulateGravity       a boolean indicating whether to simulate gravity or not
      */
     public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters, double retractedHeightMeters, double maximumHeightMeters, boolean simulateGravity) {
-        super(gearbox, gearRatio);
+        super(gearRatio);
         diameterMeters = drumRadiusMeters + drumRadiusMeters;
         this.retractedHeightMeters = retractedHeightMeters;
         elevatorSimulation = new ElevatorSim(

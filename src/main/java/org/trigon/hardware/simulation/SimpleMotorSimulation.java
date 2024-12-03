@@ -20,7 +20,7 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
      * @param momentOfInertia the moment of inertia of the motor(s)
      */
     public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
-        super(gearbox, gearRatio);
+        super(gearRatio);
         motorSimulation = new DCMotorSim(LinearSystemId.createDCMotorSystem(gearbox, momentOfInertia, gearRatio), gearbox);
     }
 
@@ -33,7 +33,7 @@ public class SimpleMotorSimulation extends MotorPhysicsSimulation {
      * @param ka        voltage needed to induce a specific acceleration
      */
     public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double kv, double ka) {
-        super(gearbox, gearRatio);
+        super(gearRatio);
         motorSimulation = new DCMotorSim(LinearSystemId.createDCMotorSystem(kv, ka), gearbox);
     }
 

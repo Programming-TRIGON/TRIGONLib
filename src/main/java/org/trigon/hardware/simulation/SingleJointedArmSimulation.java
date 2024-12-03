@@ -24,7 +24,7 @@ public class SingleJointedArmSimulation extends MotorPhysicsSimulation {
      * @param simulateGravity  whether to simulate gravity or not
      */
     public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMassKilograms, Rotation2d minimumAngle, Rotation2d maximumAngle, boolean simulateGravity) {
-        super(gearbox, gearRatio);
+        super(gearRatio);
         armSimulation = new SingleJointedArmSim(
                 gearbox,
                 gearRatio,

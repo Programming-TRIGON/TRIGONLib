@@ -34,7 +34,7 @@ public abstract class SparkEncoder {
     public abstract double getPosition();
 
     /**
-     * Gets the velocity of the encoder in the unit set by the conversion factor. Rotations by default.
+     * Gets the velocity of the encoder in the unit set by the conversion factor. Rotations per minute by default.
      *
      * @return the velocity of the encoder
      */
