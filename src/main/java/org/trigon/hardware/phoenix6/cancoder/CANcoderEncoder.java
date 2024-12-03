@@ -24,7 +24,7 @@ public class CANcoderEncoder {
     private final int id;
 
     /**
-     * Creates a new CANcoderEncoder.
+     * Creates a new CANcoder encoder.
      *
      * @param id          the ID of the CANcoder
      * @param encoderName the name of the encoder
@@ -34,7 +34,7 @@ public class CANcoderEncoder {
     }
 
     /**
-     * Creates a new CANcoderEncoder.
+     * Creates a new CANcoder encoder.
      *
      * @param id          the ID of the CANcoder
      * @param encoderName the name of the encoder

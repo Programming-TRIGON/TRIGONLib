@@ -26,7 +26,17 @@ public abstract class SparkEncoder {
         return new AbsoluteSparkEncoder(spark.getAbsoluteEncoder());
     }
 
+    /**
+     * Gets the position of the encoder in the unit set by the conversion factor. Rotations by default.
+     *
+     * @return the position of the encoder
+     */
     public abstract double getPosition();
 
+    /**
+     * Gets the velocity of the encoder in the unit set by the conversion factor. Rotations by default.
+     *
+     * @return the velocity of the encoder
+     */
     public abstract double getVelocity();
 }

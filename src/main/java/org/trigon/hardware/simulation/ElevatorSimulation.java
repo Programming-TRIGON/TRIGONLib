@@ -22,7 +22,7 @@ public class ElevatorSimulation extends MotorPhysicsSimulation {
      * @param drumRadiusMeters      the radius of the drum in meters
      * @param retractedHeightMeters the height of the elevator when retracted in meters
      * @param maximumHeightMeters   the maximum height of the elevator in meters
-     * @param simulateGravity       a boolean indicating whether to simulate gravity
+     * @param simulateGravity       a boolean indicating whether to simulate gravity or not
      */
     public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters, double retractedHeightMeters, double maximumHeightMeters, boolean simulateGravity) {
         super(gearbox, gearRatio);

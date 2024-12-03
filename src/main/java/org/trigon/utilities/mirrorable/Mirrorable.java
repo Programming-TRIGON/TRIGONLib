@@ -40,7 +40,7 @@ public abstract class Mirrorable<T> {
     }
 
     /**
-     * Gets a command that updates the alliance. This is used to cache the alliance every 0.5 seconds. Ignoring disable is used to allow this command to run when the robot is disabled.
+     * Gets a command that updates the alliance. This is used to cache the alliance every 0.5 seconds. Ignoring disable is used to update the alliance when the robot is disabled.
      *
      * @return the command
      */
@@ -60,7 +60,7 @@ public abstract class Mirrorable<T> {
      * Creates a new mirrorable object.
      *
      * @param nonMirroredObject           the object when the robot is on the blue alliance, or the non-mirrored object
-     * @param shouldMirrorWhenRedAlliance whether the object should be mirrored when the robot is on the red alliance
+     * @param shouldMirrorWhenRedAlliance should the object should be mirrored when the robot is on the red alliance
      */
     protected Mirrorable(T nonMirroredObject, boolean shouldMirrorWhenRedAlliance) {
         this.nonMirroredObject = nonMirroredObject;

@@ -17,20 +17,10 @@ public class RelativeSparkEncoder extends SparkEncoder {
         this.encoder = encoder;
     }
 
-    /**
-     * Gets the position of the encoder in the unit set in the conversion factor. Rotations by default.
-     *
-     * @return the position of the encoder
-     */
     public double getPosition() {
         return encoder.getPosition();
     }
 
-    /**
-     * Gets the position of the encoder in the unit set in the conversion factor. Rotations by default.
-     *
-     * @return the position of the encoder
-     */
     public double getVelocity() {
         return encoder.getVelocity();
     }
