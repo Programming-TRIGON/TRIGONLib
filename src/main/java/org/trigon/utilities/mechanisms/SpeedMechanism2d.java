@@ -1,18 +1,18 @@
 package org.trigon.utilities.mechanisms;
 
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 /**
  * A Mechanism2d object to display the current velocity and target velocity of a mechanism.
  */
 public class SpeedMechanism2d {
     private final String key;
-    private final Mechanism2d mechanism;
-    private final MechanismLigament2d
+    private final LoggedMechanism2d mechanism;
+    private final LoggedMechanismLigament2d
             currentVelocityLigament,
             currentVelocityTopArrowLigament,
             currentVelocityBottomArrowLigament,
@@ -40,15 +40,15 @@ public class SpeedMechanism2d {
     public SpeedMechanism2d(String name, double maximumDisplayableVelocity, double deadband) {
         this.deadband = deadband;
         this.key = "Mechanisms/" + name;
-        this.mechanism = new Mechanism2d(2 * maximumDisplayableVelocity, 2 * maximumDisplayableVelocity);
-        final MechanismRoot2d root = mechanism.getRoot("Root", maximumDisplayableVelocity, maximumDisplayableVelocity);
-        this.currentVelocityLigament = root.append(new MechanismLigament2d("ZCurrentVelocityLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.BLUE));
-        this.currentVelocityTopArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityTopArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_TOP_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.BLUE));
-        this.currentVelocityBottomArrowLigament = currentVelocityLigament.append(new MechanismLigament2d("ZCurrentVelocityBottomArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_BOTTOM_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.BLUE));
+        this.mechanism = new LoggedMechanism2d(2 * maximumDisplayableVelocity, 2 * maximumDisplayableVelocity);
+        final LoggedMechanismRoot2d root = mechanism.getRoot("Root", maximumDisplayableVelocity, maximumDisplayableVelocity);
+        this.currentVelocityLigament = root.append(new LoggedMechanismLigament2d("ZCurrentVelocityLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.BLUE));
+        this.currentVelocityTopArrowLigament = currentVelocityLigament.append(new LoggedMechanismLigament2d("ZCurrentVelocityTopArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_TOP_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.BLUE));
+        this.currentVelocityBottomArrowLigament = currentVelocityLigament.append(new LoggedMechanismLigament2d("ZCurrentVelocityBottomArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_BOTTOM_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.BLUE));
 
-        this.targetVelocityLigament = root.append(new MechanismLigament2d("TargetVelocityLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
-        this.targetVelocityTopArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityTopArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_TOP_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
-        this.targetVelocityBottomArrowLigament = targetVelocityLigament.append(new MechanismLigament2d("TargetVelocityBottomArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_BOTTOM_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
+        this.targetVelocityLigament = root.append(new LoggedMechanismLigament2d("TargetVelocityLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
+        this.targetVelocityTopArrowLigament = targetVelocityLigament.append(new LoggedMechanismLigament2d("TargetVelocityTopArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_TOP_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
+        this.targetVelocityBottomArrowLigament = targetVelocityLigament.append(new LoggedMechanismLigament2d("TargetVelocityBottomArrowLigament", MechanismConstants.ARROW_LENGTH_SCALE * maximumDisplayableVelocity, MechanismConstants.ZERO_BOTTOM_ANGLE, MechanismConstants.MECHANISM_LINE_WIDTH, MechanismConstants.GRAY));
     }
 
     /**
@@ -114,7 +114,7 @@ public class SpeedMechanism2d {
         return MechanismConstants.BLUE;
     }
 
-    private void setArrowAngle(double velocity, MechanismLigament2d topLigament, MechanismLigament2d bottomLigament) {
+    private void setArrowAngle(double velocity, LoggedMechanismLigament2d topLigament, LoggedMechanismLigament2d bottomLigament) {
         if (velocity > deadband) {
             topLigament.setAngle(MechanismConstants.POSITIVE_TOP_ANGLE);
             bottomLigament.setAngle(MechanismConstants.POSITIVE_BOTTOM_ANGLE);
