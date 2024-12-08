@@ -1,20 +1,20 @@
 package org.trigon.utilities.mechanisms;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.mechanism.LoggedMechanism2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismLigament2d;
+import org.littletonrobotics.junction.mechanism.LoggedMechanismRoot2d;
 
 /**
  * A Mechanism2d object to display the current angle and target angle, and the current position and target position of an arm elevator.
  */
 public class ArmElevatorMechanism2d {
     private final String key;
-    private final Mechanism2d mechanism;
-    private final MechanismLigament2d
+    private final LoggedMechanism2d mechanism;
+    private final LoggedMechanismLigament2d
             currentPositionLigament,
             targetPositionLigament;
     private final double minimumLength;
@@ -30,10 +30,10 @@ public class ArmElevatorMechanism2d {
     public ArmElevatorMechanism2d(String name, double maximumLength, double minimumLength, Color mechanismColor) {
         this.key = "Mechanisms/" + name;
         this.minimumLength = minimumLength;
-        this.mechanism = new Mechanism2d(2 * maximumLength, 2 * maximumLength);
-        final MechanismRoot2d root = mechanism.getRoot("Root", maximumLength, maximumLength);
-        this.currentPositionLigament = root.append(new MechanismLigament2d("ZCurrentPositionLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, new Color8Bit(mechanismColor)));
-        this.targetPositionLigament = root.append(new MechanismLigament2d("TargetPositionLigament", 0, 0, MechanismConstants.TARGET_ELEVATOR_POSITION_LIGAMENT_WIDTH, MechanismConstants.GRAY));
+        this.mechanism = new LoggedMechanism2d(2 * maximumLength, 2 * maximumLength);
+        final LoggedMechanismRoot2d root = mechanism.getRoot("Root", maximumLength, maximumLength);
+        this.currentPositionLigament = root.append(new LoggedMechanismLigament2d("ZCurrentPositionLigament", 0, 0, MechanismConstants.MECHANISM_LINE_WIDTH, new Color8Bit(mechanismColor)));
+        this.targetPositionLigament = root.append(new LoggedMechanismLigament2d("TargetPositionLigament", 0, 0, MechanismConstants.TARGET_ELEVATOR_POSITION_LIGAMENT_WIDTH, MechanismConstants.GRAY));
     }
 
     /**
