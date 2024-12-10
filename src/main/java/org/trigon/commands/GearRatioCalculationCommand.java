@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderEncoder;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderSignal;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
@@ -23,13 +23,26 @@ public class GearRatioCalculationCommand extends Command {
     private final DoubleConsumer runGearRatioCalculation;
     private final String subsystemName;
     private final double backlashAccountabilityTimeSeconds;
-    private final LoggedDashboardNumber movementVoltage;
+    private final LoggedNetworkNumber movementVoltage;
 
     private double startingRotorPosition;
     private double startingEncoderPosition;
     private double gearRatio;
     private double startTime;
     private boolean hasSetStartingPositions = false;
+
+    /**
+     * Creates a new GearRatioCalculationCommand.
+     * This constructor takes a motor to run the gear ratio calculation on, and to measure the distance the rotor travels.
+     * It also takes an encoder to measure the distance traveled.
+     *
+     * @param motor       the motor that drives the rotor
+     * @param encoder     the encoder that measures the distance traveled
+     * @param requirement the subsystem that this command requires
+     */
+    public GearRatioCalculationCommand(TalonFXMotor motor, CANcoderEncoder encoder, SubsystemBase requirement) {
+        this(motor, encoder, 0, requirement);
+    }
 
     /**
      * Creates a new GearRatioCalculationCommand.
@@ -54,6 +67,22 @@ public class GearRatioCalculationCommand extends Command {
     /**
      * Creates a new GearRatioCalculationCommand.
      *
+     * @param rotorPositionSupplier   a supplier that returns the current position of the rotor in degrees
+     * @param encoderPositionSupplier a supplier that returns the current position of the encoder in degrees
+     * @param runGearRatioCalculation a consumer that drives the motor with a given voltage
+     * @param requirement             the subsystem that this command requires
+     */
+    public GearRatioCalculationCommand(
+            DoubleSupplier rotorPositionSupplier,
+            DoubleSupplier encoderPositionSupplier,
+            DoubleConsumer runGearRatioCalculation,
+            SubsystemBase requirement) {
+        this(rotorPositionSupplier, encoderPositionSupplier, runGearRatioCalculation, 0, requirement);
+    }
+
+    /**
+     * Creates a new GearRatioCalculationCommand.
+     *
      * @param rotorPositionSupplier             a supplier that returns the current position of the rotor in degrees
      * @param encoderPositionSupplier           a supplier that returns the current position of the encoder in degrees
      * @param runGearRatioCalculation           a consumer that drives the motor with a given voltage
@@ -72,7 +101,7 @@ public class GearRatioCalculationCommand extends Command {
         this.subsystemName = requirement.getName();
         this.backlashAccountabilityTimeSeconds = backlashAccountabilityTimeSeconds;
 
-        this.movementVoltage = new LoggedDashboardNumber("GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
+        this.movementVoltage = new LoggedNetworkNumber("GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
 
         addRequirements(requirement);
     }
@@ -88,7 +117,7 @@ public class GearRatioCalculationCommand extends Command {
     public void execute() {
         runGearRatioCalculation();
 
-        if (Timer.getFPGATimestamp() - startTime > backlashAccountabilityTimeSeconds && !hasSetStartingPositions)
+        if (Timer.getTimestamp() - startTime > backlashAccountabilityTimeSeconds && !hasSetStartingPositions)
             setStartingPositions();
 
         if (hasSetStartingPositions) {
