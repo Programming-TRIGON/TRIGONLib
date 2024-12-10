@@ -49,48 +49,18 @@ public class GearRatioCalculationCommand extends Command {
      * This constructor takes a motor to run the gear ratio calculation on, and to measure the distance the rotor travels.
      * It also takes an encoder to measure the distance traveled.
      *
-     * @param motor        the motor that drives the rotor
-     * @param encoder      the encoder that measures the distance traveled
-     * @param isFOCEnabled whether FOC is enabled on the motor or not
-     * @param requirement  the subsystem that this command requires
-     */
-    public GearRatioCalculationCommand(TalonFXMotor motor, CANcoderEncoder encoder, boolean isFOCEnabled, SubsystemBase requirement) {
-        this(motor, encoder, isFOCEnabled, 0, requirement);
-    }
-
-    /**
-     * Creates a new GearRatioCalculationCommand.
-     * This constructor takes a motor to run the gear ratio calculation on, and to measure the distance the rotor travels.
-     * It also takes an encoder to measure the distance traveled.
-     *
      * @param motor                             the motor that drives the rotor
      * @param encoder                           the encoder that measures the distance traveled
      * @param backlashAccountabilityTimeSeconds the time to wait before setting the starting positions in order to account for backlash
      * @param requirement                       the subsystem that this command requires
      */
     public GearRatioCalculationCommand(TalonFXMotor motor, CANcoderEncoder encoder, double backlashAccountabilityTimeSeconds, SubsystemBase requirement) {
-        this(motor, encoder, false, backlashAccountabilityTimeSeconds, requirement);
-    }
-
-    /**
-     * Creates a new GearRatioCalculationCommand.
-     * This constructor takes a motor to run the gear ratio calculation on, and to measure the distance the rotor travels.
-     * It also takes an encoder to measure the distance traveled.
-     *
-     * @param motor                             the motor that drives the rotor
-     * @param encoder                           the encoder that measures the distance traveled
-     * @param isFOCEnabled                      whether FOC is enabled on the motor or not
-     * @param backlashAccountabilityTimeSeconds the time to wait before setting the starting positions in order to account for backlash
-     * @param requirement                       the subsystem that this command requires
-     */
-    public GearRatioCalculationCommand(TalonFXMotor motor, CANcoderEncoder encoder, boolean isFOCEnabled, double backlashAccountabilityTimeSeconds, SubsystemBase requirement) {
         this(
                 () -> motor.getSignal(TalonFXSignal.ROTOR_POSITION),
                 () -> encoder.getSignal(CANcoderSignal.POSITION),
-                (voltage) -> motor.setControl(new VoltageOut(voltage).withEnableFOC(isFOCEnabled)),
+                (voltage) -> motor.setControl(new VoltageOut(voltage)),
                 backlashAccountabilityTimeSeconds,
-                requirement
-        );
+                requirement);
     }
 
     /**
