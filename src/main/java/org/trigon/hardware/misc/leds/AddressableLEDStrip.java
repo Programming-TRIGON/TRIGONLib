@@ -65,7 +65,7 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void blink(Color firstColor, double speed) {
         final double correctedSpeed = 1 - speed;
-        final double currentTime = Timer.getFPGATimestamp();
+        final double currentTime = Timer.getTimestamp();
 
         if (currentTime - lastLEDAnimationChangeTime > correctedSpeed) {
             lastLEDAnimationChangeTime = currentTime;
@@ -89,7 +89,7 @@ public class AddressableLEDStrip extends LEDStrip {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
-        final double currentTime = Timer.getFPGATimestamp();
+        final double currentTime = Timer.getTimestamp();
 
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
@@ -108,7 +108,7 @@ public class AddressableLEDStrip extends LEDStrip {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
-        final double currentTime = Timer.getFPGATimestamp();
+        final double currentTime = Timer.getTimestamp();
 
         if (currentTime - lastLEDAnimationChangeTime > moveLEDTimeSeconds) {
             lastLEDAnimationChangeTime = currentTime;
@@ -165,7 +165,7 @@ public class AddressableLEDStrip extends LEDStrip {
     @Override
     void resetLEDSettings() {
         lastBreatheLED = indexOffset;
-        lastLEDAnimationChangeTime = Timer.getFPGATimestamp();
+        lastLEDAnimationChangeTime = Timer.getTimestamp();
         rainbowFirstPixelHue = 0;
         isLEDAnimationChanged = false;
         amountOfColorFlowLEDs = 0;
