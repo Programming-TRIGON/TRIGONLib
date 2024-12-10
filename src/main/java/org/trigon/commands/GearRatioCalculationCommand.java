@@ -60,7 +60,8 @@ public class GearRatioCalculationCommand extends Command {
                 () -> encoder.getSignal(CANcoderSignal.POSITION),
                 (voltage) -> motor.setControl(new VoltageOut(voltage)),
                 backlashAccountabilityTimeSeconds,
-                requirement);
+                requirement
+        );
     }
 
     /**
