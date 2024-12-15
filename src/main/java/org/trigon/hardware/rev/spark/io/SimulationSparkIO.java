@@ -73,7 +73,9 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void setInverted(boolean inverted) {
-        motor.setInverted(inverted);
+        final SparkMaxConfig configuration = new SparkMaxConfig();
+        configuration.inverted(inverted);
+        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 
     @Override
@@ -89,8 +91,9 @@ public class SimulationSparkIO extends SparkIO {
             return;
 
         updatePhysicsSimulation();
-        updateMotorSimulation();
-        updateEncoderSimulation();
+        final double physicsSimulationVelocityForSimulation = getPhysicsSimulationVelocityForMotorSimulation();
+        updateMotorSimulation(physicsSimulationVelocityForSimulation);
+        updateEncoderSimulation(physicsSimulationVelocityForSimulation);
     }
 
     @Override
@@ -109,13 +112,13 @@ public class SimulationSparkIO extends SparkIO {
         physicsSimulation.updateMotor();
     }
 
-    private void updateMotorSimulation() {
-        motorSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+    private void updateMotorSimulation(double physicsSimulationVelocityForSimulation) {
+        motorSimulation.iterate(physicsSimulationVelocityForSimulation, RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
     }
 
-    private void updateEncoderSimulation() {
-        absoluteEncoderSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.getPeriodicTimeSeconds());
+    private void updateEncoderSimulation(double physicsSimulationVelocityForSimulation) {
+        absoluteEncoderSimulation.iterate(physicsSimulationVelocityForSimulation, RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
     private double getPhysicsSimulationVelocityForMotorSimulation() {
