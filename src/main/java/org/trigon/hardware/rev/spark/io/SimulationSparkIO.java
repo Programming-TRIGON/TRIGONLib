@@ -121,13 +121,18 @@ public class SimulationSparkIO extends SparkIO {
         absoluteEncoderSimulation.iterate(physicsSimulationVelocityForSimulation, RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
+    /**
+     * Gets the velocity from the physics simulation in the units set in the conversion factor. This is used in the iterate method to update the motor simulation.
+     *
+     * @return the velocity from the physics simulation
+     */
     private double getPhysicsSimulationVelocityForMotorSimulation() {
         if (isUsingAbsoluteEncoder)
-            return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
-        return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
+            return getVelocityConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
+        return getVelocityConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
     }
 
-    private double getConversionFactor() {
-        return motor.configAccessor.encoder.getPositionConversionFactor();
+    private double getVelocityConversionFactor() {
+        return motor.configAccessor.encoder.getVelocityConversionFactor();
     }
 }

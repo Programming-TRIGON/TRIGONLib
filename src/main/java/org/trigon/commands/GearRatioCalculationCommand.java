@@ -35,6 +35,8 @@ public class GearRatioCalculationCommand extends Command {
      * Creates a new GearRatioCalculationCommand.
      * This constructor takes a motor to run the gear ratio calculation on, and to measure the distance the rotor travels.
      * It also takes an encoder to measure the distance traveled.
+     * This constructor will record the starting positions without any delay. This might be problematic when the subsystem has backlash.
+     * When you have backlash and want to account for it with a measuring delay, use the other constructor.
      *
      * @param motor       the motor that drives the rotor
      * @param encoder     the encoder that measures the distance traveled
@@ -66,6 +68,8 @@ public class GearRatioCalculationCommand extends Command {
 
     /**
      * Creates a new GearRatioCalculationCommand.
+     * This constructor will record the starting positions without any delay. This might be problematic when the system has backlash.
+     * When you have backlash and want to account for it with a measuring delay, use the other constructor.
      *
      * @param rotorPositionSupplier   a supplier that returns the current position of the rotor in degrees
      * @param encoderPositionSupplier a supplier that returns the current position of the encoder in degrees
