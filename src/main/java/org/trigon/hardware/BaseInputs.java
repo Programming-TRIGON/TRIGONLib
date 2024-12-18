@@ -73,7 +73,7 @@ public abstract class BaseInputs implements LoggableInputs {
     }
 
     private boolean shouldPrintError() {
-        final double currentTime = Timer.getFPGATimestamp();
+        final double currentTime = Timer.getTimestamp();
         final boolean shouldPrint = currentTime - lastErrorTimestamp > 5;
         if (shouldPrint)
             lastErrorTimestamp = currentTime;
