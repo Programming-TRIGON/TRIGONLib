@@ -36,7 +36,7 @@ public class GearRatioCalculationCommand extends Command {
      * This constructor takes a motor to run the gear ratio calculation on, and to measure the distance the rotor travels.
      * It also takes an encoder to measure the distance traveled.
      * This constructor will record the starting positions without any delay. This might be problematic when the subsystem has backlash.
-     * When you have backlash and want to account for it with a measuring delay, use the other constructor.
+     * When you have backlash and want to account for it with a measuring delay, use {@link GearRatioCalculationCommand#GearRatioCalculationCommand(TalonFXMotor, CANcoderEncoder, double, SubsystemBase)}.
      *
      * @param motor       the motor that drives the rotor
      * @param encoder     the encoder that measures the distance traveled
@@ -69,10 +69,10 @@ public class GearRatioCalculationCommand extends Command {
     /**
      * Creates a new GearRatioCalculationCommand.
      * This constructor will record the starting positions without any delay. This might be problematic when the system has backlash.
-     * When you have backlash and want to account for it with a measuring delay, use the other constructor.
+     * When you have backlash and want to account for it with a measuring delay, use {@link GearRatioCalculationCommand#GearRatioCalculationCommand(DoubleSupplier, DoubleSupplier, DoubleConsumer, double, SubsystemBase)}.
      *
-     * @param rotorPositionSupplier   a supplier that returns the current position of the rotor in degrees
-     * @param encoderPositionSupplier a supplier that returns the current position of the encoder in degrees
+     * @param rotorPositionSupplier   a supplier that returns the current position of the rotor. Must be in the same units as the encoder position supplier
+     * @param encoderPositionSupplier a supplier that returns the current position of the encoder. Must be in the same units as the rotor position supplier
      * @param runGearRatioCalculation a consumer that drives the motor with a given voltage
      * @param requirement             the subsystem that this command requires
      */
@@ -87,8 +87,8 @@ public class GearRatioCalculationCommand extends Command {
     /**
      * Creates a new GearRatioCalculationCommand.
      *
-     * @param rotorPositionSupplier             a supplier that returns the current position of the rotor in degrees
-     * @param encoderPositionSupplier           a supplier that returns the current position of the encoder in degrees
+     * @param rotorPositionSupplier             a supplier that returns the current position of the rotor. Must be in the same units as the encoder position supplier
+     * @param encoderPositionSupplier           a supplier that returns the current position of the encoder. Must be in the same units as the rotor position supplier
      * @param runGearRatioCalculation           a consumer that drives the motor with a given voltage
      * @param backlashAccountabilityTimeSeconds the time to wait before setting the starting positions in order to account for backlash
      * @param requirement                       the subsystem that this command requires
