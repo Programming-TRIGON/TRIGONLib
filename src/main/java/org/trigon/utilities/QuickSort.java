@@ -5,7 +5,7 @@ import java.util.function.ToDoubleFunction;
 
 public class QuickSort {
     /**
-     * Uses quick sort to sort the given array by their double values.
+     * Uses quick sort to sort an array of objects by their double values.
      * Quick Sort is a sorting method that partitions the array into smaller sections for faster sorting.
      * The sorting is done by selecting a pivot point and moving all values less than it to the left and all values greater than it to the right.
      * This is done recursively until the array is sorted.
