@@ -1,5 +1,3 @@
-package org.trigon.utilities;
-
 import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 
@@ -10,47 +8,47 @@ public class QuickSort {
      * The sorting is done by selecting a pivot point and moving all values less than it to the left and all values greater than it to the right.
      * This is done recursively until the array is sorted.
      *
-     * @param array                  the array to sort
-     * @param objectToDoubleFunction the function needed to convert an object in the array to a double
+     * @param array            the array to sort
+     * @param toDoubleFunction the function needed to convert an object in the array to a double
      */
-    public static void sort(Object[] array, ToDoubleFunction<Object> objectToDoubleFunction) {
-        quickSortByDoubleValue(array, objectToDoubleFunction, 0, array.length - 1);
+    public static <T> void sort(T[] array, ToDoubleFunction<T> toDoubleFunction) {
+        quickSortByDoubleValue(array, toDoubleFunction, 0, array.length - 1);
     }
 
     /**
      * Runs a loop that partitions the given section of an array, sorts by their double value, and calculates a new pivot.
      * This method uses recursion and keeps calling itself until the array is sorted.
      *
-     * @param array                  the array to sort
-     * @param objectToDoubleFunction function needed to convert the array to a double
-     * @param startIndex             the index of the start of the unsorted section of the array
-     * @param endIndex               the index of the end of the unsorted section of the array
+     * @param array       the array to sort
+     * @param toDoubleFunction the function needed to convert an object in the array to a double
+     * @param startIndex  the index of the start of the unsorted section of the array
+     * @param endIndex    the index of the end of the unsorted section of the array
      */
-    private static void quickSortByDoubleValue(Object[] array, ToDoubleFunction<Object> objectToDoubleFunction, int startIndex, int endIndex) {
+    private static <T> void quickSortByDoubleValue(T[] array, ToDoubleFunction<T> toDoubleFunction, int startIndex, int endIndex) {
         if (startIndex < endIndex) {
-            final int pivot = partitionArrayAndGetNewPivot(array, objectToDoubleFunction, startIndex, endIndex);
+            final int pivot = partitionArrayAndGetNewPivot(array, toDoubleFunction, startIndex, endIndex);
 
-            quickSortByDoubleValue(array, objectToDoubleFunction, startIndex, pivot - 1);
-            quickSortByDoubleValue(array, objectToDoubleFunction, pivot + 1, endIndex);
+            quickSortByDoubleValue(array, toDoubleFunction, startIndex, pivot - 1);
+            quickSortByDoubleValue(array, toDoubleFunction, pivot + 1, endIndex);
         }
     }
 
     /**
      * Partitions the given section of an array by their double value and returns the new pivot.
      *
-     * @param array                  the array to partition and sort
-     * @param objectToDoubleFunction the function needed to convert an object in the array to a double
-     * @param startIndex             the start of the current partition of the array to partition
-     * @param endIndex               the end of the current partition of the array to partition
+     * @param array       the array to partition and sort
+     * @param toDoubleFunction the function needed to convert an object in the array to a double
+     * @param startIndex  the start of the current partition of the array to partition
+     * @param endIndex    the end of the current partition of the array to partition
      * @return the index of the new pivot in the whole array
      */
-    private static int partitionArrayAndGetNewPivot(Object[] array, ToDoubleFunction<Object> objectToDoubleFunction, int startIndex, int endIndex) {
-        final double[] arrayAsDouble = Arrays.stream(array).mapToDouble(objectToDoubleFunction).toArray();
-        final double pivot = arrayAsDouble[endIndex];
+    private static <T> int partitionArrayAndGetNewPivot(T[] array, ToDoubleFunction<T> toDoubleFunction, int startIndex, int endIndex) {
+        final double[] doubleArray = Arrays.stream(array).mapToDouble(toDoubleFunction).toArray();
+        final double pivot = doubleArray[endIndex];
 
         int i = startIndex;
         for (int j = startIndex; j < endIndex; j++) {
-            if (arrayAsDouble[j] < pivot) {
+            if (doubleArray[j] < pivot) {
                 swapArrayValues(array, i, j);
                 i++;
             }
@@ -66,8 +64,8 @@ public class QuickSort {
      * @param firstIndex  the index of the first value to swap
      * @param secondIndex the index of the second value to swap
      */
-    private static void swapArrayValues(Object[] array, int firstIndex, int secondIndex) {
-        final Object temp = array[firstIndex];
+    private static <T> void swapArrayValues(T[] array, int firstIndex, int secondIndex) {
+        final T temp = array[firstIndex];
         array[firstIndex] = array[secondIndex];
         array[secondIndex] = temp;
     }
