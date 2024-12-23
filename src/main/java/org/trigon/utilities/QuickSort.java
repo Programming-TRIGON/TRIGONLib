@@ -1,3 +1,5 @@
+package org.trigon.utilities;
+
 import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 
@@ -19,10 +21,10 @@ public class QuickSort {
      * Runs a loop that partitions the given section of an array, sorts by their double value, and calculates a new pivot.
      * This method uses recursion and keeps calling itself until the array is sorted.
      *
-     * @param array       the array to sort
+     * @param array            the array to sort
      * @param toDoubleFunction the function needed to convert an object in the array to a double
-     * @param startIndex  the index of the start of the unsorted section of the array
-     * @param endIndex    the index of the end of the unsorted section of the array
+     * @param startIndex       the index of the start of the unsorted section of the array
+     * @param endIndex         the index of the end of the unsorted section of the array
      */
     private static <T> void quickSortByDoubleValue(T[] array, ToDoubleFunction<T> toDoubleFunction, int startIndex, int endIndex) {
         if (startIndex < endIndex) {
@@ -36,10 +38,10 @@ public class QuickSort {
     /**
      * Partitions the given section of an array by their double value and returns the new pivot.
      *
-     * @param array       the array to partition and sort
+     * @param array            the array to partition and sort
      * @param toDoubleFunction the function needed to convert an object in the array to a double
-     * @param startIndex  the start of the current partition of the array to partition
-     * @param endIndex    the end of the current partition of the array to partition
+     * @param startIndex       the start of the current partition of the array to partition
+     * @param endIndex         the end of the current partition of the array to partition
      * @return the index of the new pivot in the whole array
      */
     private static <T> int partitionArrayAndGetNewPivot(T[] array, ToDoubleFunction<T> toDoubleFunction, int startIndex, int endIndex) {
