@@ -91,9 +91,9 @@ public class SimulationSparkIO extends SparkIO {
             return;
 
         updatePhysicsSimulation();
-        final double physicsSimulationVelocityForSimulation = getPhysicsSimulationVelocityForMotorSimulation();
-        updateMotorSimulation(physicsSimulationVelocityForSimulation);
-        updateEncoderSimulation(physicsSimulationVelocityForSimulation);
+        final double physicsSimulationVelocity = getPhysicsSimulationVelocity();
+        updateMotorSimulation(physicsSimulationVelocity);
+        updateEncoderSimulation(physicsSimulationVelocity);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class SimulationSparkIO extends SparkIO {
      *
      * @return the velocity from the physics simulation
      */
-    private double getPhysicsSimulationVelocityForMotorSimulation() {
+    private double getPhysicsSimulationVelocity() {
         if (isUsingAbsoluteEncoder)
             return getVelocityConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
         return getVelocityConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
