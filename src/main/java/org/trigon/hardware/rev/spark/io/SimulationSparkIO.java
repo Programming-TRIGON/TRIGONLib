@@ -73,7 +73,9 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void setInverted(boolean inverted) {
-        motor.setInverted(inverted);
+        final SparkMaxConfig configuration = new SparkMaxConfig();
+        configuration.inverted(inverted);
+        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 
     @Override
@@ -89,8 +91,9 @@ public class SimulationSparkIO extends SparkIO {
             return;
 
         updatePhysicsSimulation();
-        updateMotorSimulation();
-        updateEncoderSimulation();
+        final double physicsSimulationVelocity = getPhysicsSimulationVelocity();
+        updateMotorSimulation(physicsSimulationVelocity);
+        updateEncoderSimulation(physicsSimulationVelocity);
     }
 
     @Override
@@ -109,22 +112,27 @@ public class SimulationSparkIO extends SparkIO {
         physicsSimulation.updateMotor();
     }
 
-    private void updateMotorSimulation() {
-        motorSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
+    private void updateMotorSimulation(double physicsSimulationVelocityForSimulation) {
+        motorSimulation.iterate(physicsSimulationVelocityForSimulation, RobotHardwareStats.SUPPLY_VOLTAGE, RobotHardwareStats.getPeriodicTimeSeconds());
         motorSimulation.setMotorCurrent(physicsSimulation.getCurrent());
     }
 
-    private void updateEncoderSimulation() {
-        absoluteEncoderSimulation.iterate(getPhysicsSimulationVelocityForMotorSimulation(), RobotHardwareStats.getPeriodicTimeSeconds());
+    private void updateEncoderSimulation(double physicsSimulationVelocityForSimulation) {
+        absoluteEncoderSimulation.iterate(physicsSimulationVelocityForSimulation, RobotHardwareStats.getPeriodicTimeSeconds());
     }
 
-    private double getPhysicsSimulationVelocityForMotorSimulation() {
+    /**
+     * Gets the velocity from the physics simulation in the units set in the conversion factor. This is used in the iterate method to update the motor simulation.
+     *
+     * @return the velocity from the physics simulation
+     */
+    private double getPhysicsSimulationVelocity() {
         if (isUsingAbsoluteEncoder)
-            return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
-        return getConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
+            return getVelocityConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getSystemVelocityRotationsPerSecond());
+        return getVelocityConversionFactor() * Conversions.perMinuteToPerSecond(physicsSimulation.getRotorVelocityRotationsPerSecond());
     }
 
-    private double getConversionFactor() {
-        return motor.configAccessor.encoder.getPositionConversionFactor();
+    private double getVelocityConversionFactor() {
+        return motor.configAccessor.encoder.getVelocityConversionFactor();
     }
 }

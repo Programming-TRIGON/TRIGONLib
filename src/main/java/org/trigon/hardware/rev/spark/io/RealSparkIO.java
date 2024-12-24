@@ -66,7 +66,9 @@ public class RealSparkIO extends SparkIO {
 
     @Override
     public void setInverted(boolean inverted) {
-        motor.setInverted(inverted);
+        final SparkMaxConfig configuration = new SparkMaxConfig();
+        configuration.inverted(inverted);
+        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 
     @Override
