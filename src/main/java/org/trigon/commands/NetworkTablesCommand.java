@@ -2,7 +2,7 @@ package org.trigon.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -15,7 +15,7 @@ import java.util.function.Function;
  */
 public class NetworkTablesCommand extends Command {
     private final Consumer<Double[]> toRun;
-    private final LoggedDashboardNumber[] dashboardNumbers;
+    private final LoggedNetworkNumber[] dashboardNumbers;
     private final boolean runPeriodically;
 
     /**
@@ -29,9 +29,9 @@ public class NetworkTablesCommand extends Command {
     public NetworkTablesCommand(Consumer<Double[]> toRun, boolean runPeriodically, Set<Subsystem> requirements, String... keys) {
         this.toRun = toRun;
         this.runPeriodically = runPeriodically;
-        dashboardNumbers = new LoggedDashboardNumber[keys.length];
+        dashboardNumbers = new LoggedNetworkNumber[keys.length];
         for (int i = 0; i < keys.length; i++)
-            dashboardNumbers[i] = new LoggedDashboardNumber(keys[i]);
+            dashboardNumbers[i] = new LoggedNetworkNumber(keys[i]);
         addRequirements(requirements.toArray(new Subsystem[0]));
     }
 
