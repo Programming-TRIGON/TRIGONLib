@@ -3,7 +3,10 @@ package org.trigon.utilities;
 import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 
-public class QuickSort {
+/**
+ * A class that handles sorting of an array using <a href="https://en.wikipedia.org/wiki/Quicksort">Quick Sort</a>.
+ */
+public class QuickSortHandler {
     /**
      * Uses quick sort to sort an array of objects by their double values.
      * Quick Sort is a sorting method that partitions the array into smaller sections for faster sorting.
