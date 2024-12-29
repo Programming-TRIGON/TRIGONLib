@@ -5,6 +5,9 @@ import java.util.function.ToDoubleFunction;
 
 /**
  * A class that handles sorting of an array using <a href="https://en.wikipedia.org/wiki/Quicksort">Quick Sort</a>.
+ * Quick Sort is a sorting method that partitions the array into smaller sections for faster sorting.
+ * The sorting is done by selecting a pivot point and moving all values less than it to the left and all values greater than it to the right.
+ * This is done recursively until the array is sorted.
  */
 public class QuickSortHandler {
     /**
