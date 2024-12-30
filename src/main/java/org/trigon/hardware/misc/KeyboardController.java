@@ -1,13 +1,14 @@
 package org.trigon.hardware.misc;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardBoolean;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 /**
  * A class that represents a keyboard controller. Used to get input from a keyboard.
  */
 public class KeyboardController {
-    private final LoggedDashboardBoolean
+    private final LoggedNetworkBoolean
             esc, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10,
             f11, f12, delete, backtick, one, two, three, four,
             five, six, seven, eight, nine, zero, minus, equals,
@@ -23,84 +24,84 @@ public class KeyboardController {
      * Construct an instance of a device.
      */
     public KeyboardController() {
-        esc = new LoggedDashboardBoolean("keyboard/esc", false);
-        f1 = new LoggedDashboardBoolean("keyboard/f1", false);
-        f2 = new LoggedDashboardBoolean("keyboard/f2", false);
-        f3 = new LoggedDashboardBoolean("keyboard/f3", false);
-        f4 = new LoggedDashboardBoolean("keyboard/f4", false);
-        f5 = new LoggedDashboardBoolean("keyboard/f5", false);
-        f6 = new LoggedDashboardBoolean("keyboard/f6", false);
-        f7 = new LoggedDashboardBoolean("keyboard/f7", false);
-        f8 = new LoggedDashboardBoolean("keyboard/f8", false);
-        f9 = new LoggedDashboardBoolean("keyboard/f9", false);
-        f10 = new LoggedDashboardBoolean("keyboard/f10", false);
-        f11 = new LoggedDashboardBoolean("keyboard/f11", false);
-        f12 = new LoggedDashboardBoolean("keyboard/f12", false);
-        delete = new LoggedDashboardBoolean("keyboard/delete", false);
-        backtick = new LoggedDashboardBoolean("keyboard/`", false);
-        one = new LoggedDashboardBoolean("keyboard/1", false);
-        two = new LoggedDashboardBoolean("keyboard/2", false);
-        three = new LoggedDashboardBoolean("keyboard/3", false);
-        four = new LoggedDashboardBoolean("keyboard/4", false);
-        five = new LoggedDashboardBoolean("keyboard/5", false);
-        six = new LoggedDashboardBoolean("keyboard/6", false);
-        seven = new LoggedDashboardBoolean("keyboard/7", false);
-        eight = new LoggedDashboardBoolean("keyboard/8", false);
-        nine = new LoggedDashboardBoolean("keyboard/9", false);
-        zero = new LoggedDashboardBoolean("keyboard/0", false);
-        minus = new LoggedDashboardBoolean("keyboard/-", false);
-        equals = new LoggedDashboardBoolean("keyboard/=", false);
-        backspace = new LoggedDashboardBoolean("keyboard/backspace", false);
-        tab = new LoggedDashboardBoolean("keyboard/tab", false);
-        q = new LoggedDashboardBoolean("keyboard/q", false);
-        w = new LoggedDashboardBoolean("keyboard/w", false);
-        e = new LoggedDashboardBoolean("keyboard/e", false);
-        r = new LoggedDashboardBoolean("keyboard/r", false);
-        t = new LoggedDashboardBoolean("keyboard/t", false);
-        y = new LoggedDashboardBoolean("keyboard/y", false);
-        u = new LoggedDashboardBoolean("keyboard/u", false);
-        i = new LoggedDashboardBoolean("keyboard/i", false);
-        o = new LoggedDashboardBoolean("keyboard/o", false);
-        p = new LoggedDashboardBoolean("keyboard/p", false);
-        a = new LoggedDashboardBoolean("keyboard/a", false);
-        s = new LoggedDashboardBoolean("keyboard/s", false);
-        d = new LoggedDashboardBoolean("keyboard/d", false);
-        f = new LoggedDashboardBoolean("keyboard/f", false);
-        g = new LoggedDashboardBoolean("keyboard/g", false);
-        h = new LoggedDashboardBoolean("keyboard/h", false);
-        j = new LoggedDashboardBoolean("keyboard/j", false);
-        k = new LoggedDashboardBoolean("keyboard/k", false);
-        l = new LoggedDashboardBoolean("keyboard/l", false);
-        semicolon = new LoggedDashboardBoolean("keyboard/;", false);
-        apostrophe = new LoggedDashboardBoolean("keyboard/'", false);
-        leftShift = new LoggedDashboardBoolean("keyboard/shift", false);
-        z = new LoggedDashboardBoolean("keyboard/z", false);
-        x = new LoggedDashboardBoolean("keyboard/x", false);
-        c = new LoggedDashboardBoolean("keyboard/c", false);
-        v = new LoggedDashboardBoolean("keyboard/v", false);
-        b = new LoggedDashboardBoolean("keyboard/b", false);
-        n = new LoggedDashboardBoolean("keyboard/n", false);
-        m = new LoggedDashboardBoolean("keyboard/m", false);
-        comma = new LoggedDashboardBoolean("keyboard/,", false);
-        period = new LoggedDashboardBoolean("keyboard/.", false);
-        rightShift = new LoggedDashboardBoolean("keyboard/right shift", false);
-        leftCtrl = new LoggedDashboardBoolean("keyboard/ctrl", false);
-        leftAlt = new LoggedDashboardBoolean("keyboard/alt", false);
-        rightCtrl = new LoggedDashboardBoolean("keyboard/right ctrl", false);
-        left = new LoggedDashboardBoolean("keyboard/left", false);
-        right = new LoggedDashboardBoolean("keyboard/right", false);
-        up = new LoggedDashboardBoolean("keyboard/up", false);
-        down = new LoggedDashboardBoolean("keyboard/down", false);
-        numpad0 = new LoggedDashboardBoolean("keyboard/numpad0", false);
-        numpad1 = new LoggedDashboardBoolean("keyboard/numpad1", false);
-        numpad2 = new LoggedDashboardBoolean("keyboard/numpad2", false);
-        numpad3 = new LoggedDashboardBoolean("keyboard/numpad3", false);
-        numpad4 = new LoggedDashboardBoolean("keyboard/numpad4", false);
-        numpad5 = new LoggedDashboardBoolean("keyboard/numpad5", false);
-        numpad6 = new LoggedDashboardBoolean("keyboard/numpad6", false);
-        numpad7 = new LoggedDashboardBoolean("keyboard/numpad7", false);
-        numpad8 = new LoggedDashboardBoolean("keyboard/numpad8", false);
-        numpad9 = new LoggedDashboardBoolean("keyboard/numpad9", false);
+        esc = new LoggedNetworkBoolean("/SmartDashboard/keyboard/esc", false);
+        f1 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f1", false);
+        f2 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f2", false);
+        f3 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f3", false);
+        f4 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f4", false);
+        f5 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f5", false);
+        f6 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f6", false);
+        f7 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f7", false);
+        f8 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f8", false);
+        f9 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f9", false);
+        f10 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f10", false);
+        f11 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f11", false);
+        f12 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f12", false);
+        delete = new LoggedNetworkBoolean("/SmartDashboard/keyboard/delete", false);
+        backtick = new LoggedNetworkBoolean("/SmartDashboard/keyboard/`", false);
+        one = new LoggedNetworkBoolean("/SmartDashboard/keyboard/1", false);
+        two = new LoggedNetworkBoolean("/SmartDashboard/keyboard/2", false);
+        three = new LoggedNetworkBoolean("/SmartDashboard/keyboard/3", false);
+        four = new LoggedNetworkBoolean("/SmartDashboard/keyboard/4", false);
+        five = new LoggedNetworkBoolean("/SmartDashboard/keyboard/5", false);
+        six = new LoggedNetworkBoolean("/SmartDashboard/keyboard/6", false);
+        seven = new LoggedNetworkBoolean("/SmartDashboard/keyboard/7", false);
+        eight = new LoggedNetworkBoolean("/SmartDashboard/keyboard/8", false);
+        nine = new LoggedNetworkBoolean("/SmartDashboard/keyboard/9", false);
+        zero = new LoggedNetworkBoolean("/SmartDashboard/keyboard/0", false);
+        minus = new LoggedNetworkBoolean("/SmartDashboard/keyboard/-", false);
+        equals = new LoggedNetworkBoolean("/SmartDashboard/keyboard/=", false);
+        backspace = new LoggedNetworkBoolean("/SmartDashboard/keyboard/backspace", false);
+        tab = new LoggedNetworkBoolean("/SmartDashboard/keyboard/tab", false);
+        q = new LoggedNetworkBoolean("/SmartDashboard/keyboard/q", false);
+        w = new LoggedNetworkBoolean("/SmartDashboard/keyboard/w", false);
+        e = new LoggedNetworkBoolean("/SmartDashboard/keyboard/e", false);
+        r = new LoggedNetworkBoolean("/SmartDashboard/keyboard/r", false);
+        t = new LoggedNetworkBoolean("/SmartDashboard/keyboard/t", false);
+        y = new LoggedNetworkBoolean("/SmartDashboard/keyboard/y", false);
+        u = new LoggedNetworkBoolean("/SmartDashboard/keyboard/u", false);
+        i = new LoggedNetworkBoolean("/SmartDashboard/keyboard/i", false);
+        o = new LoggedNetworkBoolean("/SmartDashboard/keyboard/o", false);
+        p = new LoggedNetworkBoolean("/SmartDashboard/keyboard/p", false);
+        a = new LoggedNetworkBoolean("/SmartDashboard/keyboard/a", false);
+        s = new LoggedNetworkBoolean("/SmartDashboard/keyboard/s", false);
+        d = new LoggedNetworkBoolean("/SmartDashboard/keyboard/d", false);
+        f = new LoggedNetworkBoolean("/SmartDashboard/keyboard/f", false);
+        g = new LoggedNetworkBoolean("/SmartDashboard/keyboard/g", false);
+        h = new LoggedNetworkBoolean("/SmartDashboard/keyboard/h", false);
+        j = new LoggedNetworkBoolean("/SmartDashboard/keyboard/j", false);
+        k = new LoggedNetworkBoolean("/SmartDashboard/keyboard/k", false);
+        l = new LoggedNetworkBoolean("/SmartDashboard/keyboard/l", false);
+        semicolon = new LoggedNetworkBoolean("/SmartDashboard/keyboard/;", false);
+        apostrophe = new LoggedNetworkBoolean("/SmartDashboard/keyboard/'", false);
+        leftShift = new LoggedNetworkBoolean("/SmartDashboard/keyboard/shift", false);
+        z = new LoggedNetworkBoolean("/SmartDashboard/keyboard/z", false);
+        x = new LoggedNetworkBoolean("/SmartDashboard/keyboard/x", false);
+        c = new LoggedNetworkBoolean("/SmartDashboard/keyboard/c", false);
+        v = new LoggedNetworkBoolean("/SmartDashboard/keyboard/v", false);
+        b = new LoggedNetworkBoolean("/SmartDashboard/keyboard/b", false);
+        n = new LoggedNetworkBoolean("/SmartDashboard/keyboard/n", false);
+        m = new LoggedNetworkBoolean("/SmartDashboard/keyboard/m", false);
+        comma = new LoggedNetworkBoolean("/SmartDashboard/keyboard/,", false);
+        period = new LoggedNetworkBoolean("/SmartDashboard/keyboard/.", false);
+        rightShift = new LoggedNetworkBoolean("/SmartDashboard/keyboard/right shift", false);
+        leftCtrl = new LoggedNetworkBoolean("/SmartDashboard/keyboard/ctrl", false);
+        leftAlt = new LoggedNetworkBoolean("/SmartDashboard/keyboard/alt", false);
+        rightCtrl = new LoggedNetworkBoolean("/SmartDashboard/keyboard/right ctrl", false);
+        left = new LoggedNetworkBoolean("/SmartDashboard/keyboard/left", false);
+        right = new LoggedNetworkBoolean("/SmartDashboard/keyboard/right", false);
+        up = new LoggedNetworkBoolean("/SmartDashboard/keyboard/up", false);
+        down = new LoggedNetworkBoolean("/SmartDashboard/keyboard/down", false);
+        numpad0 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad0", false);
+        numpad1 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad1", false);
+        numpad2 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad2", false);
+        numpad3 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad3", false);
+        numpad4 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad4", false);
+        numpad5 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad5", false);
+        numpad6 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad6", false);
+        numpad7 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad7", false);
+        numpad8 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad8", false);
+        numpad9 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad9", false);
     }
 
     public Trigger esc() {
