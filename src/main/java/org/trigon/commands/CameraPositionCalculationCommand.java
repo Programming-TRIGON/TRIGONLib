@@ -1,6 +1,5 @@
 package org.trigon.commands;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -10,106 +9,74 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
-import java.util.Optional;
 import java.util.function.DoubleConsumer;
 import java.util.function.Supplier;
 
 public class CameraPositionCalculationCommand extends Command {
     private static final LoggedNetworkNumber ROTATION_SPEED = new LoggedNetworkNumber("CameraPositionCalculationCommand/RotationSpeed", 1);
-    private static final LoggedNetworkNumber ROTATION_RATE_LIMIT = new LoggedNetworkNumber("CameraPositionCalculationCommand/RotationRateLimit", 1);
 
-    private final Supplier<Optional<Pose2d>> cameraPose;
-    private final Rotation2d minimumRotationDistance;
+    private final Supplier<Pose2d> cameraPoseSupplier;
+    private final Rotation2d cameraAngleOnRobot;
     private final DoubleConsumer rotateRobot;
-    private final Supplier<Rotation2d> robotHeading;
 
-    private SlewRateLimiter rotationSlewRateLimiter;
-    private boolean hasSetFirstCameraPose = false;
-    private Pose2d startingCameraPose = null;
-    private Rotation2d StartingCameraPoseHeading;
-    private Transform2d robotToCamera = null;
+    private Pose2d initialPose, endPose;
 
-    public CameraPositionCalculationCommand(Supplier<Optional<Pose2d>> cameraPose, Rotation2d minimumRotationDistance, DoubleConsumer rotateRobot, Supplier<Rotation2d> robotHeading, SubsystemBase requirement) {
-        this.cameraPose = cameraPose;
-        this.minimumRotationDistance = minimumRotationDistance;
+    public CameraPositionCalculationCommand(Supplier<Pose2d> cameraPoseSupplier, Rotation2d cameraAngleOnRobot, DoubleConsumer rotateRobot, SubsystemBase requirement) {
+        this.cameraPoseSupplier = cameraPoseSupplier;
+        this.cameraAngleOnRobot = cameraAngleOnRobot;
         this.rotateRobot = rotateRobot;
-        this.robotHeading = robotHeading;
     }
 
     @Override
     public void initialize() {
-        rotationSlewRateLimiter = new SlewRateLimiter(ROTATION_RATE_LIMIT.get());
-        rotationSlewRateLimiter.reset(0);
+        initialPose = cameraPoseSupplier.get();
     }
 
     @Override
     public void execute() {
-        rotateRobot.accept(rotationSlewRateLimiter.calculate(ROTATION_SPEED.get()));
-
-        if (!hasSetFirstCameraPose)
-            if (cameraPose.get().isPresent()) {
-                startingCameraPose = cameraPose.get().get();
-                hasSetFirstCameraPose = true;
-                StartingCameraPoseHeading = robotHeading.get();
-            } else if (Math.abs(robotHeading.get().minus(StartingCameraPoseHeading).getRadians()) > minimumRotationDistance.getRadians())
-                if (cameraPose.get().isPresent()) {
-                    robotToCamera = solveRobotToCamera(startingCameraPose, cameraPose.get().get());
-                    this.end(false);
-                }
+        rotateRobot.accept(ROTATION_SPEED.get());
+        endPose = cameraPoseSupplier.get();
+        logRobotToCamera();
     }
 
     @Override
     public void end(boolean interrupted) {
-        if (robotToCamera != null)
-            Logger.recordOutput("CameraPositionCalculationCommand/RobotToCamera", robotToCamera);
+        logRobotToCamera();
     }
 
-    private Transform2d solveRobotToCamera(Pose2d firstCameraPose, Pose2d secondCameraPose) {
-        double firstCameraPoseX = firstCameraPose.getTranslation().getX();
-        double firstCameraPoseY = firstCameraPose.getTranslation().getY();
-        double firstCameraPoseCosine = firstCameraPose.getRotation().getCos();
-        double firstCameraPoseSine = firstCameraPose.getRotation().getSin();
+    private void logRobotToCamera() {
+        if (endPose == null || initialPose == null)
+            return;
 
-        double secondCameraPoseX = secondCameraPose.getTranslation().getX();
-        double secondCameraPoseY = secondCameraPose.getTranslation().getY();
-        double secondCameraPoseCosine = secondCameraPose.getRotation().getCos();
-        double secondCameraPoseSine = secondCameraPose.getRotation().getSin();
-
-        double denominator = calculateCameraPositionCalculationDenominator(firstCameraPoseCosine, secondCameraPoseCosine, firstCameraPoseSine, secondCameraPoseSine);
-        double xNumerator = calculateXNumerator(firstCameraPoseX, secondCameraPoseX, firstCameraPoseY, secondCameraPoseY, firstCameraPoseCosine, secondCameraPoseCosine, firstCameraPoseSine, secondCameraPoseSine);
-        double yNumerator = calculateYNumerator(firstCameraPoseX, secondCameraPoseX, firstCameraPoseY, secondCameraPoseY, firstCameraPoseCosine, secondCameraPoseCosine, firstCameraPoseSine, secondCameraPoseSine);
-
-        double xCameraToRobotDistanceMeters = xNumerator / denominator;
-        double yCameraToRobotDistanceMeters = yNumerator / denominator;
-
-        return new Transform2d(new Translation2d(xCameraToRobotDistanceMeters, yCameraToRobotDistanceMeters), new Rotation2d(0));
+        final Transform2d robotToCamera = solveForRobotToCamera(initialPose, endPose, cameraAngleOnRobot);
+        Logger.recordOutput("CameraPositionCalculationCommand/RobotToCamera", robotToCamera);
     }
 
-    private double calculateCameraPositionCalculationDenominator(double firstPoseCos, double secondPoseCos, double firstPoseSin, double secondPoseSin) {
-        return (firstPoseCos - secondPoseCos) * (firstPoseCos - secondPoseCos) + (firstPoseSin - secondPoseSin) * (firstPoseSin - secondPoseSin);
+    private Transform2d solveForRobotToCamera(Pose2d initialPose, Pose2d endPose, Rotation2d cameraAngleOnRobot) {
+        final double initialCos = initialPose.getRotation().getCos();
+        final double initialSin = initialPose.getRotation().getSin();
+        final double endCos = endPose.getRotation().getCos();
+        final double endSin = endPose.getRotation().getSin();
+
+        final double cosDifference = initialCos - endCos;
+        final double sinDifference = initialSin - endSin;
+        final double denominator = solveForDenominator(cosDifference, sinDifference);
+
+        final Translation2d translationDifference = endPose.getTranslation().minus(initialPose.getTranslation());
+        final Translation2d transformTranslation = solveForTransformTranslation(denominator, translationDifference, cosDifference, sinDifference);
+        final Translation2d rotatedTransformTranslation = transformTranslation.rotateBy(cameraAngleOnRobot);
+
+        return new Transform2d(rotatedTransformTranslation, cameraAngleOnRobot);
     }
 
-    private double calculateXNumerator(double firstPoseX, double secondPoseX, double firstPoseY, double secondPoseY, double firstPoseCos, double secondPoseCos, double firstPoseSin, double secondPoseSin) {
-        return -calculateCameraToRobotAxisDistance(firstPoseX, secondPoseX, firstPoseY, secondPoseY, firstPoseCos - secondPoseCos, firstPoseSin - secondPoseSin);
+    private double solveForDenominator(double cosDifference, double sinDifference) {
+        return (cosDifference * cosDifference) + (sinDifference * sinDifference);
     }
 
-    private double calculateYNumerator(double firstPoseX, double secondPoseX, double firstPoseY, double secondPoseY, double firstPoseCos, double secondPoseCos, double firstPoseSin, double secondPoseSin) {
-        return calculateCameraToRobotAxisDistance(firstPoseX, secondPoseX, firstPoseY, secondPoseY, firstPoseSin - secondPoseSin, secondPoseCos - firstPoseCos);
-    }
+    private Translation2d solveForTransformTranslation(double denominator, Translation2d translationDifference, double cosDifference, double sinDifference) {
+        final double transformX = ((translationDifference.getX() * cosDifference) + (translationDifference.getY() * sinDifference)) / -denominator;
+        final double transformY = ((translationDifference.getX() * sinDifference) + (translationDifference.getY() * cosDifference)) / -denominator;
 
-    /**
-     * Calculates the distance between the camera and the robot on the given axis.
-     * The formula for the calculation is the same for both the x and y axis, other than the custom parameters.
-     *
-     * @param firstPoseX  the x translation of the first camera pose
-     * @param secondPoseX the x translation of the second camera pose
-     * @param firstPoseY  the y translation of the first camera pose
-     * @param secondPoseY the y translation of the second camera pose
-     * @param firstParam  the custom parameter for the first half of the calculation
-     * @param secondParam the custom parameter for the second half of the calculation
-     * @return the distance between the camera and the robot on the given axis
-     */
-    private double calculateCameraToRobotAxisDistance(double firstPoseX, double secondPoseX, double firstPoseY, double secondPoseY, double firstParam, double secondParam) {
-        return ((secondPoseX - firstPoseX) * (firstParam) + (secondPoseY - firstPoseY) * (secondParam));
+        return new Translation2d(transformX, transformY);
     }
 }
