@@ -12,7 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 import java.util.Arrays;
 import java.util.function.DoubleConsumer;
@@ -23,8 +23,8 @@ import java.util.function.Supplier;
  * A command for characterizing the wheel radius of each module of a swerve drive system by calculating the radius of each drive wheel based on rotational data and robot yaw during operation.
  */
 public class WheelRadiusCharacterizationCommand extends Command {
-    private static final LoggedDashboardNumber CHARACTERIZATION_SPEED = new LoggedDashboardNumber("WheelRadiusCharacterization/SpeedRadiansPerSecond", 1);
-    private static final LoggedDashboardNumber ROTATION_RATE_LIMIT = new LoggedDashboardNumber("WheelRadiusCharacterization/RotationRateLimit", 1);
+    private static final LoggedNetworkNumber CHARACTERIZATION_SPEED = new LoggedNetworkNumber("WheelRadiusCharacterization/SpeedRadiansPerSecond", 1);
+    private static final LoggedNetworkNumber ROTATION_RATE_LIMIT = new LoggedNetworkNumber("WheelRadiusCharacterization/RotationRateLimit", 1);
 
     private final double[]
             wheelDistancesFromCenterMeters,
