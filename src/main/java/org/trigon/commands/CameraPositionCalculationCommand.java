@@ -16,14 +16,14 @@ public class CameraPositionCalculationCommand extends Command {
     private static final LoggedNetworkNumber ROTATION_SPEED = new LoggedNetworkNumber("CameraPositionCalculationCommand/RotationSpeed", 1);
 
     private final Supplier<Pose2d> cameraPoseSupplier;
-    private final Rotation2d cameraAngleOnRobot;
+    private final Rotation2d cameraMountAngle;
     private final DoubleConsumer rotateRobot;
 
     private Pose2d initialPose, endPose;
 
-    public CameraPositionCalculationCommand(Supplier<Pose2d> cameraPoseSupplier, Rotation2d cameraAngleOnRobot, DoubleConsumer rotateRobot, SubsystemBase requirement) {
+    public CameraPositionCalculationCommand(Supplier<Pose2d> cameraPoseSupplier, Rotation2d cameraMountAngle, DoubleConsumer rotateRobot, SubsystemBase requirement) {
         this.cameraPoseSupplier = cameraPoseSupplier;
-        this.cameraAngleOnRobot = cameraAngleOnRobot;
+        this.cameraMountAngle = cameraMountAngle;
         this.rotateRobot = rotateRobot;
     }
 
@@ -48,11 +48,11 @@ public class CameraPositionCalculationCommand extends Command {
         if (endPose == null || initialPose == null)
             return;
 
-        final Transform2d robotToCamera = solveForRobotToCamera(initialPose, endPose, cameraAngleOnRobot);
+        final Transform2d robotToCamera = solveForRobotToCamera(initialPose, endPose, cameraMountAngle);
         Logger.recordOutput("CameraPositionCalculationCommand/RobotToCamera", robotToCamera);
     }
 
-    private Transform2d solveForRobotToCamera(Pose2d initialPose, Pose2d endPose, Rotation2d cameraAngleOnRobot) {
+    private Transform2d solveForRobotToCamera(Pose2d initialPose, Pose2d endPose, Rotation2d cameraMountAngle) {
         final double initialCos = initialPose.getRotation().getCos();
         final double initialSin = initialPose.getRotation().getSin();
         final double endCos = endPose.getRotation().getCos();
@@ -64,9 +64,9 @@ public class CameraPositionCalculationCommand extends Command {
 
         final Translation2d translationDifference = endPose.getTranslation().minus(initialPose.getTranslation());
         final Translation2d transformTranslation = solveForTransformTranslation(denominator, translationDifference, cosDifference, sinDifference);
-        final Translation2d rotatedTransformTranslation = transformTranslation.rotateBy(cameraAngleOnRobot);
+        final Translation2d rotatedTransformTranslation = transformTranslation.rotateBy(cameraMountAngle);
 
-        return new Transform2d(rotatedTransformTranslation, cameraAngleOnRobot);
+        return new Transform2d(rotatedTransformTranslation, cameraMountAngle);
     }
 
     private double solveForDenominator(double cosDifference, double sinDifference) {
