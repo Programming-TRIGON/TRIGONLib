@@ -10,7 +10,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-group = 'org.github.levyishai'
+group = 'org.github.Programming-TRIGON'
 
 repositories {
     maven {
