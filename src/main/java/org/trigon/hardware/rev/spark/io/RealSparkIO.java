@@ -1,5 +1,6 @@
 package org.trigon.hardware.rev.spark.io;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -25,18 +26,18 @@ public class RealSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
-        pidController.setReference(value, controlType, pidSlot);
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot slot) {
+        pidController.setReference(value, controlType, slot);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
-        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward);
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot slot, double arbitraryFeedForward) {
+        pidController.setReference(value, controlType, slot, arbitraryFeedForward);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
-        pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot slot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+        pidController.setReference(value, controlType, slot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
     @Override
