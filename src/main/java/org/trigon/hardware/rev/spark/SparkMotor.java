@@ -1,5 +1,6 @@
 package org.trigon.hardware.rev.spark;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -103,7 +104,7 @@ public class SparkMotor {
      * @param controlType the control type
      * @param pidSlot     the PID slot to use
      */
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot pidSlot) {
         motorIO.setReference(value, controlType, pidSlot);
     }
 
@@ -115,7 +116,7 @@ public class SparkMotor {
      * @param pidSlot              the PID slot to use
      * @param arbitraryFeedForward the feed forward value
      */
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot pidSlot, double arbitraryFeedForward) {
         motorIO.setReference(value, controlType, pidSlot, arbitraryFeedForward);
     }
 
@@ -128,7 +129,7 @@ public class SparkMotor {
      * @param arbitraryFeedForward      the feed forward value
      * @param arbitraryFeedForwardUnits the units of the feed forward value
      */
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
         motorIO.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 

@@ -1,10 +1,7 @@
 package org.trigon.hardware.rev.spark.io;
 
 import com.revrobotics.sim.SparkAbsoluteEncoderSim;
-import com.revrobotics.spark.SparkBase;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkSim;
+import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -37,17 +34,17 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot) {
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot pidSlot) {
         pidController.setReference(value, controlType, pidSlot);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward) {
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot pidSlot, double arbitraryFeedForward) {
         pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward);
     }
 
     @Override
-    public void setReference(double value, SparkBase.ControlType controlType, int pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
+    public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot pidSlot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
         pidController.setReference(value, controlType, pidSlot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
