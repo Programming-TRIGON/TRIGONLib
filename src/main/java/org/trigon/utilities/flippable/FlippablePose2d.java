@@ -24,12 +24,12 @@ public class FlippablePose2d extends Flippable<Pose2d> {
     /**
      * Creates a new FlippablePose2d with the given translation and rotation.
      *
-     * @param translation2d             the translation of the pose.
-     * @param rotation                  the rotation of the pose.
+     * @param translation2d             the translation of the pose
+     * @param rotationRadians           the rotation of the pose in radians
      * @param shouldFlipWhenRedAlliance should the pose be flipped when the robot is on the red alliance
      */
-    public FlippablePose2d(Translation2d translation2d, double rotation, boolean shouldFlipWhenRedAlliance) {
-        this(new Pose2d(translation2d, new Rotation2d(rotation)), shouldFlipWhenRedAlliance);
+    public FlippablePose2d(Translation2d translation2d, double rotationRadians, boolean shouldFlipWhenRedAlliance) {
+        this(new Pose2d(translation2d, new Rotation2d(rotationRadians)), shouldFlipWhenRedAlliance);
     }
 
     /**
@@ -45,7 +45,7 @@ public class FlippablePose2d extends Flippable<Pose2d> {
     /**
      * Gets the rotation value of the pose. The pose will be flipped if the robot is on the red alliance and {@link #shouldFlipWhenRedAlliance} is true.
      *
-     * @return the rotation value of the pose.
+     * @return the rotation value of the pose
      */
     public FlippableRotation2d getRotation() {
         return new FlippableRotation2d(nonFlippedObject.getRotation(), shouldFlipWhenRedAlliance);

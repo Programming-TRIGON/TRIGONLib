@@ -31,6 +31,13 @@ public class FlippableTranslation3d extends Flippable<Translation3d> {
         super(nonFlippedTranslation, shouldFlipWhenRedAlliance);
     }
 
+    /**
+     * Flips the given translation. The translation will be flipped if the robot is on the red alliance and {@link #shouldFlipWhenRedAlliance} is true.
+     * The Z value will have no change.
+     *
+     * @param translation the object to flip
+     * @return the flipped translation
+     */
     @Override
     protected Translation3d flip(Translation3d translation) {
         final Translation2d flippedTranslation2d = FlippingUtil.flipFieldPosition(translation.toTranslation2d());
