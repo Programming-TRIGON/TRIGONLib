@@ -1,5 +1,6 @@
 package org.trigon.hardware.rev.spark;
 
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -10,13 +11,13 @@ public class SparkIO {
     public void setReference(double value, SparkBase.ControlType ctrl) {
     }
 
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot) {
+    public void setReference(double value, SparkBase.ControlType ctrl, ClosedLoopSlot slot) {
     }
 
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward) {
+    public void setReference(double value, SparkBase.ControlType ctrl, ClosedLoopSlot slot, double arbFeedForward) {
     }
 
-    public void setReference(double value, SparkBase.ControlType ctrl, int pidSlot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
+    public void setReference(double value, SparkBase.ControlType ctrl, ClosedLoopSlot slot, double arbFeedForward, SparkClosedLoopController.ArbFFUnits arbFFUnits) {
     }
 
     public void setPeriodicFrameTimeout(int timeoutMs) {
