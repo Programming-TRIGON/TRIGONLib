@@ -8,17 +8,6 @@ import edu.wpi.first.math.geometry.Translation2d;
  */
 public class FlippableTranslation2d extends Flippable<Translation2d> {
     /**
-     * Creates a new FlippableTranslation3d with the given translation.
-     *
-     * @param nonFlippedTranslation     the translation to flip
-     * @param shouldFlipWhenRedAlliance should the position be flipped when the robot is on the red alliance
-     */
-    public FlippableTranslation2d(Translation2d nonFlippedTranslation, boolean shouldFlipWhenRedAlliance) {
-        super(nonFlippedTranslation, shouldFlipWhenRedAlliance);
-    }
-
-
-    /**
      * Creates a new FlippableTranslation3d with the given x and y values.
      *
      * @param x                         the x value of the translation
@@ -27,6 +16,16 @@ public class FlippableTranslation2d extends Flippable<Translation2d> {
      */
     public FlippableTranslation2d(double x, double y, boolean shouldFlipWhenRedAlliance) {
         this(new Translation2d(x, y), shouldFlipWhenRedAlliance);
+    }
+    
+    /**
+     * Creates a new FlippableTranslation3d with the given translation.
+     *
+     * @param nonFlippedTranslation     the translation to flip
+     * @param shouldFlipWhenRedAlliance should the position be flipped when the robot is on the red alliance
+     */
+    public FlippableTranslation2d(Translation2d nonFlippedTranslation, boolean shouldFlipWhenRedAlliance) {
+        super(nonFlippedTranslation, shouldFlipWhenRedAlliance);
     }
 
     @Override

@@ -9,18 +9,6 @@ import edu.wpi.first.math.geometry.Translation2d;
  * A class that represents a {@link Pose2d} that can be flipped when the robot is on the red alliance.
  */
 public class FlippablePose2d extends Flippable<Pose2d> {
-
-
-    /**
-     * Creates a new FlippablePose2d with the given x, y, and rotation.
-     *
-     * @param nonFlippedPose            the pose when the robot is on the blue alliance
-     * @param shouldFlipWhenRedAlliance should the pose be flipped when the robot is on the red alliance
-     */
-    public FlippablePose2d(Pose2d nonFlippedPose, boolean shouldFlipWhenRedAlliance) {
-        super(nonFlippedPose, shouldFlipWhenRedAlliance);
-    }
-
     /**
      * Creates a new FlippablePose2d with the given x, y, and rotation.
      *
@@ -42,6 +30,16 @@ public class FlippablePose2d extends Flippable<Pose2d> {
      */
     public FlippablePose2d(Translation2d translation2d, double rotation, boolean shouldFlipWhenRedAlliance) {
         this(new Pose2d(translation2d, new Rotation2d(rotation)), shouldFlipWhenRedAlliance);
+    }
+
+    /**
+     * Creates a new FlippablePose2d with the given x, y, and rotation.
+     *
+     * @param nonFlippedPose            the pose when the robot is on the blue alliance
+     * @param shouldFlipWhenRedAlliance should the pose be flipped when the robot is on the red alliance
+     */
+    public FlippablePose2d(Pose2d nonFlippedPose, boolean shouldFlipWhenRedAlliance) {
+        super(nonFlippedPose, shouldFlipWhenRedAlliance);
     }
 
     /**

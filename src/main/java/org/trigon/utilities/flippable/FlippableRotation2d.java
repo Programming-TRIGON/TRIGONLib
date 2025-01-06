@@ -8,26 +8,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
  */
 public class FlippableRotation2d extends Flippable<Rotation2d> {
     /**
-     * Creates a new FlippableRotation2d with the given Rotation2d.
-     *
-     * @param nonFlippedRotation        the non flipped rotation when the robot is on the blue alliance
-     * @param shouldFlipWhenRedAlliance should the rotation be flipped when the robot is on the red alliance
-     */
-    public FlippableRotation2d(Rotation2d nonFlippedRotation, boolean shouldFlipWhenRedAlliance) {
-        super(nonFlippedRotation, shouldFlipWhenRedAlliance);
-    }
-
-    /**
-     * Creates a new FlippableRotation2d with the given rotation value.
-     *
-     * @param radians                   the value of the angle in radians
-     * @param shouldFlipWhenRedAlliance should the rotation be flipped when the robot is on the red alliance
-     */
-    public FlippableRotation2d(double radians, boolean shouldFlipWhenRedAlliance) {
-        this(new Rotation2d(radians), shouldFlipWhenRedAlliance);
-    }
-
-    /**
      * Constructs and returns a FlippableRotation2d with the given degree value.
      *
      * @param degrees                   the value of the angle in degrees
@@ -58,6 +38,26 @@ public class FlippableRotation2d extends Flippable<Rotation2d> {
      */
     public static FlippableRotation2d fromRotations(double rotations, boolean shouldFlipWhenRedAlliance) {
         return new FlippableRotation2d(Rotation2d.fromRotations(rotations), shouldFlipWhenRedAlliance);
+    }
+
+    /**
+     * Creates a new FlippableRotation2d with the given rotation value.
+     *
+     * @param radians                   the value of the angle in radians
+     * @param shouldFlipWhenRedAlliance should the rotation be flipped when the robot is on the red alliance
+     */
+    public FlippableRotation2d(double radians, boolean shouldFlipWhenRedAlliance) {
+        this(new Rotation2d(radians), shouldFlipWhenRedAlliance);
+    }
+
+    /**
+     * Creates a new FlippableRotation2d with the given Rotation2d.
+     *
+     * @param nonFlippedRotation        the non flipped rotation when the robot is on the blue alliance
+     * @param shouldFlipWhenRedAlliance should the rotation be flipped when the robot is on the red alliance
+     */
+    public FlippableRotation2d(Rotation2d nonFlippedRotation, boolean shouldFlipWhenRedAlliance) {
+        super(nonFlippedRotation, shouldFlipWhenRedAlliance);
     }
 
     @Override
