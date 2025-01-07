@@ -1,7 +1,6 @@
 package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusSignal;
 import org.littletonrobotics.junction.LogTable;
 import org.trigon.hardware.BaseInputs;
 import org.trigon.hardware.RobotHardwareStats;
@@ -78,11 +77,8 @@ public class Phoenix6Inputs extends BaseInputs {
     private void updateSignalsToTable(LogTable table) {
         BaseStatusSignal.refreshAll(signals);
 
-        for (BaseStatusSignal signal : signals) {
-            if (signal.getName().equals("ClosedLoopReference")) // This signal isn't updated correctly by `BaseStatusSignal.updateAll` for some reason.
-                ((StatusSignal<Double>) signal).refresh();
+        for (BaseStatusSignal signal : signals)
             table.put(signal.getName(), signal.getValueAsDouble());
-        }
     }
 
     private void addSignalToSignalsArray(BaseStatusSignal statusSignal) {
