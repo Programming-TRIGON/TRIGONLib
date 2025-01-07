@@ -1,14 +1,15 @@
 package org.trigon.hardware.rev.spark;
 
 import org.littletonrobotics.junction.LogTable;
-import org.trigon.hardware.BaseInputs;
+import org.trigon.hardware.InputsBase;
 import org.trigon.hardware.RobotHardwareStats;
+import org.trigon.hardware.SignalThreadBase;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-public class SparkInputs extends BaseInputs {
+public class SparkInputs extends InputsBase {
     private final HashMap<String, Queue<Double>> signalToThreadedQueue = new HashMap<>();
     private final SparkSignalThread signalThread = SparkSignalThread.getInstance();
     private SparkStatusSignal[] signals = new SparkStatusSignal[0];
@@ -61,7 +62,7 @@ public class SparkInputs extends BaseInputs {
 
     private void updateThreadedSignalsToTable(LogTable table) {
         for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
-            table.put(entry.getKey(), entry.getValue().stream().mapToDouble(Double::doubleValue).toArray());
+            table.put(entry.getKey(), SignalThreadBase.queueToDoubleArray(entry.getValue()));
             entry.getValue().clear();
         }
     }
