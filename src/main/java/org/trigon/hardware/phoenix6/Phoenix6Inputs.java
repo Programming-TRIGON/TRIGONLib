@@ -2,14 +2,15 @@ package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import org.littletonrobotics.junction.LogTable;
-import org.trigon.hardware.BaseInputs;
+import org.trigon.hardware.InputsBase;
 import org.trigon.hardware.RobotHardwareStats;
+import org.trigon.hardware.SignalThreadBase;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-public class Phoenix6Inputs extends BaseInputs {
+public class Phoenix6Inputs extends InputsBase {
     private final HashMap<String, Queue<Double>> signalToThreadedQueue = new HashMap<>();
     private final Phoenix6SignalThread signalThread = Phoenix6SignalThread.getInstance();
     private BaseStatusSignal[] signals = new BaseStatusSignal[0];
@@ -69,7 +70,7 @@ public class Phoenix6Inputs extends BaseInputs {
 
     private void updateThreadedSignalsToTable(LogTable table) {
         for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
-            table.put(entry.getKey(), entry.getValue().stream().mapToDouble(Double::doubleValue).toArray());
+            table.put(entry.getKey(), SignalThreadBase.queueToDoubleArray(entry.getValue()));
             entry.getValue().clear();
         }
     }
