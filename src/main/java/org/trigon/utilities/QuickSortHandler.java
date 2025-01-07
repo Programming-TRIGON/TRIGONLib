@@ -1,6 +1,5 @@
 package org.trigon.utilities;
 
-import java.util.Arrays;
 import java.util.function.ToDoubleFunction;
 
 /**
@@ -51,7 +50,7 @@ public class QuickSortHandler {
      * @return the index of the new pivot in the whole array
      */
     private static <T> int partitionArrayAndGetNewPivot(T[] array, ToDoubleFunction<T> toDoubleFunction, int startIndex, int endIndex) {
-        final double[] doubleArray = Arrays.stream(array).mapToDouble(toDoubleFunction).toArray();
+        final double[] doubleArray = convertArrayToDoubleArray(array, toDoubleFunction);
         final double pivot = doubleArray[endIndex];
 
         int i = startIndex;
@@ -63,6 +62,13 @@ public class QuickSortHandler {
         }
         swapArrayValues(array, i, endIndex);
         return i;
+    }
+
+    private static <T> double[] convertArrayToDoubleArray(T[] array, ToDoubleFunction<T> toDoubleFunction) {
+        final double[] doubleArray = new double[array.length];
+        for (int i = 0; i < array.length; i++)
+            doubleArray[i] = toDoubleFunction.applyAsDouble(array[i]);
+        return doubleArray;
     }
 
     /**

@@ -6,7 +6,7 @@ import org.littletonrobotics.junction.inputs.LoggableInputs;
 
 import java.util.NoSuchElementException;
 
-public abstract class BaseInputs implements LoggableInputs {
+public abstract class InputsBase implements LoggableInputs {
     protected LogTable latestTable = null;
     private final String name;
     private double lastErrorTimestamp = 0;
@@ -16,7 +16,7 @@ public abstract class BaseInputs implements LoggableInputs {
      *
      * @param name the name of the instance. Used for error messages
      */
-    public BaseInputs(String name) {
+    public InputsBase(String name) {
         this.name = name;
     }
 
