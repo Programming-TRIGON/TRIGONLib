@@ -75,7 +75,7 @@ public class CameraPositionCalculationCommand extends Command {
 
     private Translation2d solveForTransformTranslation(double denominator, Translation2d translationDifference, double cosDifference, double sinDifference) {
         final double transformX = ((translationDifference.getX() * cosDifference) + (translationDifference.getY() * sinDifference)) / -denominator;
-        final double transformY = ((translationDifference.getX() * sinDifference) + (translationDifference.getY() * cosDifference)) / -denominator;
+        final double transformY = ((translationDifference.getX() * sinDifference) - (translationDifference.getY() * cosDifference)) / denominator;
 
         return new Translation2d(transformX, transformY);
     }
