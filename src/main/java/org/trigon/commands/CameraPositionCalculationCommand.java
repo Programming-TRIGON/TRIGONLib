@@ -35,6 +35,11 @@ public class CameraPositionCalculationCommand extends Command {
     @Override
     public void execute() {
         rotateRobot.accept(ROTATION_SPEED.get());
+        
+        final Pose2d currentPose = cameraPoseSupplier.get();
+        if (currentPose != null)
+            endPose = currentPose;
+
         endPose = cameraPoseSupplier.get();
         logRobotToCamera();
     }
