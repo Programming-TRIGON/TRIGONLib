@@ -2,7 +2,6 @@ package org.trigon.hardware.misc;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
-import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 /**
  * A class that represents a keyboard controller. Used to get input from a keyboard.

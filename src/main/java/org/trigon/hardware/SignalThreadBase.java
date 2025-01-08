@@ -18,6 +18,15 @@ public class SignalThreadBase extends Thread {
     private final String name;
     protected double threadFrequencyHertz = 50;
 
+    @SuppressWarnings("ConstantConditions")
+    public static double[] queueToDoubleArray(Queue<Double> queue) {
+        final double[] array = new double[queue.size()];
+        for (int i = 0; i < array.length; i++)
+            array[i] = queue.poll();
+
+        return array;
+    }
+
     /**
      * Creates a new SignalThreadBase.
      *
@@ -44,7 +53,7 @@ public class SignalThreadBase extends Thread {
      */
     public void updateLatestTimestamps() {
         if (!RobotHardwareStats.isReplay()) {
-            threadInputs.timestamps = timestamps.stream().mapToDouble(Double::doubleValue).toArray();
+            threadInputs.timestamps = queueToDoubleArray(timestamps);
             timestamps.clear();
         }
         Logger.processInputs(name, threadInputs);
