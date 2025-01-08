@@ -35,6 +35,9 @@ public class CameraPositionCalculationCommand extends Command {
     @Override
     public void execute() {
         rotateRobot.accept(ROTATION_SPEED.get());
+        if (endPose == null)
+            return;
+
         endPose = cameraPoseSupplier.get();
         logRobotToCamera();
     }
