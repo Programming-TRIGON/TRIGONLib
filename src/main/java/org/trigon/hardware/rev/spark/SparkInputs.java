@@ -61,10 +61,8 @@ public class SparkInputs extends InputsBase {
     }
 
     private void updateThreadedSignalsToTable(LogTable table) {
-        for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
+        for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet())
             table.put(entry.getKey(), SignalThreadBase.queueToDoubleArray(entry.getValue()));
-            entry.getValue().clear();
-        }
     }
 
     private void updateSignalsToTable(LogTable table) {
