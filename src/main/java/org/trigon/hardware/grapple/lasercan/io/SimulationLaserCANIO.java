@@ -19,6 +19,6 @@ public class SimulationLaserCANIO extends LaserCANIO {
             return;
         inputs.distanceMillimeters = valueSupplier.getAsDouble();
         inputs.ambientLight = 0;
-        inputs.hasResult = false;
+        inputs.hasResult = true;
     }
 }
