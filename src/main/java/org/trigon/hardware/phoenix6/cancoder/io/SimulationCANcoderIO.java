@@ -59,8 +59,8 @@ public class SimulationCANcoderIO extends CANcoderIO {
      * There's no reason to use the sensor direction in simulation, and it can sometimes cause problems so it is always set to CounterClockwise_Positive.
      * The magnet offset is set to 0 because the magnet offset is not used in simulation.
      *
-     * @param configuration The configuration to adapt
-     * @return The adapted configuration
+     * @param configuration the configuration to adapt
+     * @return the adapted configuration
      */
     private CANcoderConfiguration adaptConfigurationToSimulation(CANcoderConfiguration configuration) {
         configuration.MagnetSensor.MagnetOffset = 0;
