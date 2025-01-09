@@ -1,6 +1,7 @@
 package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusSignal;
 import org.littletonrobotics.junction.LogTable;
 import org.trigon.hardware.InputsBase;
 import org.trigon.hardware.RobotHardwareStats;
@@ -69,17 +70,19 @@ public class Phoenix6Inputs extends InputsBase {
     }
 
     private void updateThreadedSignalsToTable(LogTable table) {
-        for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
+        for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet())
             table.put(entry.getKey(), SignalThreadBase.queueToDoubleArray(entry.getValue()));
-            entry.getValue().clear();
-        }
     }
 
     private void updateSignalsToTable(LogTable table) {
         BaseStatusSignal.refreshAll(signals);
 
-        for (BaseStatusSignal signal : signals)
+        for (BaseStatusSignal signal : signals) {
+            if (signal.getName().equals("ClosedLoopReference")) // This signal isn't updated correctly by `BaseStatusSignal.updateAll` for some reason.
+                ((StatusSignal<Double>) signal).refresh();
+
             table.put(signal.getName(), signal.getValueAsDouble());
+        }
     }
 
     private void addSignalToSignalsArray(BaseStatusSignal statusSignal) {

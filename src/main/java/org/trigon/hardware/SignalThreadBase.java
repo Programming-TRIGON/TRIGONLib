@@ -52,10 +52,9 @@ public class SignalThreadBase extends Thread {
      * Updates the latest timestamps, and processes the inputs.
      */
     public void updateLatestTimestamps() {
-        if (!RobotHardwareStats.isReplay()) {
+        if (!RobotHardwareStats.isReplay())
             threadInputs.timestamps = queueToDoubleArray(timestamps);
-            timestamps.clear();
-        }
+
         Logger.processInputs(name, threadInputs);
     }
 
