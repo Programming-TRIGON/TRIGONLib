@@ -13,7 +13,7 @@ import java.util.function.DoubleConsumer;
 import java.util.function.Supplier;
 
 public class CameraPositionCalculationCommand extends Command {
-    private static final LoggedNetworkNumber ROTATION_SPEED = new LoggedNetworkNumber("CameraPositionCalculationCommand/RotationSpeed", 1);
+    private static final LoggedNetworkNumber ROTATION_SPEED = new LoggedNetworkNumber("/CameraPositionCalculationCommand/RotationSpeed", 1);
 
     private final Supplier<Pose2d> cameraPoseSupplier;
     private final Rotation2d cameraMountAngle;
@@ -35,7 +35,7 @@ public class CameraPositionCalculationCommand extends Command {
     @Override
     public void execute() {
         rotateRobot.accept(ROTATION_SPEED.get());
-        
+
         final Pose2d currentPose = cameraPoseSupplier.get();
         if (currentPose != null)
             endPose = currentPose;
