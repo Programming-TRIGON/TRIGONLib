@@ -8,13 +8,24 @@ import org.trigon.hardware.grapple.lasercan.LaserCANInputsAutoLogged;
 public class RealLaserCANIO extends LaserCANIO {
     private final LaserCan laserCan;
 
-    public RealLaserCANIO(int canID) {
-        laserCan = new LaserCan(canID);
+    public RealLaserCANIO(int id) {
+        laserCan = new LaserCan(id);
     }
 
     public void updateInputs(LaserCANInputsAutoLogged inputs) {
-        if (laserCan.getMeasurement() != null)
+        final LaserCan.Measurement measurement = laserCan.getMeasurement();
+        if (measurement != null) {
+            inputs.hasResult = measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT;
+            if (!inputs.hasResult)
+                return;
+
             inputs.distanceMillimeters = laserCan.getMeasurement().distance_mm;
+            inputs.ambientLight = measurement.ambient;
+            inputs.highNoise = measurement.status == LaserCan.LASERCAN_STATUS_NOISE_ISSUE;
+            inputs.weakSignal = measurement.status == LaserCan.LASERCAN_STATUS_WEAK_SIGNAL;
+            inputs.outOfBounds = measurement.status == LaserCan.LASERCAN_STATUS_OUT_OF_BOUNDS;
+            inputs.wrapAround = measurement.status == LaserCan.LASERCAN_STATUS_WRAPAROUND;
+        }
     }
 
     @Override

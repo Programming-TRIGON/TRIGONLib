@@ -18,12 +18,12 @@ public class LaserCAN {
     /**
      * Creates a new LaserCAN with the given CAN ID and name.
      *
-     * @param canID the ID of the LaserCAN on the CANBUS
-     * @param name  the name of the LaserCAN
+     * @param id   the ID of the LaserCAN on the CANBUS
+     * @param name the name of the LaserCAN
      */
-    public LaserCAN(int canID, String name) {
+    public LaserCAN(int id, String name) {
         this.name = name;
-        laserCANIO = LaserCANIO.generateIO(canID);
+        laserCANIO = LaserCANIO.generateIO(id);
     }
 
     /**
@@ -84,5 +84,47 @@ public class LaserCAN {
      */
     public double getDistanceMillimeters() {
         return inputs.distanceMillimeters;
+    }
+
+    /**
+     * @return the ambient light measured by the sensor
+     */
+    public int getAmbientLight() {
+        return inputs.ambientLight;
+    }
+
+    /**
+     * @return whether the sensor has a result
+     */
+    public boolean hasResult() {
+        return inputs.hasResult;
+    }
+
+    /**
+     * @return whether the result of the sensor has high noise or not
+     */
+    public boolean hasHighNoise() {
+        return inputs.highNoise;
+    }
+
+    /**
+     * @return whether the sensor has a weak signal
+     */
+    public boolean hasWeakSignal() {
+        return inputs.weakSignal;
+    }
+
+    /**
+     * @return whether the result of the sensor is out of bounds
+     */
+    public boolean isOutOfBounds() {
+        return inputs.outOfBounds;
+    }
+
+    /**
+     * @return whether the result of the sensor is a wraparound
+     */
+    public boolean isWrapAround() {
+        return inputs.wrapAround;
     }
 }
