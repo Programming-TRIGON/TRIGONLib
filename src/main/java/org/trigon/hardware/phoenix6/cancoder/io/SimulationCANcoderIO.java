@@ -2,6 +2,7 @@ package org.trigon.hardware.phoenix6.cancoder.io;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.sim.CANcoderSimState;
 import org.trigon.hardware.phoenix6.cancoder.CANcoderIO;
 
@@ -34,8 +35,8 @@ public class SimulationCANcoderIO extends CANcoderIO {
 
     @Override
     public void applyConfiguration(CANcoderConfiguration configuration) {
-        configuration.MagnetSensor.MagnetOffset = 0;
-        cancoder.getConfigurator().apply(configuration);
+        final CANcoderConfiguration adaptedConfiguration = adaptConfigurationToSimulation(configuration);
+        cancoder.getConfigurator().apply(adaptedConfiguration);
     }
 
     @Override
@@ -51,5 +52,19 @@ public class SimulationCANcoderIO extends CANcoderIO {
     @Override
     public CANcoder getCANcoder() {
         return cancoder;
+    }
+
+    /**
+     * Adapts the configuration for simulation. There are some setting that don't work well in simulation and need to be adapted.
+     * There's no reason to use the sensor direction in simulation, and it can sometimes cause problems so it is always set to CounterClockwise_Positive.
+     * The magnet offset is set to 0 because the magnet offset is not used in simulation.
+     *
+     * @param configuration The configuration to adapt
+     * @return The adapted configuration
+     */
+    private CANcoderConfiguration adaptConfigurationToSimulation(CANcoderConfiguration configuration) {
+        configuration.MagnetSensor.MagnetOffset = 0;
+        configuration.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        return configuration;
     }
 }
