@@ -105,7 +105,7 @@ public class GearRatioCalculationCommand extends Command {
         this.subsystemName = requirement.getName();
         this.backlashAccountabilityTimeSeconds = backlashAccountabilityTimeSeconds;
 
-        this.movementVoltage = new LoggedNetworkNumber("/GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
+        this.movementVoltage = new LoggedNetworkNumber("/SmartDashboard/GearRatioCalculation/" + this.subsystemName + "/Voltage", 1);
 
         addRequirements(requirement);
     }

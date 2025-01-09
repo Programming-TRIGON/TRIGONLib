@@ -23,8 +23,8 @@ import java.util.function.Supplier;
  * A command for characterizing the wheel radius of each module of a swerve drive system by calculating the radius of each drive wheel based on rotational data and robot yaw during operation.
  */
 public class WheelRadiusCharacterizationCommand extends Command {
-    private static final LoggedNetworkNumber CHARACTERIZATION_SPEED = new LoggedNetworkNumber("/WheelRadiusCharacterization/SpeedRadiansPerSecond", 1);
-    private static final LoggedNetworkNumber ROTATION_RATE_LIMIT = new LoggedNetworkNumber("/WheelRadiusCharacterization/RotationRateLimit", 1);
+    private static final LoggedNetworkNumber CHARACTERIZATION_SPEED = new LoggedNetworkNumber("/SmartDashboard/WheelRadiusCharacterization/SpeedRadiansPerSecond", 1);
+    private static final LoggedNetworkNumber ROTATION_RATE_LIMIT = new LoggedNetworkNumber("/SmartDashboard/WheelRadiusCharacterization/RotationRateLimit", 1);
 
     private final double[]
             wheelDistancesFromCenterMeters,
