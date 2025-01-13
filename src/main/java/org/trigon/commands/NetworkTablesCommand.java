@@ -29,9 +29,8 @@ public class NetworkTablesCommand extends Command {
     public NetworkTablesCommand(Consumer<Double[]> toRun, boolean runPeriodically, Set<Subsystem> requirements, String... keys) {
         this.toRun = toRun;
         this.runPeriodically = runPeriodically;
-        dashboardNumbers = new LoggedNetworkNumber[keys.length];
-        for (int i = 0; i < keys.length; i++)
-            dashboardNumbers[i] = new LoggedNetworkNumber("/SmartDashboard/" + keys[i], 0);
+        this.dashboardNumbers = generateDashboardNumbers(keys);
+
         addRequirements(requirements.toArray(new Subsystem[0]));
     }
 
@@ -120,10 +119,21 @@ public class NetworkTablesCommand extends Command {
         return (Double[] values) -> commandCreator.apply(values).initialize();
     }
 
+    private LoggedNetworkNumber[] generateDashboardNumbers(String... keys) {
+        LoggedNetworkNumber[] toReturn = new LoggedNetworkNumber[keys.length];
+
+        for (int i = 0; i < keys.length; i++)
+            toReturn[i] = new LoggedNetworkNumber("/SmartDashboard/" + keys[i], 0);
+
+        return toReturn;
+    }
+
     private Double[] getDashboardNumbersValues() {
-        Double[] values = new Double[dashboardNumbers.length];
+        final Double[] values = new Double[dashboardNumbers.length];
+
         for (int i = 0; i < dashboardNumbers.length; i++)
             values[i] = dashboardNumbers[i].get();
+
         return values;
     }
 }
