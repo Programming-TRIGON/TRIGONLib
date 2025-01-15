@@ -2,6 +2,7 @@ package org.trigon.hardware.misc.servo;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.Logger;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
  * A wrapper class representing a servo motor.
@@ -76,5 +77,14 @@ public class Servo {
      */
     public double getSpeed() {
         return inputs.speed;
+    }
+
+    /**
+     * Set the physics simulation for the servo. Must be called for the servo to work in simulation.
+     *
+     * @param physicsSimulation the physics simulation to be used
+     */
+    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
+        servoIO.setPhysicsSimulation(physicsSimulation);
     }
 }

@@ -222,7 +222,7 @@ public class SparkMotor {
     }
 
     /**
-     * Sets the physics simulation to be used by the motor. Needs to be called for the motor to work in simulation.
+     * Sets the physics simulation to be used by the motor. Must be called for the motor to work in simulation.
      *
      * @param physicsSimulation      the physics simulation to be used
      * @param isUsingAbsoluteEncoder whether the motor is using a relative encoder or an absolute encoder
