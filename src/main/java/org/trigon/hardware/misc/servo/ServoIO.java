@@ -24,15 +24,11 @@ public class ServoIO {
     protected void setAngle(Rotation2d angle) {
     }
 
-    protected void setPosition(double position) {
-    }
-
     protected void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {
     }
 
     @AutoLog
     protected static class ServoInputs {
-        public double positionRotations = 0;
         public Rotation2d targetAngle = Rotation2d.fromDegrees(0);
         public double speed = 0;
     }

@@ -51,16 +51,6 @@ public class Servo {
     }
 
     /**
-     * Set the position of the servo.
-     * Servo values range from 0 to 1 corresponding to the range of full left to full right.
-     *
-     * @param position the position of the servo between 0 and 1
-     */
-    public void setPosition(double position) {
-        servoIO.setPosition(position);
-    }
-
-    /**
      * Set the bounds on the PWM pulse widths.
      * The values determine the upper and lower speeds as well as the deadband bracket.
      *
@@ -79,13 +69,6 @@ public class Servo {
      */
     public Rotation2d getTargetAngle() {
         return inputs.targetAngle;
-    }
-
-    /**
-     * @return the position of the servo in rotations
-     */
-    public double getPositionRotations() {
-        return inputs.positionRotations;
     }
 
     /**

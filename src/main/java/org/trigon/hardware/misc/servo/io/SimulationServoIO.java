@@ -17,7 +17,6 @@ public class SimulationServoIO extends ServoIO {
 
     @Override
     protected void updateInputs(ServoInputsAutoLogged inputs) {
-        inputs.positionRotations = servoSim.getPosition();
         inputs.targetAngle = Rotation2d.fromDegrees(servoSim.getPosition() * getServoAngleRange() + MIN_SERVO_ANGLE_DEGREES);
         inputs.speed = servoSim.getSpeed();
     }
@@ -30,12 +29,7 @@ public class SimulationServoIO extends ServoIO {
     @Override
     protected void setAngle(Rotation2d angle) {
         final double clampedAngleDegrees = Conversions.clampToRange(angle.getDegrees(), MIN_SERVO_ANGLE_DEGREES, MAX_SERVO_ANGLE_DEGREES);
-        setPosition((clampedAngleDegrees - MIN_SERVO_ANGLE_DEGREES) / getServoAngleRange());
-    }
-
-    @Override
-    protected void setPosition(double position) {
-        servoSim.setPosition(position);
+        servoSim.setPosition((clampedAngleDegrees - MIN_SERVO_ANGLE_DEGREES) / getServoAngleRange());
     }
 
     private double getServoAngleRange() {
