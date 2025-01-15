@@ -9,8 +9,8 @@ import org.trigon.hardware.misc.servo.ServoInputsAutoLogged;
 public class SimulationServoIO extends ServoIO {
     private final SimDeviceSim simulationServo;
 
-    public SimulationServoIO(String name) {
-        simulationServo = new SimDeviceSim(name);
+    public SimulationServoIO(int channel, String name) {
+        simulationServo = new SimDeviceSim(name, channel);
     }
 
     @Override

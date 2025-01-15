@@ -11,7 +11,7 @@ public class ServoIO {
         if (RobotHardwareStats.isReplay())
             return new ServoIO();
         if (RobotHardwareStats.isSimulation())
-            return new SimulationServoIO(name);
+            return new SimulationServoIO(channel, name);
         return new RealServoIO(channel);
     }
 
