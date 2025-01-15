@@ -6,14 +6,12 @@ import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.misc.servo.io.RealServoIO;
 import org.trigon.hardware.misc.servo.io.SimulationServoIO;
 
-import java.util.function.DoubleSupplier;
-
 public class ServoIO {
-    static ServoIO generateServoIO(int channel) {
+    static ServoIO generateServoIO(int channel, String name) {
         if (RobotHardwareStats.isReplay())
             return new ServoIO();
         if (RobotHardwareStats.isSimulation())
-            return new SimulationServoIO();
+            return new SimulationServoIO(name);
         return new RealServoIO(channel);
     }
 
@@ -30,9 +28,6 @@ public class ServoIO {
     }
 
     protected void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {
-    }
-
-    protected void setSimulationSupplier(DoubleSupplier simulationValueSupplier) {
     }
 
     @AutoLog

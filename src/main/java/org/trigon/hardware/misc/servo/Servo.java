@@ -3,8 +3,6 @@ package org.trigon.hardware.misc.servo;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.function.DoubleSupplier;
-
 /**
  * A wrapper class representing a servo motor.
  */
@@ -21,7 +19,7 @@ public class Servo {
      */
     public Servo(int channel, String name) {
         this.name = name;
-        servoIO = ServoIO.generateServoIO(channel);
+        servoIO = ServoIO.generateServoIO(channel, name);
     }
 
     /**
@@ -74,15 +72,6 @@ public class Servo {
      */
     public void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {
         servoIO.setBoundsMicroseconds(maxPulseWidthMicroseconds, maxDeadbandRangeMicroseconds, centerPulseMicroseconds, minDeadbandRangeMicroseconds, minPulseWidthMicroseconds);
-    }
-
-    /**
-     * Set the simulation supplier for the servo. The supplier is used to get the position of the servo in simulation.
-     *
-     * @param simulationValueSupplier the simulation supplier
-     */
-    public void setSimulationSupplier(DoubleSupplier simulationValueSupplier) {
-        servoIO.setSimulationSupplier(simulationValueSupplier);
     }
 
     /**
