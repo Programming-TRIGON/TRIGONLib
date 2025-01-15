@@ -19,7 +19,7 @@ public class Servo {
      */
     public Servo(int channel, String name) {
         this.name = name;
-        servoIO = ServoIO.generateServoIO(channel, name);
+        servoIO = ServoIO.generateServoIO(channel);
     }
 
     /**

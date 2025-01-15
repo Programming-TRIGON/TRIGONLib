@@ -7,11 +7,11 @@ import org.trigon.hardware.misc.servo.io.RealServoIO;
 import org.trigon.hardware.misc.servo.io.SimulationServoIO;
 
 public class ServoIO {
-    static ServoIO generateServoIO(int channel, String name) {
+    static ServoIO generateServoIO(int channel) {
         if (RobotHardwareStats.isReplay())
             return new ServoIO();
         if (RobotHardwareStats.isSimulation())
-            return new SimulationServoIO(channel, name);
+            return new SimulationServoIO(channel);
         return new RealServoIO(channel);
     }
 
