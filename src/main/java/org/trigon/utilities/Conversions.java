@@ -240,20 +240,6 @@ public class Conversions {
     }
 
     /**
-     * Clamps a value to a given range.
-     * If the value is less than the minimum, the minimum is returned.
-     * If the value is greater than the maximum, the maximum is returned.
-     *
-     * @param value the value to clamp
-     * @param min   the minimum value
-     * @param max   the maximum value
-     * @return the clamped value
-     */
-    public static double clampToRange(double value, double min, double max) {
-        return Math.min(max, Math.max(min, value));
-    }
-
-    /**
      * Converts a string from SNAKE_CASE to CamelCase.
      *
      * @param input the string to convert

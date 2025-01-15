@@ -5,6 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.misc.servo.io.RealServoIO;
 import org.trigon.hardware.misc.servo.io.SimulationServoIO;
+import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 public class ServoIO {
     static ServoIO generateServoIO(int channel) {
@@ -18,13 +19,19 @@ public class ServoIO {
     protected void updateInputs(ServoInputsAutoLogged inputs) {
     }
 
-    protected void setSpeed(double speed) {
+    protected void updateSimulation() {
     }
 
-    protected void setAngle(Rotation2d angle) {
+    protected void setTargetSpeed(double targetSpeed) {
+    }
+
+    protected void setTargetAngle(Rotation2d targetAngle) {
     }
 
     protected void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {
+    }
+
+    protected void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
     }
 
     @AutoLog

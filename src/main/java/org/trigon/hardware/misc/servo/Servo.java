@@ -34,20 +34,20 @@ public class Servo {
      * Set the PWM value based on a speed.
      * Should be called before {@link #setBoundsMicroseconds(int, int, int, int, int)} is called.
      *
-     * @param speed the speed of the servo between -1.0 and 1.0.
+     * @param targetSpeed the speed of the servo between -1.0 and 1.0.
      */
-    public void setSpeed(double speed) {
-        servoIO.setSpeed(speed);
+    public void setTargetSpeed(double targetSpeed) {
+        servoIO.setTargetSpeed(targetSpeed);
     }
 
     /**
      * Set the angle of the servo.
      * Servo angles that are out of the supported range of the servo, the servo will go to the closest angle in the supported range.
      *
-     * @param angle the angle of the servo
+     * @param targetAngle the angle of the servo
      */
-    public void setAngle(Rotation2d angle) {
-        servoIO.setAngle(angle);
+    public void setTargetAngle(Rotation2d targetAngle) {
+        servoIO.setTargetAngle(targetAngle);
     }
 
     /**

@@ -19,13 +19,13 @@ public class RealServoIO extends ServoIO {
     }
 
     @Override
-    protected void setSpeed(double speed) {
-        servo.setSpeed(speed);
+    protected void setTargetSpeed(double targetSpeed) {
+        servo.setSpeed(targetSpeed);
     }
 
     @Override
-    protected void setAngle(Rotation2d angle) {
-        servo.setAngle(angle.getDegrees());
+    protected void setTargetAngle(Rotation2d targetAngle) {
+        servo.setAngle(targetAngle.getDegrees());
     }
 
     @Override
