@@ -42,10 +42,21 @@ public class Servo {
     }
 
     /**
-     * Set the angle of the servo.
-     * Servo angles that are out of the supported range of the servo, the servo will go to the closest angle in the supported range.
+     * Sets the servo position using a scaled 0 to 1.0 value. 0 corresponds to one extreme of the servo and 1.0 corresponds to the other
+     * This method works regardless of the types of servo being used.
      *
-     * @param targetAngle the angle of the servo
+     * @param targetScaledPosition the target position of the servo on a scale between 0 and 1
+     */
+    public void setTargetScaledPosition(double targetScaledPosition) {
+        servoIO.setTargetScaledPosition(targetScaledPosition);
+    }
+
+    /**
+     * Set the servo position by specifying the angle.
+     * This method will work for servos with the range of 0 to 180 degrees.
+     * Any values passed to this method outside the specified range will be coerced to the boundary.
+     *
+     * @param targetAngle the angle of the servo between 0 and 180 degrees
      */
     public void setTargetAngle(Rotation2d targetAngle) {
         servoIO.setTargetAngle(targetAngle);
@@ -73,10 +84,10 @@ public class Servo {
     }
 
     /**
-     * @return the speed of the servo
+     * @return the targetSpeed of the servo
      */
     public double getSpeed() {
-        return inputs.speed;
+        return inputs.targetSpeed;
     }
 
     /**

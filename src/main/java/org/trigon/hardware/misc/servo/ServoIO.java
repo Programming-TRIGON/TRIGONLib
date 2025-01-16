@@ -28,6 +28,9 @@ public class ServoIO {
     protected void setTargetAngle(Rotation2d targetAngle) {
     }
 
+    protected void setTargetScaledPosition(double targetScaledPosition) {
+    }
+
     protected void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {
     }
 
@@ -37,6 +40,7 @@ public class ServoIO {
     @AutoLog
     protected static class ServoInputs {
         public Rotation2d targetAngle = Rotation2d.fromDegrees(0);
-        public double speed = 0;
+        public double targetScaledPosition = 0;
+        public double targetSpeed = 0;
     }
 }
