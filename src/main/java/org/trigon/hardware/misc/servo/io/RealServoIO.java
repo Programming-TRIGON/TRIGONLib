@@ -7,10 +7,10 @@ import org.trigon.hardware.misc.servo.ServoIO;
 import org.trigon.hardware.misc.servo.ServoInputsAutoLogged;
 
 public class RealServoIO extends ServoIO {
+    private final Servo servo;
     private Rotation2d
             maxServoAngle = Rotation2d.fromDegrees(180),
             minServoAngle = Rotation2d.fromDegrees(0);
-    private final Servo servo;
 
     public RealServoIO(int channel) {
         servo = new Servo(channel);
