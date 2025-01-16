@@ -15,7 +15,7 @@ public class SimulationServoIO extends ServoIO {
 
     @Override
     protected void updateInputs(ServoInputsAutoLogged inputs) {
-        inputs.targetAngle = Rotation2d.fromDegrees(targetScaledPosition * getServoAngleRange() + minServoAngle.getDegrees());
+        inputs.targetAngle = Rotation2d.fromDegrees(targetScaledPosition * getServoAngleRange().getDegrees() + minServoAngle.getDegrees());
         inputs.targetScaledPosition = targetScaledPosition;
         inputs.targetSpeed = targetSpeed;
     }
@@ -33,7 +33,7 @@ public class SimulationServoIO extends ServoIO {
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
         final double clampedAngleDegrees = MathUtil.clamp(targetAngle.getDegrees(), minServoAngle.getDegrees(), maxServoAngle.getDegrees());
-        targetScaledPosition = clampedAngleDegrees - (minServoAngle.getDegrees() / getServoAngleRange());
+        targetScaledPosition = clampedAngleDegrees - (minServoAngle.getDegrees() / getServoAngleRange().getDegrees());
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SimulationServoIO extends ServoIO {
         maxServoAngle = maxAngle;
     }
 
-    private double getServoAngleRange() {
-        return maxServoAngle.getDegrees() - minServoAngle.getDegrees();
+    private Rotation2d getServoAngleRange() {
+        return maxServoAngle.minus(minServoAngle);
     }
 }
