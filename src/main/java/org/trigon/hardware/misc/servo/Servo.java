@@ -2,7 +2,6 @@ package org.trigon.hardware.misc.servo;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.Logger;
-import org.trigon.hardware.simulation.MotorPhysicsSimulation;
 
 /**
  * A wrapper class representing a servo motor.
@@ -53,10 +52,9 @@ public class Servo {
 
     /**
      * Set the servo position by specifying the angle.
-     * This method will work for servos with the range of 0 to 180 degrees.
-     * Any values passed to this method outside the specified range will be coerced to the boundary.
+     * Any values passed to this method outside the range set in {@link Servo#setRange(Rotation2d, Rotation2d)} will be coerced to the boundary.
      *
-     * @param targetAngle the angle of the servo between 0 and 180 degrees
+     * @param targetAngle the angle of the servo
      */
     public void setTargetAngle(Rotation2d targetAngle) {
         servoIO.setTargetAngle(targetAngle);
@@ -77,6 +75,18 @@ public class Servo {
     }
 
     /**
+     * Set the range of the servo.
+     * This depends on the type of servo being used, and should be called once before being used.
+     * The range is 0 to 180 degrees by default.
+     *
+     * @param minAngle the minimum angle of the servo
+     * @param maxAngle the maximum angle of the servo
+     */
+    public void setRange(Rotation2d minAngle, Rotation2d maxAngle) {
+        servoIO.setRange(minAngle, maxAngle);
+    }
+
+    /**
      * @return the target angle of the servo
      */
     public Rotation2d getTargetAngle() {
@@ -88,14 +98,5 @@ public class Servo {
      */
     public double getSpeed() {
         return inputs.targetSpeed;
-    }
-
-    /**
-     * Set the physics simulation for the servo. Must be called for the servo to work in simulation.
-     *
-     * @param physicsSimulation the physics simulation to be used
-     */
-    public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
-        servoIO.setPhysicsSimulation(physicsSimulation);
     }
 }
