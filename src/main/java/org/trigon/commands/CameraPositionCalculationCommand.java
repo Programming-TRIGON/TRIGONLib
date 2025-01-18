@@ -40,7 +40,6 @@ public class CameraPositionCalculationCommand extends Command {
         if (currentPose != null)
             endPose = currentPose;
 
-        endPose = cameraPoseSupplier.get();
         logRobotToCamera();
     }
 
