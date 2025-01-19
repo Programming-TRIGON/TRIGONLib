@@ -7,10 +7,9 @@ import org.trigon.hardware.misc.servo.ServoIO;
 import org.trigon.hardware.misc.servo.ServoInputsAutoLogged;
 
 public class RealServoIO extends ServoIO {
+    private static final Rotation2d MIN_SERVO_ANGLE = Rotation2d.fromDegrees(0);
     private final Servo servo;
-    private Rotation2d
-            maxServoAngle = Rotation2d.fromDegrees(180),
-            minServoAngle = Rotation2d.fromDegrees(0);
+    private Rotation2d maxServoAngle = Rotation2d.fromDegrees(180);
 
     public RealServoIO(int channel) {
         servo = new Servo(channel);
@@ -19,7 +18,7 @@ public class RealServoIO extends ServoIO {
     @Override
     protected void updateInputs(ServoInputsAutoLogged inputs) {
         inputs.targetScaledPosition = servo.get();
-        inputs.targetAngle = Rotation2d.fromDegrees(servo.get() * getServoAngleRange().getDegrees() + minServoAngle.getDegrees());
+        inputs.targetAngle = Rotation2d.fromDegrees(servo.get() * getServoAngleRange().getDegrees() + MIN_SERVO_ANGLE.getDegrees());
         inputs.targetSpeed = servo.getSpeed();
     }
 
@@ -45,20 +44,19 @@ public class RealServoIO extends ServoIO {
     }
 
     @Override
-    protected void setRange(Rotation2d minAngle, Rotation2d maxAngle) {
-        minServoAngle = minAngle;
+    protected void setMaxAngle(Rotation2d maxAngle) {
         maxServoAngle = maxAngle;
     }
 
     private double calculateScaledPosition(Rotation2d angle) {
-        return angle.minus(minServoAngle).getDegrees() / getServoAngleRange().getDegrees();
+        return angle.minus(MIN_SERVO_ANGLE).getDegrees() / getServoAngleRange().getDegrees();
     }
 
     private Rotation2d clampAngleToRange(Rotation2d angle) {
-        return Rotation2d.fromDegrees(MathUtil.clamp(angle.getDegrees(), minServoAngle.getDegrees(), maxServoAngle.getDegrees()));
+        return Rotation2d.fromDegrees(MathUtil.clamp(angle.getDegrees(), MIN_SERVO_ANGLE.getDegrees(), maxServoAngle.getDegrees()));
     }
 
     private Rotation2d getServoAngleRange() {
-        return maxServoAngle.minus(minServoAngle);
+        return maxServoAngle.minus(MIN_SERVO_ANGLE);
     }
 }
