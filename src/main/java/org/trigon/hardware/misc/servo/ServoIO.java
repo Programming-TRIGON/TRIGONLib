@@ -24,7 +24,7 @@ public class ServoIO {
     protected void setTargetAngle(Rotation2d targetAngle) {
     }
 
-    protected void setTargetScaledPosition(double targetScaledPosition) {
+    protected void set(double value) {
     }
 
     protected void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {

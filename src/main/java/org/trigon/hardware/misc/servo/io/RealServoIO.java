@@ -18,8 +18,8 @@ public class RealServoIO extends ServoIO {
 
     @Override
     protected void updateInputs(ServoInputsAutoLogged inputs) {
-        inputs.targetScaledPosition = servo.getPosition();
-        inputs.targetAngle = Rotation2d.fromDegrees(inputs.targetScaledPosition * getServoAngleRange().getDegrees() + minServoAngle.getDegrees());
+        inputs.targetScaledPosition = servo.get();
+        inputs.targetAngle = Rotation2d.fromDegrees(servo.get() * getServoAngleRange().getDegrees() + minServoAngle.getDegrees());
         inputs.targetSpeed = servo.getSpeed();
     }
 
@@ -30,13 +30,13 @@ public class RealServoIO extends ServoIO {
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        final Rotation2d clampedTargetAngle = Rotation2d.fromDegrees(MathUtil.clamp(targetAngle.getDegrees(), minServoAngle.getDegrees(), maxServoAngle.getDegrees()));
-        servo.setPosition(clampedTargetAngle.minus(minServoAngle).getDegrees() / getServoAngleRange().getDegrees());
+        final Rotation2d clampedTargetAngle = clampAngleToRange(targetAngle);
+        servo.set(calculateScaledPosition(clampedTargetAngle));
     }
 
     @Override
-    protected void setTargetScaledPosition(double targetScaledPosition) {
-        servo.setPosition(targetScaledPosition);
+    protected void set(double value) {
+        servo.set(value);
     }
 
     @Override
@@ -48,6 +48,14 @@ public class RealServoIO extends ServoIO {
     protected void setRange(Rotation2d minAngle, Rotation2d maxAngle) {
         minServoAngle = minAngle;
         maxServoAngle = maxAngle;
+    }
+
+    private double calculateScaledPosition(Rotation2d angle) {
+        return angle.minus(minServoAngle).getDegrees() / getServoAngleRange().getDegrees();
+    }
+
+    private Rotation2d clampAngleToRange(Rotation2d angle) {
+        return Rotation2d.fromDegrees(MathUtil.clamp(angle.getDegrees(), minServoAngle.getDegrees(), maxServoAngle.getDegrees()));
     }
 
     private Rotation2d getServoAngleRange() {

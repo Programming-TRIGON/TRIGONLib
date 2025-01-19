@@ -26,8 +26,8 @@ public class SimulationServoIO extends ServoIO {
     }
 
     @Override
-    protected void setTargetScaledPosition(double targetScaledPosition) {
-        this.targetScaledPosition = MathUtil.clamp(targetScaledPosition, 0, 1);
+    protected void set(double value) {
+        this.targetScaledPosition = MathUtil.clamp(value, 0, 1);
     }
 
     @Override

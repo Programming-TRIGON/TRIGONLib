@@ -43,11 +43,13 @@ public class Servo {
     /**
      * Sets the servo position using a scaled 0 to 1.0 value. 0 corresponds to one extreme of the servo and 1.0 corresponds to the other
      * This method works regardless of the types of servo being used.
+     * For speed servos this will set the speed of the servo.
+     * For angle servos this will set the angle of the servo depending on the range given in {@link Servo#setRange(Rotation2d, Rotation2d)}.
      *
-     * @param targetScaledPosition the target position of the servo on a scale between 0 and 1
+     * @param value the target position/speed of the servo on a scale between 0 and 1
      */
-    public void setTargetScaledPosition(double targetScaledPosition) {
-        servoIO.setTargetScaledPosition(targetScaledPosition);
+    public void set(double value) {
+        servoIO.set(value);
     }
 
     /**
