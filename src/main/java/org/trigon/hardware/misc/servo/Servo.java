@@ -95,13 +95,6 @@ public class Servo {
     }
 
     /**
-     * @return the target scaled position of the servo
-     */
-    public double getTargetScaledPosition() {
-        return inputs.targetScaledPosition;
-    }
-
-    /**
      * @return the targetSpeed of the servo
      */
     public double getSpeed() {
