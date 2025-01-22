@@ -25,6 +25,8 @@ public class CameraPositionCalculationCommand extends Command {
         this.cameraPoseSupplier = cameraPoseSupplier;
         this.cameraMountAngle = cameraMountAngle;
         this.rotateRobot = rotateRobot;
+
+        addRequirements(requirement);
     }
 
     @Override
