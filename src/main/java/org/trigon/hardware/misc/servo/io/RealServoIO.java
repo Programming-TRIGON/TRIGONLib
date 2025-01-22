@@ -17,7 +17,6 @@ public class RealServoIO extends ServoIO {
 
     @Override
     protected void updateInputs(ServoInputsAutoLogged inputs) {
-        inputs.targetScaledPosition = servo.get();
         inputs.targetAngle = Rotation2d.fromDegrees(servo.get() * getServoAngleRange().getDegrees() + MIN_SERVO_ANGLE.getDegrees());
         inputs.targetSpeed = servo.getSpeed();
     }

@@ -15,7 +15,6 @@ public class SimulationServoIO extends ServoIO {
     @Override
     protected void updateInputs(ServoInputsAutoLogged inputs) {
         inputs.targetAngle = Rotation2d.fromDegrees(targetScaledPosition * getServoAngleRange().getDegrees() + MIN_SERVO_ANGLE.getDegrees());
-        inputs.targetScaledPosition = targetScaledPosition;
         inputs.targetSpeed = targetSpeed;
     }
 

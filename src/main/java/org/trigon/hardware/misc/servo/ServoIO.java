@@ -36,7 +36,6 @@ public class ServoIO {
     @AutoLog
     protected static class ServoInputs {
         public Rotation2d targetAngle = Rotation2d.fromDegrees(0);
-        public double targetScaledPosition = 0;
         public double targetSpeed = 0;
     }
 }
