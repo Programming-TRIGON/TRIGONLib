@@ -97,7 +97,7 @@ public class Servo {
     /**
      * @return the targetSpeed of the servo
      */
-    public double getSpeed() {
+    public double getTargetSpeed() {
         return inputs.targetSpeed;
     }
 }
