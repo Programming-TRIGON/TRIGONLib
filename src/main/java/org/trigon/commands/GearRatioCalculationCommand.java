@@ -114,6 +114,7 @@ public class GearRatioCalculationCommand extends Command {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         gearRatio = 0;
+        hasSetStartingPositions = false;
         resetLogs();
     }
 
