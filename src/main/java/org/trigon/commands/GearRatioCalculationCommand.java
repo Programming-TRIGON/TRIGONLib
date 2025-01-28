@@ -132,6 +132,7 @@ public class GearRatioCalculationCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        runGearRatioCalculation.accept(0);
         gearRatio = calculateGearRatio();
         logGearRatioAndDistance();
         printResult();
@@ -154,9 +155,9 @@ public class GearRatioCalculationCommand extends Command {
     }
 
     private void resetLogs() {
-        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", 0);
-        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", 0);
-        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", 0);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/RotorDistance", 0.0);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/EncoderDistance", 0.0);
+        Logger.recordOutput("GearRatioCalculation/" + subsystemName + "/GearRatio", 0.0);
     }
 
     private double calculateGearRatio() {
