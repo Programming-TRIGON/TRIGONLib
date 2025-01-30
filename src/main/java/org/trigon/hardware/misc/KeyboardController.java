@@ -17,7 +17,7 @@ public class KeyboardController {
             rightShift, leftCtrl, leftAlt, rightCtrl,
             left, right, up, down, numpad0, numpad1, numpad2,
             numpad3, numpad4, numpad5, numpad6, numpad7, numpad8,
-            numpad9;
+            numpad9, numpadDecimal;
 
     /**
      * Construct an instance of a device.
@@ -101,6 +101,7 @@ public class KeyboardController {
         numpad7 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad7");
         numpad8 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad8");
         numpad9 = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpad9");
+        numpadDecimal = new LoggedNetworkBoolean("/SmartDashboard/keyboard/numpaddecimal");
     }
 
     public Trigger esc() {
@@ -413,5 +414,9 @@ public class KeyboardController {
 
     public Trigger numpad9() {
         return new Trigger(numpad9::get);
+    }
+
+    public Trigger numpadDecimal() {
+        return new Trigger(numpadDecimal::get);
     }
 }
