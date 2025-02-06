@@ -33,7 +33,6 @@ public class RealLaserCANIO extends LaserCANIO {
         laserCan.setRangingMode(rangingMode);
     }
 
-
     @Override
     protected void setRegionOfInterest(int startX, int startY, int endX, int endY) throws ConfigurationFailedException {
         laserCan.setRegionOfInterest(new LaserCan.RegionOfInterest(startX, startY, endX - startX, endY - startY));

@@ -13,7 +13,7 @@ public class LaserCANIO {
     static LaserCANIO generateIO(int id) {
         if (RobotHardwareStats.isReplay())
             return new LaserCANIO();
-        else if (RobotHardwareStats.isSimulation())
+        if (RobotHardwareStats.isSimulation())
             return new SimulationLaserCANIO();
         return new RealLaserCANIO(id);
     }
