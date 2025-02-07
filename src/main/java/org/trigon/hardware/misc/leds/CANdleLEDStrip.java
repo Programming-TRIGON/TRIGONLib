@@ -97,9 +97,9 @@ public class CANdleLEDStrip extends LEDStrip {
     void alternateColor(Color firstColor, Color secondColor) {
         for (int i = 0; i < numberOfLEDs; i++)
             CANDLE.setLEDs(
-                    (int) (i % 2 == 0 ? firstColor.red : secondColor.red),
-                    (int) (i % 2 == 0 ? firstColor.green : secondColor.green),
-                    (int) (i % 2 == 0 ? firstColor.blue : secondColor.blue),
+                    (int) (isEven(i) ? firstColor.red : secondColor.red),
+                    (int) (isEven(i) ? firstColor.green : secondColor.green),
+                    (int) (isEven(i) ? firstColor.blue : secondColor.blue),
                     0,
                     i + indexOffset,
                     1
@@ -156,5 +156,9 @@ public class CANdleLEDStrip extends LEDStrip {
                     i == amountOfSections - 1 ? numberOfLEDs - 1 : ledsPerSection * (i + 1) - 1
             );
         }
+    }
+
+    private boolean isEven(int number) {
+        return number % 2 == 0;
     }
 }
