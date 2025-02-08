@@ -85,7 +85,7 @@ public class Phoenix6Inputs extends InputsBase {
     }
 
     private void updateSignalsToTable(LogTable table) {
-        for (int i = firstInputIndex; i < ALL_SIGNALS.length; i++) {
+        for (int i = firstInputIndex; i < firstInputIndex + numberOfInputs; i++) {
             final BaseStatusSignal signal = ALL_SIGNALS[i];
             if (signal.getName().equals("ClosedLoopReference")) // This signal isn't updated correctly by `BaseStatusSignal.updateAll` for some reason.
                 ((StatusSignal<Double>) signal).refresh();
