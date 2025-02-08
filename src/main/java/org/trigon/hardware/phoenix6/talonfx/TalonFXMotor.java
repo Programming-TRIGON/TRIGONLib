@@ -43,7 +43,7 @@ public class TalonFXMotor {
     public TalonFXMotor(int id, String motorName, String canbus) {
         this.motorName = motorName;
         this.motorIO = generateIO(id, canbus);
-        this.motorInputs = new Phoenix6Inputs(motorName);
+        this.motorInputs = new Phoenix6Inputs(motorName, !canbus.isEmpty());
         this.id = id;
         motorIO.optimizeBusUsage();
     }

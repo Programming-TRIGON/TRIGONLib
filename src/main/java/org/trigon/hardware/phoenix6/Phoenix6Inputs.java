@@ -12,8 +12,11 @@ import java.util.Map;
 import java.util.Queue;
 
 public class Phoenix6Inputs extends InputsBase {
-    private static BaseStatusSignal[] ALL_SIGNALS = new BaseStatusSignal[0];
+    private static BaseStatusSignal[]
+            RIO_SIGNALS = new BaseStatusSignal[0],
+            CANIVORE_SIGNALS = new BaseStatusSignal[0];
 
+    private final boolean isCanivore;
     private final HashMap<String, Queue<Double>> signalToThreadedQueue = new HashMap<>();
     private final Phoenix6SignalThread signalThread = Phoenix6SignalThread.getInstance();
     private int firstInputIndex = -1;
@@ -22,17 +25,20 @@ public class Phoenix6Inputs extends InputsBase {
     /**
      * Creates a new Phoenix6Inputs instance.
      *
-     * @param name the name of the instance
+     * @param name       the name of the instance
+     * @param isCanivore whether the instance is running on a canivore network (CAN FD)
      */
-    public Phoenix6Inputs(String name) {
+    public Phoenix6Inputs(String name, boolean isCanivore) {
         super(name);
+        this.isCanivore = isCanivore;
     }
 
     public static void refreshAllInputs() {
         if (RobotHardwareStats.isReplay())
             return;
 
-        BaseStatusSignal.refreshAll(ALL_SIGNALS);
+        BaseStatusSignal.refreshAll(CANIVORE_SIGNALS);
+        BaseStatusSignal.refreshAll(RIO_SIGNALS);
     }
 
     @Override
@@ -76,7 +82,10 @@ public class Phoenix6Inputs extends InputsBase {
             updateFrequencyHertz = 100; // For some reason, simulation sometimes malfunctions if a status signal isn't updated frequently enough.
 
         statusSignal.setUpdateFrequency(updateFrequencyHertz);
-        addSignalToSignalsArray(statusSignal);
+        if (isCanivore)
+            addSignalToCANivoreSignalsArray(statusSignal);
+        else
+            addSignalToRIOSignalsArray(statusSignal);
     }
 
     private void updateThreadedSignalsToTable(LogTable table) {
@@ -86,22 +95,33 @@ public class Phoenix6Inputs extends InputsBase {
 
     private void updateSignalsToTable(LogTable table) {
         for (int i = firstInputIndex; i < firstInputIndex + numberOfInputs; i++) {
-            final BaseStatusSignal signal = ALL_SIGNALS[i];
-            if (signal.getName().equals("ClosedLoopReference")) // This signal isn't updated correctly by `BaseStatusSignal.updateAll` for some reason.
+            final BaseStatusSignal signal = isCanivore ? CANIVORE_SIGNALS[i] : RIO_SIGNALS[i];
+            if (signal.getName().equals("ClosedLoopReference")) // This signal isn't updated correctly by `BaseStatusSignal.refreshAll()` for some reason.
                 ((StatusSignal<Double>) signal).refresh();
 
             table.put(signal.getName(), signal.getValueAsDouble());
         }
     }
 
-    private void addSignalToSignalsArray(BaseStatusSignal statusSignal) {
+    private void addSignalToRIOSignalsArray(BaseStatusSignal statusSignal) {
         if (firstInputIndex == -1)
-            firstInputIndex = ALL_SIGNALS.length;
+            firstInputIndex = RIO_SIGNALS.length;
         numberOfInputs++;
 
-        final BaseStatusSignal[] newSignals = new BaseStatusSignal[ALL_SIGNALS.length + 1];
-        System.arraycopy(ALL_SIGNALS, 0, newSignals, 0, ALL_SIGNALS.length);
-        newSignals[ALL_SIGNALS.length] = statusSignal;
-        ALL_SIGNALS = newSignals;
+        final BaseStatusSignal[] newSignals = new BaseStatusSignal[RIO_SIGNALS.length + 1];
+        System.arraycopy(RIO_SIGNALS, 0, newSignals, 0, RIO_SIGNALS.length);
+        newSignals[RIO_SIGNALS.length] = statusSignal;
+        RIO_SIGNALS = newSignals;
+    }
+
+    private void addSignalToCANivoreSignalsArray(BaseStatusSignal statusSignal) {
+        if (firstInputIndex == -1)
+            firstInputIndex = CANIVORE_SIGNALS.length;
+        numberOfInputs++;
+
+        final BaseStatusSignal[] newSignals = new BaseStatusSignal[CANIVORE_SIGNALS.length + 1];
+        System.arraycopy(CANIVORE_SIGNALS, 0, newSignals, 0, CANIVORE_SIGNALS.length);
+        newSignals[CANIVORE_SIGNALS.length] = statusSignal;
+        CANIVORE_SIGNALS = newSignals;
     }
 }
