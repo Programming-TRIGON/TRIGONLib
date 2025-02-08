@@ -12,9 +12,12 @@ import java.util.Map;
 import java.util.Queue;
 
 public class Phoenix6Inputs extends InputsBase {
+    private static BaseStatusSignal[] ALL_SIGNALS = new BaseStatusSignal[0];
+
     private final HashMap<String, Queue<Double>> signalToThreadedQueue = new HashMap<>();
     private final Phoenix6SignalThread signalThread = Phoenix6SignalThread.getInstance();
-    private BaseStatusSignal[] signals = new BaseStatusSignal[0];
+    private int firstInputIndex = -1;
+    private int numberOfInputs = 0;
 
     /**
      * Creates a new Phoenix6Inputs instance.
@@ -25,9 +28,16 @@ public class Phoenix6Inputs extends InputsBase {
         super(name);
     }
 
+    public static void refreshAllInputs() {
+        if (RobotHardwareStats.isReplay())
+            return;
+
+        BaseStatusSignal.refreshAll(ALL_SIGNALS);
+    }
+
     @Override
     public void toLog(LogTable table) {
-        if (signals.length == 0)
+        if (numberOfInputs == 0)
             return;
 
         updateThreadedSignalsToTable(table);
@@ -75,9 +85,8 @@ public class Phoenix6Inputs extends InputsBase {
     }
 
     private void updateSignalsToTable(LogTable table) {
-        BaseStatusSignal.refreshAll(signals);
-
-        for (BaseStatusSignal signal : signals) {
+        for (int i = firstInputIndex; i < ALL_SIGNALS.length; i++) {
+            final BaseStatusSignal signal = ALL_SIGNALS[i];
             if (signal.getName().equals("ClosedLoopReference")) // This signal isn't updated correctly by `BaseStatusSignal.updateAll` for some reason.
                 ((StatusSignal<Double>) signal).refresh();
 
@@ -86,9 +95,13 @@ public class Phoenix6Inputs extends InputsBase {
     }
 
     private void addSignalToSignalsArray(BaseStatusSignal statusSignal) {
-        final BaseStatusSignal[] newSignals = new BaseStatusSignal[signals.length + 1];
-        System.arraycopy(signals, 0, newSignals, 0, signals.length);
-        newSignals[signals.length] = statusSignal;
-        signals = newSignals;
+        if (firstInputIndex == -1)
+            firstInputIndex = ALL_SIGNALS.length;
+        numberOfInputs++;
+
+        final BaseStatusSignal[] newSignals = new BaseStatusSignal[ALL_SIGNALS.length + 1];
+        System.arraycopy(ALL_SIGNALS, 0, newSignals, 0, ALL_SIGNALS.length);
+        newSignals[ALL_SIGNALS.length] = statusSignal;
+        ALL_SIGNALS = newSignals;
     }
 }

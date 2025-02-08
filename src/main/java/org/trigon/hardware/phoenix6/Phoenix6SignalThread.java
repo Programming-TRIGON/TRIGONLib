@@ -58,7 +58,7 @@ public class Phoenix6SignalThread extends SignalThreadBase {
      * @return the queue that the signal's values will be written to
      */
     public Queue<Double> registerSignal(BaseStatusSignal signal) {
-        Queue<Double> queue = new ArrayBlockingQueue<>(100);
+        final Queue<Double> queue = new ArrayBlockingQueue<>(100);
         SIGNALS_LOCK.lock();
         try {
             addSignalToSignalsArray(signal);
