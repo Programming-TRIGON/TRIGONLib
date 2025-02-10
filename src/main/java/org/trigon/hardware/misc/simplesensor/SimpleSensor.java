@@ -111,11 +111,12 @@ public class SimpleSensor {
 
     /**
      * Gets the scaled value from the sensor using the scaling constants.
+     * In simulation, just gets the value from the simulation supplier.
      *
      * @return the scaled value
      */
     public double getScaledValue() {
-        return (sensorInputs.value * scalingSlope) + scalingInterceptPoint;
+        return RobotHardwareStats.isSimulation() ? sensorInputs.value : (sensorInputs.value * scalingSlope) + scalingInterceptPoint;
     }
 
     /**
