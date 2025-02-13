@@ -43,7 +43,7 @@ public class Phoenix6Inputs extends InputsBase {
 
     @Override
     public void toLog(LogTable table) {
-        if (numberOfInputs == 0)
+        if (numberOfInputs == 0 && signalToThreadedQueue.isEmpty())
             return;
 
         updateThreadedSignalsToTable(table);
