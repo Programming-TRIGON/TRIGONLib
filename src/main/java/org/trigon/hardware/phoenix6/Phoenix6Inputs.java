@@ -63,10 +63,11 @@ public class Phoenix6Inputs extends InputsBase {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;
 
-        registerSignal(statusSignal, updateFrequencyHertz);
         if (RobotHardwareStats.isSimulation()) // You can't run signals at a high frequency in simulation. A fast thread slows down the simulation.
-            statusSignal.setUpdateFrequency(50);
-        signalToThreadedQueue.put(statusSignal.getName() + "_Threaded", signalThread.registerSignal(statusSignal));
+            updateFrequencyHertz = 50;
+        statusSignal.setUpdateFrequency(updateFrequencyHertz);
+
+        signalToThreadedQueue.put(statusSignal.getName(), signalThread.registerSignal(statusSignal));
     }
 
     /**
@@ -89,8 +90,11 @@ public class Phoenix6Inputs extends InputsBase {
     }
 
     private void updateThreadedSignalsToTable(LogTable table) {
-        for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet())
-            table.put(entry.getKey(), SignalThreadBase.queueToDoubleArray(entry.getValue()));
+        for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
+            final double[] queueAsArray = SignalThreadBase.queueToDoubleArray(entry.getValue());
+            table.put(entry.getKey() + "_Threaded", queueAsArray);
+            table.put(entry.getKey(), queueAsArray[queueAsArray.length - 1]);
+        }
     }
 
     private void updateSignalsToTable(LogTable table) {
