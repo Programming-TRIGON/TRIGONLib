@@ -1,10 +1,9 @@
 package org.trigon.utilities;
 
-import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-public class TrigonOrchestra {
-    private static final Orchestra ORCHESTRA = new Orchestra();
+public class Orchestra {
+    private static final com.ctre.phoenix6.Orchestra ORCHESTRA = new com.ctre.phoenix6.Orchestra();
 
     public static void addMotor(TalonFX motor, int trackNumber) {
         ORCHESTRA.addInstrument(motor, trackNumber);
