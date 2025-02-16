@@ -192,8 +192,8 @@ public class TalonFXMotor {
         motorIO.setBrake(brake);
     }
 
-    public void addToTrigonOrchestra(int trackNumber) {
-        Orchestra.addMotor(motorIO.getTalonFX(), trackNumber);
+    public void addToOrchestra() {
+        Orchestra.addMotor(motorIO.getTalonFX());
     }
 
     private BaseStatusSignal motorSignalToStatusSignal(TalonFXSignal signal) {
