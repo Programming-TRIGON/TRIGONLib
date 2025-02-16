@@ -4,53 +4,59 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import java.util.ArrayList;
 
+/**
+ * Software that plays music through motors.
+ */
 public class Orchestra {
     private static final com.ctre.phoenix6.Orchestra ORCHESTRA = new com.ctre.phoenix6.Orchestra();
-    private static final ArrayList<TalonFX> TALON_FXES = new ArrayList<>();
+    private static final ArrayList<TalonFX> INSTRUMENTS = new ArrayList<>();
 
     /**
-     * Adds a motor to the array list TALON_FXES to then be added to the Orchestra.
+     * Adds a motor to the array list INSTRUMENTS to then be added to the Orchestra.
      *
-     * @param motor the motor to be added to MOTORS
+     * @param motor the motor to be added to the Orchestra through INSTRUMENTS
      */
     public static void addMotor(TalonFX motor) {
-        TALON_FXES.add(motor);
+        INSTRUMENTS.add(motor);
     }
 
     /**
-     * sets a music file to the Orchestra and assigns a track to each motor added to the Orchestra.
-     * if the number of motors exceeds the amount of tracks then the extra motors will be assigned used tracks.
-     * can only assign one track to each motor
+     * Gives a music file to the Orchestra and assigns a track to each motor added to the Orchestra.
+     * Each track plays a different part of the music file; bass, harmonys, etc....
+     * If the number of motors exceeds the amount of total tracks then the extra motors will be assigned used tracks.
+     * The extra motors will receive the track number equivalent to by how much exceeded the total amount of tracks.
+     * Only one track can be assigned to each motor.
      *
-     * @param musicFile the music file to be added to the Orchestra
-     * @param tracks    number of tracks to be assigned to the motors
+     * @param musicFile   the music file to be added to the Orchestra
+     * @param totalTracks number of totalTracks to be assigned to the motors
      */
-    public static void playTrack(String musicFile, int tracks) {
-        for (int i = 0; i < TALON_FXES.size(); i++)
-            ORCHESTRA.addInstrument(TALON_FXES.get(i), i % tracks + 1);
-        addAndPlayTrack(musicFile);
+    public static void playTracks(String musicFile, int totalTracks) {
+        for (int i = 0; i < INSTRUMENTS.size(); i++)
+            ORCHESTRA.addInstrument(INSTRUMENTS.get(i), i % totalTracks + 1);
+        addAndPlayTracks(musicFile);
     }
 
     /**
-     * Sets a music file to the Orchestra and assigns one or multiple motors in the Orchestra a single track.
+     * Sets a music file to the Orchestra and assigns each track to one or more motors.
+     * Each track plays a different part of the music file; bass, harmonys, etc....
      * Works with multiple tracks.
-     * can assign a single track to more than one motor.
+     * Can assign a single track to more than one motor.
      *
-     * @param musicFile the music file to be added to the Orchestra
-     * @param perTrack  how many motors should get assigned to a track
+     * @param musicFile      the music file to be added to the Orchestra
+     * @param motorsPerTrack number of motors that get assigned to a track
      */
-    public static void playTrack(String musicFile, int... perTrack) throws IllegalStateException {
+    public static void playTracks(String musicFile, int... motorsPerTrack) throws IllegalStateException {
         int totalTracks = 0;
         int motorsAssignedTracks = 0;
-        for (int i = 0; i < perTrack.length; i++) {
-            totalTracks += perTrack[i];
-            if (totalTracks > TALON_FXES.size())
+        for (int i = 0; i < motorsPerTrack.length; i++) {
+            totalTracks += motorsPerTrack[i];
+            if (totalTracks > INSTRUMENTS.size())
                 throw new IllegalStateException("Not enough motors");
-            for (int j = 0; j < perTrack[i]; i++)
-                ORCHESTRA.addInstrument(TALON_FXES.get(motorsAssignedTracks++), i + 1);
+            for (int j = 0; j < motorsPerTrack[i]; i++)
+                ORCHESTRA.addInstrument(INSTRUMENTS.get(motorsAssignedTracks++), i + 1);
 
         }
-        addAndPlayTrack(musicFile);
+        addAndPlayTracks(musicFile);
     }
 
     /**
@@ -58,22 +64,21 @@ public class Orchestra {
      *
      * @param musicFile the music file to be added to the Orchestra
      */
-    public static void addAndPlayTrack(String musicFile) {
-        addTrack(musicFile);
-        playTrack();
+    public static void addAndPlayTracks(String musicFile) {
+        addTracks(musicFile);
+        playTracks();
     }
 
     /**
-     * Stops the Orchestra from playing and resets the music file to the start
-     * removes all the motors from the Orchestra.
+     * Resets the Orchestra.
      */
-    public static void stopTrack() {
+    public static void stopTracks() {
         ORCHESTRA.stop();
         clearAllMotors();
     }
 
     /**
-     * Removes all the motors from the Orchestra meaning there is no hardware to play the music.
+     * Removes all the motors from the Orchestra and returns the status code of clearing all the motors.
      */
     public static void clearAllMotors() {
         ORCHESTRA.clearInstruments();
@@ -82,48 +87,48 @@ public class Orchestra {
     /**
      * Plays the music file in the Orchestra.
      */
-    public static void playTrack() {
+    public static void playTracks() {
         ORCHESTRA.play();
     }
 
     /**
-     * add a music file to the Orchestra.
+     * Assigns a music file to the Orchestra.
      *
      * @param musicFile the music file to be added to the Orchestra
      */
-    public static void addTrack(String musicFile) {
+    public static void addTracks(String musicFile) {
         ORCHESTRA.loadMusic(musicFile);
     }
 
     /**
-     * Pauses the music file in the Orchestra.
+     * Stops the music file in the Orchestra until resumed.
      */
-    public static void pauseTrack() {
+    public static void pauseTracks() {
         ORCHESTRA.pause();
     }
 
     /**
-     * Closes the current Orchestra instance.
+     * Stops playing the music file and resets the Orchestra.
      */
-    public static void closeTrack() {
+    public static void closeTracks() {
         ORCHESTRA.close();
     }
 
     /**
-     * Determines whether or not the music file is playing.
+     * returns whether or not the music file is playing.
      *
      * @return if the track is playing
      */
-    public static boolean isTrackPlaying() {
+    public static boolean areTracksPlaying() {
         return ORCHESTRA.isPlaying();
     }
 
     /**
-     * Gets the current time stamp of the music file.
+     * Gets the current time location of the music file.
      *
-     * @return the current time stamp of the music file in seconds
+     * @return the current time location of the music file in seconds
      */
-    public static double getCurrentTrackTime() {
+    public static double getCurrentMusicFileTimeLocation() {
         return ORCHESTRA.getCurrentTime();
     }
 }
