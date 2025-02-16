@@ -43,7 +43,7 @@ public class CANcoderEncoder {
     public CANcoderEncoder(int id, String encoderName, String canbus) {
         this.encoderName = encoderName;
         this.encoderIO = generateIO(id, canbus);
-        this.encoderInputs = new Phoenix6Inputs(encoderName);
+        this.encoderInputs = new Phoenix6Inputs(encoderName, !canbus.isEmpty());
         this.id = id;
         encoderIO.optimizeBusUsage();
     }

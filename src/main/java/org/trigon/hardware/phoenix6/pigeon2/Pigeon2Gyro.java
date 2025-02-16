@@ -42,7 +42,7 @@ public class Pigeon2Gyro {
     public Pigeon2Gyro(int id, String gyroName, String canbus) {
         this.gyroName = gyroName;
         this.gyroIO = generateIO(id, canbus);
-        this.gyroInputs = new Phoenix6Inputs(gyroName);
+        this.gyroInputs = new Phoenix6Inputs(gyroName, !canbus.isEmpty());
         this.id = id;
         gyroIO.optimizeBusUsage();
     }
