@@ -192,6 +192,9 @@ public class TalonFXMotor {
         motorIO.setBrake(brake);
     }
 
+    /**
+     * Adds the motor to the Orchestra.
+     */
     public void addToOrchestra() {
         Orchestra.addMotor(motorIO.getTalonFX());
     }
