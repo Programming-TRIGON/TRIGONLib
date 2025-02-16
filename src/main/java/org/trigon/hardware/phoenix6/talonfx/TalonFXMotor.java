@@ -32,6 +32,7 @@ public class TalonFXMotor {
      */
     public TalonFXMotor(int id, String motorName) {
         this(id, motorName, "");
+        addToOrchestra();
     }
 
     /**
@@ -193,9 +194,10 @@ public class TalonFXMotor {
     }
 
     /**
-     * Adds the motor to the Orchestra.
+     * Adds the TalonFX to the Orchestra.
+     * Orchestra plays a track of music in one or more motors.
      */
-    public void addToOrchestra() {
+    private void addToOrchestra() {
         Orchestra.addMotor(motorIO.getTalonFX());
     }
 
