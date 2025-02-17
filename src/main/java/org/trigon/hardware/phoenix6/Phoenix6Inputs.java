@@ -92,9 +92,9 @@ public class Phoenix6Inputs extends InputsBase {
     private void updateThreadedSignalsToTable(LogTable table) {
         for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
             final double[] queueAsArray = SignalThreadBase.queueToDoubleArray(entry.getValue());
+            table.put(entry.getKey() + "_Threaded", queueAsArray);
             if (queueAsArray.length == 0)
                 continue;
-            table.put(entry.getKey() + "_Threaded", queueAsArray);
             table.put(entry.getKey(), queueAsArray[queueAsArray.length - 1]);
         }
     }
