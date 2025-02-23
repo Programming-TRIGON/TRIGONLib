@@ -58,9 +58,9 @@ public class CANdleLEDStrip extends LEDStrip {
     void blink(Color firstColor, double speed) {
         CANDLE.animate(
                 new SingleFadeAnimation(
-                        (int) firstColor.red,
-                        (int) firstColor.green,
-                        (int) firstColor.blue,
+                        (int) (firstColor.red * 255),
+                        (int) (firstColor.green * 255),
+                        (int) (firstColor.blue * 255),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -79,9 +79,9 @@ public class CANdleLEDStrip extends LEDStrip {
     void breathe(Color color, int amountOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         CANDLE.animate(
                 new LarsonAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        (int) (color.red * 255),
+                        (int) (color.green * 255),
+                        (int) (color.blue * 255),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -97,9 +97,9 @@ public class CANdleLEDStrip extends LEDStrip {
     void alternateColor(Color firstColor, Color secondColor) {
         for (int i = 0; i < numberOfLEDs; i++)
             CANDLE.setLEDs(
-                    (int) (isEven(i) ? firstColor.red : secondColor.red),
-                    (int) (isEven(i) ? firstColor.green : secondColor.green),
-                    (int) (isEven(i) ? firstColor.blue : secondColor.blue),
+                    (int) ((isEven(i) ? firstColor.red : secondColor.red) * 255),
+                    (int) ((isEven(i) ? firstColor.green : secondColor.green) * 255),
+                    (int) ((isEven(i) ? firstColor.blue : secondColor.blue) * 255),
                     0,
                     i + indexOffset,
                     1
@@ -111,9 +111,9 @@ public class CANdleLEDStrip extends LEDStrip {
         final boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new ColorFlowAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        (int) (color.red * 255),
+                        (int) (color.green * 255),
+                        (int) (color.blue * 255),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -148,9 +148,9 @@ public class CANdleLEDStrip extends LEDStrip {
     private void setSectionColor(int amountOfSections, int ledsPerSection, Supplier<Color>[] colors) {
         for (int i = 0; i < amountOfSections; i++) {
             CANDLE.setLEDs(
-                    (int) (inverted ? colors[amountOfSections - i - 1].get().red : colors[i].get().red),
-                    (int) (inverted ? colors[amountOfSections - i - 1].get().green : colors[i].get().green),
-                    (int) (inverted ? colors[amountOfSections - i - 1].get().blue : colors[i].get().blue),
+                    (int) ((inverted ? colors[amountOfSections - i - 1].get().red : colors[i].get().red) * 255),
+                    (int) ((inverted ? colors[amountOfSections - i - 1].get().green : colors[i].get().green) * 255),
+                    (int) ((inverted ? colors[amountOfSections - i - 1].get().blue : colors[i].get().blue) * 255),
                     0,
                     ledsPerSection * i + indexOffset,
                     i == amountOfSections - 1 ? numberOfLEDs - 1 : ledsPerSection * (i + 1) - 1
