@@ -55,12 +55,12 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void blink(Color firstColor, double speed) {
+    void blink(Color color, double speed) {
         CANDLE.animate(
                 new SingleFadeAnimation(
-                        (int) (firstColor.red * 255),
-                        (int) (firstColor.green * 255),
-                        (int) (firstColor.blue * 255),
+                        (int) (color.red * 255),
+                        (int) (color.green * 255),
+                        (int) (color.blue * 255),
                         0,
                         speed,
                         this.numberOfLEDs,

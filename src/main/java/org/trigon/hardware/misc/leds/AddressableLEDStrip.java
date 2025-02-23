@@ -63,7 +63,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void blink(Color firstColor, double speed) {
+    void blink(Color color, double speed) {
         final double correctedSpeed = 1 - speed;
         final double currentTime = Timer.getTimestamp();
 
@@ -73,7 +73,7 @@ public class AddressableLEDStrip extends LEDStrip {
         }
 
         if (isLEDAnimationChanged) {
-            staticColor(firstColor);
+            staticColor(color);
             return;
         }
         clearLEDColors();
