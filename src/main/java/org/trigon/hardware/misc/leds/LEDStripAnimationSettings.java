@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 /**
  * A class that contains settings for the LED commands.
  */
-public class AnimationSettings {
+public class LEDStripAnimationSettings {
     /**
-     * The settings for a command that sets an LED strip to a color.
+     * The settings for a command that sets an LED strip to a single color.
      *
      * @param color the color to set the LED strip to
      */
@@ -18,7 +18,7 @@ public class AnimationSettings {
     }
 
     /**
-     * The settings for a command that blinks a color on and off on an LED strip.
+     * The settings for a command that blinks a single color on and off on an LED strip.
      *
      * @param color the color to blink
      * @param speed the speed at which the LED strip should blink on a scale from 0 and 1

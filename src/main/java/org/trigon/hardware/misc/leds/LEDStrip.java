@@ -1,12 +1,8 @@
 package org.trigon.hardware.misc.leds;
 
-import com.ctre.phoenix.led.LarsonAnimation;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.trigon.hardware.RobotHardwareStats;
-
-import java.util.function.Supplier;
 
 /**
  * A wrapper class for LED strips. This class provides a set of methods for controlling LED strips.
@@ -75,66 +71,21 @@ public abstract class LEDStrip extends SubsystemBase {
     void resetLEDSettings() {
     }
 
-    /**
-     * Sets the color of the LED strip to the given color.
-     *
-     * @param color the color to set the LED strip to
-     */
-    abstract void staticColor(Color color);
-
-    /**
-     * Blinks the LED strip with a specific color.
-     *
-     * @param color the color to blink
-     * @param speed how fast the LED strip should blink on a scale between 0 and 1
-     */
-    abstract void blink(Color color, double speed);
-
-    /**
-     * "Breathes" a pocket of LEDs with a given color.
-     *
-     * @param color         the color of the breathing LEDs
-     * @param breathingLEDs the amount of breathing LEDs
-     * @param speed         how fast should the color travel the strip on a scale between 0 and 1
-     * @param inverted      whether the breathing should be inverted
-     * @param bounceMode    when the breathing LEDs should restart at the start of the strip
-     */
-    abstract void breathe(Color color, int breathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode);
-
-    /**
-     * Flows a color through the LED strip.
-     *
-     * @param color    the color to flow through the LED strip
-     * @param speed    how fast should the color travel the strip on a scale between 0 and 1
-     * @param inverted whether the color flow should be inverted
-     */
-    abstract void colorFlow(Color color, double speed, boolean inverted);
-
-    /**
-     * Displays two colors in an alternating pattern on the LED strip.
-     *
-     * @param firstColor  the first color
-     * @param secondColor the second color
-     */
-    abstract void alternateColor(Color firstColor, Color secondColor);
-
-    /**
-     * Splits the LED strip into different sections.
-     *
-     * @param colors an array of the colors to color the sections with. The length of the array dictates the amount of sections
-     */
-    abstract void sectionColor(Supplier<Color>[] colors);
-
-    /**
-     * Displays a rainbow pattern on the LED strip.
-     *
-     * @param brightness the brightness of the rainbow on a scale from 0 to 1
-     * @param speed      the speed of the rainbow's movement on a scale from 0 to 1
-     * @param inverted   whether the rainbow should be inverted
-     */
-    abstract void rainbow(double brightness, double speed, boolean inverted);
-
     abstract void clearLEDColors();
+
+    abstract void animate(LEDStripAnimationSettings.StaticColorSettings settings);
+
+    abstract void animate(LEDStripAnimationSettings.BlinkSettings settings);
+
+    abstract void animate(LEDStripAnimationSettings.BreatheSettings settings);
+
+    abstract void animate(LEDStripAnimationSettings.ColorFlowSettings settings);
+
+    abstract void animate(LEDStripAnimationSettings.AlternateColorSettings settings);
+
+    abstract void animate(LEDStripAnimationSettings.SectionColorSettings settings);
+
+    abstract void animate(LEDStripAnimationSettings.RainbowSettings settings);
 
     private void addLEDStripToLEDStripsArray(LEDStrip ledStrip) {
         final LEDStrip[] newLEDStrips = new LEDStrip[LED_STRIPS.length + 1];
