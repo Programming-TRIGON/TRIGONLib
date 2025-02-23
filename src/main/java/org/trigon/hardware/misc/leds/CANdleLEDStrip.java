@@ -72,7 +72,14 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     void staticColor(Color color) {
-        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, indexOffset, numberOfLEDs);
+        CANDLE.setLEDs(
+                ((int) color.red * 255),
+                ((int) color.green * 255),
+                ((int) color.blue * 255),
+                0,
+                indexOffset,
+                numberOfLEDs
+        );
     }
 
     @Override
