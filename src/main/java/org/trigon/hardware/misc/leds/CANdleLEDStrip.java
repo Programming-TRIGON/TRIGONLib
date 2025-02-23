@@ -50,12 +50,12 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void clearLEDColors() {
+    protected void clearLEDColors() {
         CANDLE.clearAnimation(animationSlot);
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.BlinkSettings settings) {
+    protected void animate(LEDStripAnimationSettings.BlinkSettings settings) {
         final Color color = settings.color();
         CANDLE.animate(
                 new SingleFadeAnimation(
@@ -72,7 +72,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.StaticColorSettings settings) {
+    protected void animate(LEDStripAnimationSettings.StaticColorSettings settings) {
         final Color color = settings.color();
         CANDLE.setLEDs(
                 ((int) color.red * 255),
@@ -85,7 +85,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.BreatheSettings settings) {
+    protected void animate(LEDStripAnimationSettings.BreatheSettings settings) {
         final Color color = settings.color();
         CANDLE.animate(
                 new LarsonAnimation(
@@ -104,7 +104,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.AlternateColorSettings settings) {
+    protected void animate(LEDStripAnimationSettings.AlternateColorSettings settings) {
         final Color firstColor = settings.firstColor();
         final Color secondColor = settings.secondColor();
         for (int i = 0; i < numberOfLEDs; i++)
@@ -119,7 +119,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.ColorFlowSettings settings) {
+    protected void animate(LEDStripAnimationSettings.ColorFlowSettings settings) {
         final boolean correctedInverted = this.inverted != settings.inverted();
         final Color color = settings.color();
         CANDLE.animate(
@@ -138,7 +138,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.RainbowSettings settings) {
+    protected void animate(LEDStripAnimationSettings.RainbowSettings settings) {
         final boolean correctedInverted = this.inverted != settings.inverted();
         CANDLE.animate(
                 new RainbowAnimation(
@@ -153,7 +153,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.SectionColorSettings settings) {
+    protected void animate(LEDStripAnimationSettings.SectionColorSettings settings) {
         final int ledsPerSection = (int) Math.floor((double) numberOfLEDs / settings.colors().length);
         setSectionColor(settings.colors().length, ledsPerSection, settings.colors());
     }

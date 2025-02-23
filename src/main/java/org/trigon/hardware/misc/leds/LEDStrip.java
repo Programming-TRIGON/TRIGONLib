@@ -63,29 +63,29 @@ public abstract class LEDStrip extends SubsystemBase {
         return numberOfLEDs;
     }
 
-    void setCurrentAnimation(Runnable currentAnimation) {
+    protected void setCurrentAnimation(Runnable currentAnimation) {
         this.currentAnimation = currentAnimation;
         currentAnimation.run();
     }
 
-    void resetLEDSettings() {
+    protected void resetLEDSettings() {
     }
 
-    abstract void clearLEDColors();
+    protected abstract void clearLEDColors();
 
-    abstract void animate(LEDStripAnimationSettings.StaticColorSettings settings);
+    protected abstract void animate(LEDStripAnimationSettings.StaticColorSettings settings);
 
-    abstract void animate(LEDStripAnimationSettings.BlinkSettings settings);
+    protected abstract void animate(LEDStripAnimationSettings.BlinkSettings settings);
 
-    abstract void animate(LEDStripAnimationSettings.BreatheSettings settings);
+    protected abstract void animate(LEDStripAnimationSettings.BreatheSettings settings);
 
-    abstract void animate(LEDStripAnimationSettings.ColorFlowSettings settings);
+    protected abstract void animate(LEDStripAnimationSettings.ColorFlowSettings settings);
 
-    abstract void animate(LEDStripAnimationSettings.AlternateColorSettings settings);
+    protected abstract void animate(LEDStripAnimationSettings.AlternateColorSettings settings);
 
-    abstract void animate(LEDStripAnimationSettings.SectionColorSettings settings);
+    protected abstract void animate(LEDStripAnimationSettings.SectionColorSettings settings);
 
-    abstract void animate(LEDStripAnimationSettings.RainbowSettings settings);
+    protected abstract void animate(LEDStripAnimationSettings.RainbowSettings settings);
 
     private void addLEDStripToLEDStripsArray(LEDStrip ledStrip) {
         final LEDStrip[] newLEDStrips = new LEDStrip[LED_STRIPS.length + 1];

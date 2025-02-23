@@ -58,12 +58,12 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void clearLEDColors() {
+    protected void clearLEDColors() {
         setStaticColor(Color.kBlack);
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.BlinkSettings settings) {
+    protected void animate(LEDStripAnimationSettings.BlinkSettings settings) {
         final double correctedSpeed = 1 - settings.speed();
         final double currentTime = Timer.getTimestamp();
 
@@ -80,12 +80,12 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.StaticColorSettings settings) {
+    protected void animate(LEDStripAnimationSettings.StaticColorSettings settings) {
         setStaticColor(settings.color());
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.BreatheSettings settings) {
+     protected void animate(LEDStripAnimationSettings.BreatheSettings settings) {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != settings.inverted();
         final double moveLEDTimeSeconds = 1 - settings.speed();
@@ -107,7 +107,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.ColorFlowSettings settings) {
+    protected void animate(LEDStripAnimationSettings.ColorFlowSettings settings) {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != settings.inverted();
         final double moveLEDTimeSeconds = 1 - settings.speed();
@@ -126,13 +126,13 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.AlternateColorSettings settings) {
+    protected void animate(LEDStripAnimationSettings.AlternateColorSettings settings) {
         for (int i = 0; i < numberOfLEDs; i++)
             LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? settings.firstColor() : settings.secondColor());
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.RainbowSettings settings) {
+    protected void animate(LEDStripAnimationSettings.RainbowSettings settings) {
         final boolean correctedInverted = this.inverted != settings.inverted();
         final int adjustedBrightness = (int) (settings.brightness() * 255);
         final int hueIncrement = (int) (settings.speed() * 8);
@@ -153,7 +153,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void animate(LEDStripAnimationSettings.SectionColorSettings settings) {
+    protected void animate(LEDStripAnimationSettings.SectionColorSettings settings) {
         final Supplier<Color>[] colors = settings.colors();
         final int amountOfSections = colors.length;
         final int ledsPerSection = (int) Math.floor((double) numberOfLEDs / amountOfSections);
@@ -167,7 +167,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void resetLEDSettings() {
+    protected void resetLEDSettings() {
         lastBreatheLED = indexOffset;
         lastLEDAnimationChangeTime = Timer.getTimestamp();
         rainbowFirstPixelHue = 0;
