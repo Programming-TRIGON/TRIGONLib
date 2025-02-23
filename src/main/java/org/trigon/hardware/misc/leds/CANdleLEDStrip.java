@@ -21,7 +21,7 @@ public class CANdleLEDStrip extends LEDStrip {
      * @param candle the CANdle instance to be used
      */
     public static void setCANdle(CANdle candle) {
-        if (CANDLE == null)
+        if (CANDLE == null && !RobotHardwareStats.isSimulation())
             CANDLE = candle;
     }
 
@@ -37,7 +37,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     /**
-     * Constructs a new CANdleLEDStrip. Before any commands are sent to the LED strip, the setCANdle method must be called.
+     * Constructs a new CANdleLEDStrip. Before any commands are sent to the LED strip, the {@link CANdleLEDStrip#setCANdle(CANdle)} method must be called.
      *
      * @param inverted     whether the LED strip is inverted
      * @param numberOfLEDs the amount of LEDs in the strip

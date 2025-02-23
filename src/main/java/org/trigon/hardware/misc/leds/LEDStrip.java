@@ -51,7 +51,7 @@ public abstract class LEDStrip extends SubsystemBase {
             ledStrip.setDefaultCommand(command);
     }
 
-    public LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
+    protected LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
         this.inverted = inverted;
         this.numberOfLEDs = numberOfLEDs;
         this.indexOffset = indexOffset;

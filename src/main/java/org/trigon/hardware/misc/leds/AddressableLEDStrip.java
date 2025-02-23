@@ -40,7 +40,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     /**
-     * Constructs a new AddressableLEDStrip. Before any commands are sent to the LED strip, the setAddressableLED and setAddressableLEDBuffer methods must be called.
+     * Constructs a new AddressableLEDStrip. Before any commands are sent to the LED strip, the {@link AddressableLEDStrip#initiateAddressableLED(int, int)} method must be called.
      *
      * @param inverted     whether the LED strip is inverted
      * @param numberOfLEDs the amount of LEDs in the strip
