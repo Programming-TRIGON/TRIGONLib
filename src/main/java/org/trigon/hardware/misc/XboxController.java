@@ -77,7 +77,7 @@ public class XboxController extends CommandXboxController {
         if (stopRumbleCommand != null)
             stopRumbleCommand.cancel();
 
-        stopRumbleCommand = new WaitCommand(durationSeconds).andThen(() -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0));
+        stopRumbleCommand = new WaitCommand(durationSeconds).andThen(() -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0)).ignoringDisable(true);
         stopRumbleCommand.schedule();
 
         getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
