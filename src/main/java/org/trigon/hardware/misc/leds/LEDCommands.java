@@ -165,8 +165,10 @@ public class LEDCommands {
      * Runs an action on all LED strips.
      */
     private static void runForLEDs(Consumer<LEDStrip> action, LEDStrip... ledStrips) {
-        for (LEDStrip ledStrip : ledStrips) {
+        if (ledStrips.length == 0)
+            ledStrips = LEDStrip.LED_STRIPS;
+
+        for (LEDStrip ledStrip : ledStrips)
             action.accept(ledStrip);
-        }
     }
 }
