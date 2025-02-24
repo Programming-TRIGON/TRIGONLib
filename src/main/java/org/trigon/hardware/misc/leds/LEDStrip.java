@@ -1,8 +1,11 @@
 package org.trigon.hardware.misc.leds;
 
-import edu.wpi.first.wpilibj2.command.Command;
+import com.ctre.phoenix.led.LarsonAnimation;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.trigon.hardware.RobotHardwareStats;
+
+import java.util.function.Supplier;
 
 /**
  * A wrapper class for LED strips. This class provides a set of methods for controlling LED strips.
@@ -42,13 +45,51 @@ public abstract class LEDStrip extends SubsystemBase {
     }
 
     /**
-     * Sets the default command for all LED strips.
+     * Sets the default animation for all LED strips.
      *
-     * @param command the default command to be set
+     * @param defaultAnimationSettings the default animation settings to be set
      */
-    public static void setDefaultCommandForAllLEDS(Command command) {
+    public static void setDefaultAnimationForAllLEDS(LEDStripAnimationSettings.LEDAnimationSettings defaultAnimationSettings) {
         for (LEDStrip ledStrip : LED_STRIPS)
-            ledStrip.setDefaultCommand(command);
+            ledStrip.setDefaultCommand(LEDCommands.getAnimateCommand(defaultAnimationSettings, ledStrip));
+    }
+
+    /**
+     * Applies the correct animation based on the type of LEDAnimationSettings.
+     */
+    static Runnable applyAnimation(LEDStrip ledStrip, LEDStripAnimationSettings.LEDAnimationSettings settings) {
+        switch (settings.getClass().getSimpleName()) {
+            case "StaticColorSettings" -> {
+                LEDStripAnimationSettings.StaticColorSettings staticColorSettings = (LEDStripAnimationSettings.StaticColorSettings) settings;
+                return () -> ledStrip.staticColor(staticColorSettings.color());
+            }
+            case "BlinkSettings" -> {
+                LEDStripAnimationSettings.BlinkSettings blinkSettings = (LEDStripAnimationSettings.BlinkSettings) settings;
+                return () -> ledStrip.blink(blinkSettings.color(), blinkSettings.speed());
+            }
+            case "BreatheSettings" -> {
+                LEDStripAnimationSettings.BreatheSettings breatheSettings = (LEDStripAnimationSettings.BreatheSettings) settings;
+                return () -> ledStrip.breathe(breatheSettings.color(), breatheSettings.numberOfBreathingLEDs(), breatheSettings.speed(), breatheSettings.inverted(), breatheSettings.bounceMode());
+            }
+            case "ColorFlowSettings" -> {
+                LEDStripAnimationSettings.ColorFlowSettings colorFlowSettings = (LEDStripAnimationSettings.ColorFlowSettings) settings;
+                return () -> ledStrip.colorFlow(colorFlowSettings.color(), colorFlowSettings.speed(), colorFlowSettings.inverted());
+            }
+            case "AlternateColorSettings" -> {
+                LEDStripAnimationSettings.AlternateColorSettings alternateColorSettings = (LEDStripAnimationSettings.AlternateColorSettings) settings;
+                return () -> ledStrip.alternateColor(alternateColorSettings.firstColor(), alternateColorSettings.secondColor());
+            }
+            case "SectionColorSettings" -> {
+                LEDStripAnimationSettings.SectionColorSettings sectionColorSettings = (LEDStripAnimationSettings.SectionColorSettings) settings;
+                return () -> ledStrip.sectionColor(sectionColorSettings.colors());
+            }
+            case "RainbowSettings" -> {
+                LEDStripAnimationSettings.RainbowSettings rainbowSettings = (LEDStripAnimationSettings.RainbowSettings) settings;
+                return () -> ledStrip.rainbow(rainbowSettings.brightness(), rainbowSettings.speed(), rainbowSettings.inverted());
+            }
+        }
+        return () -> {
+        };
     }
 
     protected LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
@@ -73,19 +114,19 @@ public abstract class LEDStrip extends SubsystemBase {
 
     protected abstract void clearLEDColors();
 
-    protected abstract void animate(LEDStripAnimationSettings.StaticColorSettings settings);
+    protected abstract void staticColor(Color color);
 
-    protected abstract void animate(LEDStripAnimationSettings.BlinkSettings settings);
+    protected abstract void blink(Color color, double speed);
 
-    protected abstract void animate(LEDStripAnimationSettings.BreatheSettings settings);
+    protected abstract void breathe(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode);
 
-    protected abstract void animate(LEDStripAnimationSettings.ColorFlowSettings settings);
+    protected abstract void colorFlow(Color color, double speed, boolean inverted);
 
-    protected abstract void animate(LEDStripAnimationSettings.AlternateColorSettings settings);
+    protected abstract void alternateColor(Color firstColor, Color secondColor);
 
-    protected abstract void animate(LEDStripAnimationSettings.SectionColorSettings settings);
+    protected abstract void sectionColor(Supplier<Color>[] colors);
 
-    protected abstract void animate(LEDStripAnimationSettings.RainbowSettings settings);
+    protected abstract void rainbow(double brightness, double speed, boolean inverted);
 
     private void addLEDStripToLEDStripsArray(LEDStrip ledStrip) {
         final LEDStrip[] newLEDStrips = new LEDStrip[LED_STRIPS.length + 1];
