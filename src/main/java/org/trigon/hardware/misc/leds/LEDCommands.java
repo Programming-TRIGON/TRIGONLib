@@ -24,7 +24,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
@@ -42,7 +42,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
@@ -61,7 +61,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
@@ -82,7 +82,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
@@ -102,7 +102,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
@@ -121,7 +121,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
@@ -139,7 +139,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
@@ -158,7 +158,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true);
+        ).ignoringDisable(true).asProxy();
     }
 
     /**
