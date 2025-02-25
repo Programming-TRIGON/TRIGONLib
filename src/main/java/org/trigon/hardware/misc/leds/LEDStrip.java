@@ -58,36 +58,21 @@ public abstract class LEDStrip extends SubsystemBase {
      * Applies the correct animation based on the type of LEDAnimationSettings.
      */
     static Runnable applyAnimation(LEDStrip ledStrip, LEDStripAnimationSettings.LEDAnimationSettings settings) {
-        switch (settings.getClass().getSimpleName()) {
-            case "StaticColorSettings" -> {
-                LEDStripAnimationSettings.StaticColorSettings staticColorSettings = (LEDStripAnimationSettings.StaticColorSettings) settings;
-                return () -> ledStrip.staticColor(staticColorSettings.color());
-            }
-            case "BlinkSettings" -> {
-                LEDStripAnimationSettings.BlinkSettings blinkSettings = (LEDStripAnimationSettings.BlinkSettings) settings;
-                return () -> ledStrip.blink(blinkSettings.color(), blinkSettings.speed());
-            }
-            case "BreatheSettings" -> {
-                LEDStripAnimationSettings.BreatheSettings breatheSettings = (LEDStripAnimationSettings.BreatheSettings) settings;
-                return () -> ledStrip.breathe(breatheSettings.color(), breatheSettings.numberOfBreathingLEDs(), breatheSettings.speed(), breatheSettings.inverted(), breatheSettings.bounceMode());
-            }
-            case "ColorFlowSettings" -> {
-                LEDStripAnimationSettings.ColorFlowSettings colorFlowSettings = (LEDStripAnimationSettings.ColorFlowSettings) settings;
-                return () -> ledStrip.colorFlow(colorFlowSettings.color(), colorFlowSettings.speed(), colorFlowSettings.inverted());
-            }
-            case "AlternateColorSettings" -> {
-                LEDStripAnimationSettings.AlternateColorSettings alternateColorSettings = (LEDStripAnimationSettings.AlternateColorSettings) settings;
-                return () -> ledStrip.alternateColor(alternateColorSettings.firstColor(), alternateColorSettings.secondColor());
-            }
-            case "SectionColorSettings" -> {
-                LEDStripAnimationSettings.SectionColorSettings sectionColorSettings = (LEDStripAnimationSettings.SectionColorSettings) settings;
-                return () -> ledStrip.sectionColor(sectionColorSettings.colors());
-            }
-            case "RainbowSettings" -> {
-                LEDStripAnimationSettings.RainbowSettings rainbowSettings = (LEDStripAnimationSettings.RainbowSettings) settings;
-                return () -> ledStrip.rainbow(rainbowSettings.brightness(), rainbowSettings.speed(), rainbowSettings.inverted());
-            }
-        }
+        if (settings instanceof LEDStripAnimationSettings.StaticColorSettings staticColorSettings)
+            return () -> ledStrip.staticColor(staticColorSettings.color());
+        if (settings instanceof LEDStripAnimationSettings.BlinkSettings blinkSettings)
+            return () -> ledStrip.blink(blinkSettings.color(), blinkSettings.speed());
+        if (settings instanceof LEDStripAnimationSettings.BreatheSettings breatheSettings)
+            return () -> ledStrip.breathe(breatheSettings.color(), breatheSettings.numberOfBreathingLEDs(), breatheSettings.speed(), breatheSettings.inverted(), breatheSettings.bounceMode());
+        if (settings instanceof LEDStripAnimationSettings.ColorFlowSettings colorFlowSettings)
+            return () -> ledStrip.colorFlow(colorFlowSettings.color(), colorFlowSettings.speed(), colorFlowSettings.inverted());
+        if (settings instanceof LEDStripAnimationSettings.AlternateColorSettings alternateColorSettings)
+            return () -> ledStrip.alternateColor(alternateColorSettings.firstColor(), alternateColorSettings.secondColor());
+        if (settings instanceof LEDStripAnimationSettings.SectionColorSettings sectionColorSettings)
+            return () -> ledStrip.sectionColor(sectionColorSettings.colors());
+        if (settings instanceof LEDStripAnimationSettings.RainbowSettings rainbowSettings)
+            return () -> ledStrip.rainbow(rainbowSettings.brightness(), rainbowSettings.speed(), rainbowSettings.inverted());
+        // TODO: I really don't like this but it'll do for now
         return () -> {
         };
     }
