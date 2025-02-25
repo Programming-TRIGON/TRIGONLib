@@ -162,6 +162,24 @@ public class LEDCommands {
     }
 
     /**
+     * Gets a command that applies the specified animation settings to the LED strips.
+     *
+     * @param settings  the settings for the desired animation
+     * @param ledStrips the LED strips to be used
+     * @return the command
+     */
+    public static Command getDefaultAnimateCommand(LEDStripAnimationSettings.LEDAnimationSettings settings, LEDStrip... ledStrips) {
+        return new StartEndCommand(
+                () -> {
+                    runForLEDs(LEDStrip::clearLEDColors, ledStrips);
+                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(LEDStrip.applyAnimation(ledStrip, settings)), ledStrips);
+                },
+                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
+                ledStrips
+        ).ignoringDisable(true);
+    }
+
+    /**
      * Runs an action on all LED strips.
      */
     private static void runForLEDs(Consumer<LEDStrip> action, LEDStrip... ledStrips) {

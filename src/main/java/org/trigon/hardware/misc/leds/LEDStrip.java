@@ -51,7 +51,7 @@ public abstract class LEDStrip extends SubsystemBase {
      */
     public static void setDefaultAnimationForAllLEDS(LEDStripAnimationSettings.LEDAnimationSettings defaultAnimationSettings) {
         for (LEDStrip ledStrip : LED_STRIPS)
-            ledStrip.setDefaultCommand(LEDCommands.getAnimateCommand(defaultAnimationSettings, ledStrip));
+            ledStrip.setDefaultCommand(LEDCommands.getDefaultAnimateCommand(defaultAnimationSettings, ledStrip));
     }
 
     /**
