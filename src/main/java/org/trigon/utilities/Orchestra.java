@@ -32,6 +32,7 @@ public class Orchestra {
     public static void playFile(String fileName, int totalTracks) {
         for (int i = 0; i < MOTORS.size(); i++)
             ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks + 1);
+
         addAndPlayFile(fileName);
     }
 

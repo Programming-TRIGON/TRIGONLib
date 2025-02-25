@@ -194,10 +194,10 @@ public class TalonFXMotor {
     }
 
     /**
-     * Adds the TalonFX to the Orchestra.
-     * Orchestra plays a track of music in one or more motors.
+     * Allows access to the TalonFX.
+     *
+     * @param signal the TalonFX signal
      */
-
     private BaseStatusSignal motorSignalToStatusSignal(TalonFXSignal signal) {
         final TalonFX talonFX = motorIO.getTalonFX();
         if (RobotHardwareStats.isReplay() || talonFX == null)
