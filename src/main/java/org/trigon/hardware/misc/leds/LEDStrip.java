@@ -58,23 +58,7 @@ public abstract class LEDStrip extends SubsystemBase {
      * Applies the correct animation based on the type of LEDAnimationSettings.
      */
     static Runnable applyAnimation(LEDStrip ledStrip, LEDStripAnimationSettings.LEDAnimationSettings settings) {
-        if (settings instanceof LEDStripAnimationSettings.StaticColorSettings staticColorSettings)
-            return () -> ledStrip.staticColor(staticColorSettings.color());
-        if (settings instanceof LEDStripAnimationSettings.BlinkSettings blinkSettings)
-            return () -> ledStrip.blink(blinkSettings.color(), blinkSettings.speed());
-        if (settings instanceof LEDStripAnimationSettings.BreatheSettings breatheSettings)
-            return () -> ledStrip.breathe(breatheSettings.color(), breatheSettings.numberOfBreathingLEDs(), breatheSettings.speed(), breatheSettings.inverted(), breatheSettings.bounceMode());
-        if (settings instanceof LEDStripAnimationSettings.ColorFlowSettings colorFlowSettings)
-            return () -> ledStrip.colorFlow(colorFlowSettings.color(), colorFlowSettings.speed(), colorFlowSettings.inverted());
-        if (settings instanceof LEDStripAnimationSettings.AlternateColorSettings alternateColorSettings)
-            return () -> ledStrip.alternateColor(alternateColorSettings.firstColor(), alternateColorSettings.secondColor());
-        if (settings instanceof LEDStripAnimationSettings.SectionColorSettings sectionColorSettings)
-            return () -> ledStrip.sectionColor(sectionColorSettings.colors());
-        if (settings instanceof LEDStripAnimationSettings.RainbowSettings rainbowSettings)
-            return () -> ledStrip.rainbow(rainbowSettings.brightness(), rainbowSettings.speed(), rainbowSettings.inverted());
-        // TODO: I really don't like this but it'll do for now
-        return () -> {
-        };
+        return () -> settings.apply(ledStrip);
     }
 
     protected LEDStrip(boolean inverted, int numberOfLEDs, int indexOffset) {
