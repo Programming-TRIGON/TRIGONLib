@@ -13,6 +13,7 @@ public class CANdleLEDStrip extends LEDStrip {
     private static CANdle CANDLE;
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
     private final int animationSlot;
+    private boolean shouldRunPeriodically = false;
 
     /**
      * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips. Should only be called once.
@@ -51,7 +52,8 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     public void periodic() {
-        currentAnimation.run();
+        if (shouldRunPeriodically)
+            currentAnimation.run();
     }
 
     @Override
@@ -61,6 +63,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void blink(Color color, double speed) {
+        shouldRunPeriodically = false;
         CANDLE.animate(
                 new SingleFadeAnimation(
                         (int) (color.red * 255),
@@ -77,6 +80,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void staticColor(Color color) {
+        shouldRunPeriodically = false;
         CANDLE.setLEDs(
                 ((int) color.red * 255),
                 ((int) color.green * 255),
@@ -89,6 +93,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void breathe(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+        shouldRunPeriodically = false;
         CANDLE.animate(
                 new LarsonAnimation(
                         (int) (color.red * 255),
@@ -107,6 +112,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void alternateColor(Color firstColor, Color secondColor) {
+        shouldRunPeriodically = false;
         for (int i = 0; i < numberOfLEDs; i++)
             CANDLE.setLEDs(
                     (int) ((isEven(i) ? firstColor.red : secondColor.red) * 255),
@@ -120,6 +126,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void colorFlow(Color color, double speed, boolean inverted) {
+        shouldRunPeriodically = false;
         final boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new ColorFlowAnimation(
@@ -138,6 +145,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void rainbow(double brightness, double speed, boolean inverted) {
+        shouldRunPeriodically = false;
         final boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new RainbowAnimation(
@@ -153,6 +161,7 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void sectionColor(Supplier<Color>[] colors) {
+        shouldRunPeriodically = true;
         final int ledsPerSection = (int) Math.floor((double) numberOfLEDs / colors.length);
         setSectionColor(colors.length, ledsPerSection, colors);
     }
