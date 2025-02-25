@@ -42,7 +42,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        );
+        ).ignoringDisable(true);
     }
 
     /**
@@ -61,7 +61,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        );
+        ).ignoringDisable(true);
     }
 
     /**
@@ -82,7 +82,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        );
+        ).ignoringDisable(true);
     }
 
     /**
@@ -102,7 +102,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        );
+        ).ignoringDisable(true);
     }
 
     /**
@@ -121,7 +121,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        );
+        ).ignoringDisable(true);
     }
 
     /**
@@ -139,7 +139,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        );
+        ).ignoringDisable(true);
     }
 
     /**
@@ -158,7 +158,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        );
+        ).ignoringDisable(true);
     }
 
     /**
