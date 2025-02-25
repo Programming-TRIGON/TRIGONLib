@@ -50,6 +50,11 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
+    public void periodic() {
+        currentAnimation.run();
+    }
+
+    @Override
     protected void clearLEDColors() {
         CANDLE.clearAnimation(animationSlot);
     }
