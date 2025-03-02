@@ -192,12 +192,7 @@ public class TalonFXMotor {
     public void setBrake(boolean brake) {
         motorIO.setBrake(brake);
     }
-
-    /**
-     * Allows access to the TalonFX.
-     *
-     * @param signal the TalonFX signal
-     */
+    
     private BaseStatusSignal motorSignalToStatusSignal(TalonFXSignal signal) {
         final TalonFX talonFX = motorIO.getTalonFX();
         if (RobotHardwareStats.isReplay() || talonFX == null)
