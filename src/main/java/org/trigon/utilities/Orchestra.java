@@ -26,14 +26,14 @@ public class Orchestra {
      * A .chrp file stores music as tracks that can be played separately.
      * The tracks are assigned linearly and loop back if there are extra motors.
      *
-     * @param fileName    the .chrp file to be played by the Orchestra
+     * @param filePath    the path of the .chrp file to be played by the Orchestra
      * @param totalTracks the number of tracks in the .chrp file.
      */
-    public static void playFile(String fileName, int totalTracks) {
+    public static void playFile(String filePath, int totalTracks) {
         for (int i = 0; i < MOTORS.size(); i++)
             ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks + 1);
 
-        addAndPlayFile(fileName);
+        addAndPlayFile(filePath);
     }
 
     /**
@@ -43,10 +43,10 @@ public class Orchestra {
      * Each slot represents a track.
      * Each value in the slot represents the number of motors that will be assigned that track.
      *
-     * @param fileName       the .chrp file to be added to the Orchestra
+     * @param filePath       the path of the .chrp file to be added to the Orchestra
      * @param motorsPerTrack number of motors that should be assigned to each track
      */
-    public static void playFile(String fileName, int... motorsPerTrack) throws IllegalStateException {
+    public static void playFile(String filePath, int... motorsPerTrack) throws IllegalStateException {
         int totalUsedMotors = 0;
         int motorsAssignedTracks = 0;
         for (int i = 0; i < motorsPerTrack.length; i++) {
@@ -56,7 +56,7 @@ public class Orchestra {
             for (int j = 0; j < motorsPerTrack[i]; i++)
                 ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks++), i + 1);
         }
-        addAndPlayFile(fileName);
+        addAndPlayFile(filePath);
     }
 
     /**
@@ -100,10 +100,10 @@ public class Orchestra {
     /**
      * Adds a .chrp file to the Orchestra and plays it.
      *
-     * @param fileName the .chrp file to be added to the Orchestra
+     * @param filePath the path of the .chrp file to be added to the Orchestra
      */
-    private static void addAndPlayFile(String fileName) {
-        ORCHESTRA.loadMusic(fileName);
+    private static void addAndPlayFile(String filePath) {
+        ORCHESTRA.loadMusic(filePath);
         play();
     }
 }
