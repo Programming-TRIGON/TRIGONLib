@@ -89,9 +89,7 @@ public class Orchestra {
     }
 
     /**
-     * Gets the play time of the .chrp file being played in seconds.
-     *
-     * @return the play time
+     * @return the play time of the .chrp file in seconds
      */
     public static double getPlayTimeSeconds() {
         return ORCHESTRA.getCurrentTime();
