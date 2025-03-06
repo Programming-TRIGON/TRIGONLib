@@ -51,8 +51,11 @@ public class Orchestra {
         int motorsAssignedTracks = 0;
         for (int i = 0; i < motorsPerTrack.length; i++) {
             totalUsedMotors += motorsPerTrack[i];
-            if (totalUsedMotors > MOTORS.size())
-                System.out.println("Not enough motors added to the Orchestra.");
+            if (totalUsedMotors > MOTORS.size()) {
+                System.out.println("Orchestra: Fewer motors than requested tracks, can't play requested file.");
+                ORCHESTRA.clearInstruments();
+                return;
+            }
             for (int j = 0; j < motorsPerTrack[i]; i++)
                 ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks++), i + 1);
         }
