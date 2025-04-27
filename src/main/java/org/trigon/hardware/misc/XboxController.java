@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  * A class that represents an Xbox controller. Used to get the values of the sticks and buttons on a controller, with the option of a deadband and exponentiation.
  */
 public class XboxController extends CommandXboxController {
-    private int exponent = 1;
+    private
+    int
+            rightStickExponent = 1,
+            leftStickExponent = 1;
     private double deadband = 0;
     private Command stopRumbleCommand = null;
 
@@ -31,28 +34,29 @@ public class XboxController extends CommandXboxController {
      */
     public XboxController(int port, int exponent, double deadband) {
         this(port);
-        this.exponent = exponent;
+        this.rightStickExponent = exponent;
+        this.leftStickExponent = exponent;
         this.deadband = deadband;
     }
 
     @Override
-    public double getLeftX() {
-        return calculateValue(super.getLeftX());
-    }
-
-    @Override
     public double getRightX() {
-        return calculateValue(super.getRightX());
-    }
-
-    @Override
-    public double getLeftY() {
-        return calculateValue(super.getLeftY());
+        return calculateRightStickValue(super.getRightX());
     }
 
     @Override
     public double getRightY() {
-        return calculateValue(super.getRightY());
+        return calculateRightStickValue(super.getRightY());
+    }
+
+    @Override
+    public double getLeftX() {
+        return calculateLeftStickValue(super.getLeftX());
+    }
+
+    @Override
+    public double getLeftY() {
+        return calculateLeftStickValue(super.getLeftY());
     }
 
     /**
@@ -61,7 +65,26 @@ public class XboxController extends CommandXboxController {
      * @param exponent the exponent
      */
     public void setExponent(int exponent) {
-        this.exponent = exponent;
+        this.rightStickExponent = exponent;
+        this.leftStickExponent = exponent;
+    }
+
+    /**
+     * Sets the exponent for the right stick on the controller, which will exponentiate the raw values of the stick by the exponent.
+     *
+     * @param exponent the exponent
+     */
+    public void setRightStickExponent(int exponent) {
+        this.rightStickExponent = exponent;
+    }
+
+    /**
+     * Sets the exponent for the left stick on the controller, which will exponentiate the raw values of the stick by the exponent.
+     *
+     * @param exponent the exponent
+     */
+    public void setLeftStickExponent(int exponent) {
+        this.leftStickExponent = exponent;
     }
 
     /**
@@ -93,11 +116,19 @@ public class XboxController extends CommandXboxController {
         return super.getHID().getPOV();
     }
 
-    private double calculateValue(double value) {
+    private double calculateRightStickValue(double value) {
         if (Math.abs(value) < deadband)
             return 0;
 
-        final double exponentiatedValue = Math.pow(value, exponent);
+        final double exponentiatedValue = Math.pow(value, rightStickExponent);
+        return Math.abs(exponentiatedValue) * -Math.signum(value);
+    }
+
+    private double calculateLeftStickValue(double value) {
+        if (Math.abs(value) < deadband)
+            return 0;
+
+        final double exponentiatedValue = Math.pow(value, leftStickExponent);
         return Math.abs(exponentiatedValue) * -Math.signum(value);
     }
 }
