@@ -28,14 +28,15 @@ public class XboxController extends CommandXboxController {
     /**
      * Constructs an instance of a controller.
      *
-     * @param port     the port index on the Driver Station that the controller is plugged into
-     * @param exponent how much to exponentiate the raw values of the sticks by
-     * @param deadband the deadband for the controller
+     * @param port               the port index on the Driver Station that the controller is plugged into
+     * @param rightStickExponent how much to exponentiate the raw values of the right stick by
+     * @param leftStickExponent  how much to exponentiate the raw values of the right stick by
+     * @param deadband           the deadband for the controller
      */
-    public XboxController(int port, int exponent, double deadband) {
+    public XboxController(int port, int rightStickExponent, int leftStickExponent, double deadband) {
         this(port);
-        this.rightStickExponent = exponent;
-        this.leftStickExponent = exponent;
+        this.rightStickExponent = rightStickExponent;
+        this.leftStickExponent = leftStickExponent;
         this.deadband = deadband;
     }
 
