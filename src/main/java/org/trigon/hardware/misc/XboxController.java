@@ -118,18 +118,18 @@ public class XboxController extends CommandXboxController {
     }
 
     private double calculateRightStickValue(double value) {
-        if (Math.abs(value) < deadband)
-            return 0;
-
-        final double exponentiatedValue = Math.pow(value, rightStickExponent);
-        return Math.abs(exponentiatedValue) * -Math.signum(value);
+        return calculateStickValue(value, rightStickExponent);
     }
 
     private double calculateLeftStickValue(double value) {
+        return calculateStickValue(value, leftStickExponent);
+    }
+
+    private double calculateStickValue(double value, double exponent) {
         if (Math.abs(value) < deadband)
             return 0;
 
-        final double exponentiatedValue = Math.pow(value, leftStickExponent);
+        final double exponentiatedValue = Math.pow(value, exponent);
         return Math.abs(exponentiatedValue) * -Math.signum(value);
     }
 }
