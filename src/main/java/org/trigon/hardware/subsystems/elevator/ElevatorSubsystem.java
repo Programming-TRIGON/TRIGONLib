@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
+import org.trigon.hardware.simulation.ElevatorSimulation;
 import org.trigon.utilities.Conversions;
 import org.trigon.utilities.mechanisms.ElevatorMechanism2d;
 
@@ -29,6 +30,7 @@ public class ElevatorSubsystem {
     private final DynamicMotionMagicVoltage positionRequest;
     private final ElevatorMechanism2d mechanism;
     private final SysIdRoutine.Config sysIDConfig;
+    private final ElevatorSimulation simulation;
     private ElevatorState targetState;
 
     public ElevatorSubsystem(TalonFXMotor motor, ElevatorConfiguration config, Pose3d... stagesOriginPoints) {
@@ -49,16 +51,16 @@ public class ElevatorSubsystem {
                 Units.Volts.of(config.sysIDStepVoltage),
                 Units.Second.of(1000)
         );
-
-//        motor.setPhysicsSimulation(new ElevatorSimulation(
-//                config.gearbox,
-//                config.gearRatio,
-//                config.massKilograms,
-//                config.drumRadiusMeters,
-//                config.minimumHeight,
-//                config.maximumHeight,
-//                config.shouldSimulateGravity
-//        ));
+        simulation = new ElevatorSimulation(
+                config.gearbox,
+                config.gearRatio,
+                config.massKilograms,
+                config.drumRadiusMeters,
+                config.minimumHeight,
+                config.maximumHeight,
+                config.shouldSimulateGravity
+        );
+        motor.setPhysicsSimulation(simulation);
     }
 
     public String getName() {
@@ -91,6 +93,7 @@ public class ElevatorSubsystem {
                 getPositionRotations(),
                 motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)
         );
+        simulation.updateMotor();
     }
 
     public void updatePeriodically() {
