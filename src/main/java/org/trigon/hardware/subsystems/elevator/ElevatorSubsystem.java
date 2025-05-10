@@ -93,7 +93,6 @@ public class ElevatorSubsystem {
                 getPositionRotations(),
                 motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)
         );
-        simulation.updateMotor();
     }
 
     public void updatePeriodically() {
