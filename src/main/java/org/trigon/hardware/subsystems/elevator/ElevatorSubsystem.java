@@ -18,23 +18,26 @@ import org.trigon.utilities.mechanisms.ElevatorMechanism2d;
 
 public class ElevatorSubsystem {
     private final TalonFXMotor motor;
-    private final String name;
-    private final double
+    private final Pose3d[] stagesOriginPoints;
+    private String name;
+    private double
             positionToleranceMeters,
             drumRadiusMeters,
             maximumVelocity,
             maximumAcceleration,
             maximumJerk;
-    private final VoltageOut voltageRequest;
-    private final DynamicMotionMagicVoltage positionRequest;
-    private final ElevatorMechanism2d mechanism;
-    private final SysIdRoutine.Config sysIDConfig;
-    private final Pose3d[] stagesOriginPoints;
+    private VoltageOut voltageRequest;
+    private DynamicMotionMagicVoltage positionRequest;
+    private ElevatorMechanism2d mechanism;
+    private SysIdRoutine.Config sysIDConfig;
     private ElevatorState targetState;
 
     public ElevatorSubsystem(TalonFXMotor motor, ElevatorConfiguration config, Pose3d... stagesOriginPoints) {
         this.motor = motor;
         this.stagesOriginPoints = stagesOriginPoints;
+    }
+
+    public void applyConfiguration(ElevatorConfiguration config) {
         name = config.name;
         positionToleranceMeters = config.positionToleranceMeters;
         drumRadiusMeters = config.drumRadiusMeters;

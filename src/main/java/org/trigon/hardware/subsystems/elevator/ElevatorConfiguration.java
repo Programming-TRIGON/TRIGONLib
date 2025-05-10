@@ -4,7 +4,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class ElevatorConfiguration {
-    public String name = "Elevator";
+    public String name = "";
     public double
             positionToleranceMeters = 1,
             drumRadiusMeters = 1,
