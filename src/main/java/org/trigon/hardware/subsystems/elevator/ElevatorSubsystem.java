@@ -147,7 +147,7 @@ public class ElevatorSubsystem {
     }
 
     private Pose3d getComponentPose(int targetStage) {
-        return calculateComponentPose(targetStage, stagesOriginPoints[targetStage - 1]);
+        return calculateComponentPose(targetStage, stagesOriginPoints[targetStage]);
     }
 
     private Pose3d calculateComponentPose(int targetStage, Pose3d originPoint) {
