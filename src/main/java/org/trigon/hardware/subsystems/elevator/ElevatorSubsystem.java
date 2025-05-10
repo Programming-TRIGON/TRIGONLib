@@ -19,25 +19,23 @@ import org.trigon.utilities.mechanisms.ElevatorMechanism2d;
 public class ElevatorSubsystem {
     private final TalonFXMotor motor;
     private final Pose3d[] stagesOriginPoints;
-    private String name;
-    private double
+    private final String name;
+    private final double
             positionToleranceMeters,
             drumRadiusMeters,
             maximumVelocity,
             maximumAcceleration,
             maximumJerk;
-    private VoltageOut voltageRequest;
-    private DynamicMotionMagicVoltage positionRequest;
-    private ElevatorMechanism2d mechanism;
-    private SysIdRoutine.Config sysIDConfig;
+    private final VoltageOut voltageRequest;
+    private final DynamicMotionMagicVoltage positionRequest;
+    private final ElevatorMechanism2d mechanism;
+    private final SysIdRoutine.Config sysIDConfig;
     private ElevatorState targetState;
 
-    public ElevatorSubsystem(TalonFXMotor motor, Pose3d... stagesOriginPoints) {
+    public ElevatorSubsystem(TalonFXMotor motor, ElevatorConfiguration config, Pose3d... stagesOriginPoints) {
         this.motor = motor;
         this.stagesOriginPoints = stagesOriginPoints;
-    }
 
-    public void applyConfiguration(ElevatorConfiguration config) {
         name = config.name;
         positionToleranceMeters = config.positionToleranceMeters;
         drumRadiusMeters = config.drumRadiusMeters;
@@ -110,7 +108,7 @@ public class ElevatorSubsystem {
     }
 
     public boolean atTargetState() {
-        final double currentToTargetStateDifference = Math.abs(targetState.getPositionMeters() - getPositionMeters());
+        final double currentToTargetStateDifference = Math.abs(targetState.getTargetPositionMeters() - getPositionMeters());
         return currentToTargetStateDifference < positionToleranceMeters;
     }
 
@@ -125,7 +123,7 @@ public class ElevatorSubsystem {
 
     public void setTargetState(ElevatorState targetState) {
         this.targetState = targetState;
-        setTargetState(targetState.getPositionMeters(), targetState.getSpeedScalar());
+        setTargetState(targetState.getTargetPositionMeters(), targetState.getSpeedScalar());
     }
 
     public void setTargetState(double targetPositionMeters, double speedScalar) {
@@ -169,7 +167,7 @@ public class ElevatorSubsystem {
     }
 
     public interface ElevatorState {
-        double getPositionMeters();
+        double getTargetPositionMeters();
 
         double getSpeedScalar();
     }
