@@ -32,7 +32,7 @@ public class ElevatorSubsystem {
     private SysIdRoutine.Config sysIDConfig;
     private ElevatorState targetState;
 
-    public ElevatorSubsystem(TalonFXMotor motor, ElevatorConfiguration config, Pose3d... stagesOriginPoints) {
+    public ElevatorSubsystem(TalonFXMotor motor, Pose3d... stagesOriginPoints) {
         this.motor = motor;
         this.stagesOriginPoints = stagesOriginPoints;
     }
