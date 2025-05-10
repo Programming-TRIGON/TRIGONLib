@@ -153,7 +153,7 @@ public class ElevatorSubsystem {
 
     private Pose3d calculateComponentPose(int targetStage, Pose3d originPoint) {
         final Transform3d elevatorTransform = new Transform3d(
-                new Translation3d(0, 0, getPositionMeters() / targetStage),
+                new Translation3d(0, 0, getPositionMeters() / (targetStage + 1)),
                 new Rotation3d()
         );
         return originPoint.transformBy(elevatorTransform);
