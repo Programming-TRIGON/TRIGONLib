@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
-import org.trigon.hardware.simulation.ElevatorSimulation;
 import org.trigon.utilities.Conversions;
 import org.trigon.utilities.mechanisms.ElevatorMechanism2d;
 
@@ -51,15 +50,15 @@ public class ElevatorSubsystem {
                 Units.Second.of(1000)
         );
 
-        motor.setPhysicsSimulation(new ElevatorSimulation(
-                config.gearbox,
-                config.gearRatio,
-                config.massKilograms,
-                config.drumRadiusMeters,
-                config.minimumHeight,
-                config.maximumHeight,
-                config.shouldSimulateGravity
-        ));
+//        motor.setPhysicsSimulation(new ElevatorSimulation(
+//                config.gearbox,
+//                config.gearRatio,
+//                config.massKilograms,
+//                config.drumRadiusMeters,
+//                config.minimumHeight,
+//                config.maximumHeight,
+//                config.shouldSimulateGravity
+//        ));
     }
 
     public String getName() {
