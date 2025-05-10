@@ -123,6 +123,7 @@ public class ElevatorSubsystem {
 
     public void setTargetState(ElevatorState targetState) {
         this.targetState = targetState;
+        System.out.println(targetState.getTargetPositionMeters());
         setTargetState(targetState.getTargetPositionMeters(), targetState.getSpeedScalar());
     }
 
