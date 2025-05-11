@@ -110,6 +110,8 @@ public class ElevatorSubsystem {
     }
 
     public boolean atTargetState() {
+        if (targetState == null)
+            return false;
         final double currentToTargetStateDifference = Math.abs(targetState.getTargetPositionMeters() - getPositionMeters());
         return currentToTargetStateDifference < positionToleranceMeters;
     }
