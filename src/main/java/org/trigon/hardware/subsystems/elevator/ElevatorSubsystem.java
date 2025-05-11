@@ -106,7 +106,7 @@ public class ElevatorSubsystem {
     }
 
     public boolean atState(ElevatorState targetState) {
-        return this.targetState.equals(targetState) && atTargetState();
+        return this.targetState == targetState && atTargetState();
     }
 
     public boolean atTargetState() {
