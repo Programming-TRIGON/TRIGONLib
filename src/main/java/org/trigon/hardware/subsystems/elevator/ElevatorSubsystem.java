@@ -1,5 +1,6 @@
 package org.trigon.hardware.subsystems.elevator;
 
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -132,6 +133,10 @@ public class ElevatorSubsystem {
         setTargetPositionRotations(metersToRotations(targetPositionMeters));
     }
 
+    public void setControl(ControlRequest request) {
+        motor.setControl(request);
+    }
+
     private void scalePositionRequestSpeed(double speedScalar) {
         positionRequest.Velocity = maximumVelocity * speedScalar;
         positionRequest.Acceleration = maximumAcceleration * speedScalar;
@@ -139,8 +144,7 @@ public class ElevatorSubsystem {
     }
 
     private void setTargetPositionRotations(double targetPositionRotations) {
-        motor.setControl(positionRequest.withPosition(targetPositionRotations));
-        System.out.println(positionRequest.Position);
+        setControl(positionRequest.withPosition(targetPositionRotations));
     }
 
     private void logComponentPoses() {
