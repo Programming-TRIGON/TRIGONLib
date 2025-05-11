@@ -140,6 +140,7 @@ public class ElevatorSubsystem {
 
     private void setTargetPositionRotations(double targetPositionRotations) {
         motor.setControl(positionRequest.withPosition(targetPositionRotations));
+        System.out.println(positionRequest.Position);
     }
 
     private void logComponentPoses() {
