@@ -149,19 +149,15 @@ public class ElevatorSubsystem {
 
     private void logComponentPoses() {
         for (int i = 0; i < stagesOriginPoints.length; i++)
-            Logger.recordOutput("Poses/Components/" + name + "Pose" + i, getComponentPose(i));
+            Logger.recordOutput("Poses/Components/" + name + "Pose" + i, calculateComponentPose(i));
     }
 
-    private Pose3d getComponentPose(int targetStage) {
-        return calculateComponentPose(targetStage, stagesOriginPoints[targetStage]);
-    }
-
-    private Pose3d calculateComponentPose(int targetStage, Pose3d originPoint) {
+    private Pose3d calculateComponentPose(int targetStage) {
         final Transform3d elevatorTransform = new Transform3d(
                 new Translation3d(0, 0, getPositionMeters() / (targetStage + 1)),
                 new Rotation3d()
         );
-        return originPoint.transformBy(elevatorTransform);
+        return stagesOriginPoints[targetStage].transformBy(elevatorTransform);
     }
 
     private double rotationsToMeters(double positionRotations) {
