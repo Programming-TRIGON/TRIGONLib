@@ -98,7 +98,7 @@ public class ElevatorSubsystem {
 
     public void updatePeriodically() {
         motor.update();
-        Logger.recordOutput("Elevator/CurrentPositionMeters", getPositionMeters());
+        Logger.recordOutput(name + "/CurrentPositionMeters", getPositionMeters());
     }
 
     public void sysIDDrive(double targetVoltage) {
