@@ -106,14 +106,14 @@ public class ElevatorSubsystem {
     }
 
     public boolean atState(ElevatorState targetState) {
-        return this.targetState.equals(targetState);
+        return this.targetState.equals(targetState) && atTargetState();
     }
 
     public boolean atTargetState() {
         final double currentToTargetStateDifference = Math.abs(targetState.getTargetPositionMeters() - getPositionMeters());
         return currentToTargetStateDifference < positionToleranceMeters;
     }
-    
+
     public double getPositionRotations() {
         return motor.getSignal(TalonFXSignal.POSITION);
     }
