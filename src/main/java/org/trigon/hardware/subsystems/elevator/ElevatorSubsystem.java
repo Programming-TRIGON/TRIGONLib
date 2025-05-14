@@ -31,7 +31,6 @@ public class ElevatorSubsystem {
     private final DynamicMotionMagicVoltage positionRequest;
     private final ElevatorMechanism2d mechanism;
     private final SysIdRoutine.Config sysIDConfig;
-    private final ElevatorSimulation simulation;
     private ElevatorState targetState;
 
     public ElevatorSubsystem(TalonFXMotor motor, ElevatorConfiguration config, Pose3d... stagesOriginPoints) {
@@ -52,16 +51,16 @@ public class ElevatorSubsystem {
                 Units.Volts.of(config.sysIDStepVoltage),
                 Units.Second.of(1000)
         );
-        simulation = new ElevatorSimulation(
-                config.gearbox,
-                config.gearRatio,
-                config.massKilograms,
-                config.drumRadiusMeters,
-                config.minimumHeight,
-                config.maximumHeight,
-                config.shouldSimulateGravity
-        );
-        motor.setPhysicsSimulation(simulation);
+        motor.setPhysicsSimulation(
+                new ElevatorSimulation(
+                        config.gearbox,
+                        config.gearRatio,
+                        config.massKilograms,
+                        config.drumRadiusMeters,
+                        config.minimumHeight,
+                        config.maximumHeight,
+                        config.shouldSimulateGravity
+                ));
     }
 
     public String getName() {
