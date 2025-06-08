@@ -22,11 +22,8 @@ public class LEDBoard extends SubsystemBase {
 
     public void setImage(String filePath) throws IOException {
         final int[][][] rgbArray = RGBArrayUtils.convertPngToRgbArray(filePath, ledStrips[0].getNumberOfLEDS(), ledStrips.length);
-        System.out.println("----- number of led strips:" + ledStrips.length);
-        System.out.println(rgbArray.length);
-        System.out.println(rgbArray[0].length);
+
         for (int i = 0; i < rgbArray.length; i++) {
-            System.out.println("i:" + i);
             for (int j = 0; j < rgbArray[0].length; j++) {
                 int[] currentRawColor = rgbArray[i][j];
                 Color currentColor = new Color(currentRawColor[0], currentRawColor[1], currentRawColor[2]);

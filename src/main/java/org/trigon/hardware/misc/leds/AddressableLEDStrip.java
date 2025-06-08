@@ -173,7 +173,7 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     protected void setSingleLEDColor(int index, Color color) {
-        LED_BUFFER.setLED(index, color);
+        LED_BUFFER.setLED(indexOffset + index, color);
     }
 
     private void setStaticColor(Color color) {
