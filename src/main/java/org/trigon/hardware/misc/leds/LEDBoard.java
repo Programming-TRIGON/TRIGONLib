@@ -2,7 +2,7 @@ package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.LarsonAnimation;
 import edu.wpi.first.wpilibj.util.Color;
-import org.trigon.utilities.RGBBoardUtils;
+import org.trigon.utilities.RGBArrayUtils;
 
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -20,7 +20,7 @@ public class LEDBoard {
     }
 
     public void setImage(String filePath) throws IOException {
-        final int[][][] rgbArray = RGBBoardUtils.convertPngToRgbArray(filePath, ledStrips[0].getNumberOfLEDS(), ledStrips.length);
+        final int[][][] rgbArray = RGBArrayUtils.convertPngToRgbArray(filePath, ledStrips[0].getNumberOfLEDS(), ledStrips.length);
         for (int i = 0; i < rgbArray.length; i++) {
             for (int j = 0; j < rgbArray[0].length; j++) {
                 int[] currentRawColor = rgbArray[i][j];

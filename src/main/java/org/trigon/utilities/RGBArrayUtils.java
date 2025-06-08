@@ -7,9 +7,9 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * A class that contains utilities to help color a board of LEDs.
+ * A class that contains utilities for arrays of rgb values.
  */
-public class RGBBoardUtils {
+public class RGBArrayUtils {
     /**
      * Converts a png image into a resized array of rgb values.
      *
