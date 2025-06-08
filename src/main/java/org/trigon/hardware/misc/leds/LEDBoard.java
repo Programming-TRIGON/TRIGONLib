@@ -2,12 +2,13 @@ package org.trigon.hardware.misc.leds;
 
 import com.ctre.phoenix.led.LarsonAnimation;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.trigon.utilities.RGBArrayUtils;
 
 import java.io.IOException;
 import java.util.function.Supplier;
 
-public class LEDBoard {
+public class LEDBoard extends SubsystemBase {
     private final LEDStrip[] ledStrips;
 
     public LEDBoard(LEDStrip... ledStrips) {

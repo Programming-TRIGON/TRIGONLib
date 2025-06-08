@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -158,6 +159,20 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
+        ).ignoringDisable(true).asProxy();
+    }
+
+    public static Command getSetImageCommand(String filePath, LEDBoard ledBoard) {
+        return new StartEndCommand(
+                () -> {
+                    try {
+                        ledBoard.setImage(filePath);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                },
+                ledBoard::clearBoard,
+                ledBoard
         ).ignoringDisable(true).asProxy();
     }
 
