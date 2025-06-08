@@ -166,6 +166,11 @@ public class CANdleLEDStrip extends LEDStrip {
         setSectionColor(colors.length, ledsPerSection, colors);
     }
 
+    @Override
+    protected void setSingleLEDColor(int index, Color color) {
+        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, index, 1);
+    }
+
     private void setSectionColor(int amountOfSections, int ledsPerSection, Supplier<Color>[] colors) {
         for (int i = 0; i < amountOfSections; i++) {
             CANDLE.setLEDs(

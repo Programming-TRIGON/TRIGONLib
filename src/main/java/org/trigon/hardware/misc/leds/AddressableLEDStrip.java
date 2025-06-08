@@ -171,6 +171,11 @@ public class AddressableLEDStrip extends LEDStrip {
         amountOfColorFlowLEDs = 0;
     }
 
+    @Override
+    protected void setSingleLEDColor(int index, Color color) {
+        LED_BUFFER.setLED(index, color);
+    }
+
     private void setStaticColor(Color color) {
         setLEDColors(color, 0, numberOfLEDs - 1);
     }
