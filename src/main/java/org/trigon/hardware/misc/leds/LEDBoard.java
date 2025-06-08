@@ -26,6 +26,7 @@ public class LEDBoard extends SubsystemBase {
             for (int j = 0; j < rgbArray[0].length; j++) {
                 int[] currentRawColor = rgbArray[i][j];
                 Color currentColor = new Color(currentRawColor[0], currentRawColor[1], currentRawColor[2]);
+                System.out.println(currentColor);
                 ledStrips[i].setSingleLEDColor(j, currentColor);
             }
         }
