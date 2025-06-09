@@ -21,7 +21,7 @@ public class LEDBoard {
     }
 
     public void clearBoard() {
-        currentAnimationFilePaths = null;
+        currentAnimationFilePaths = new String[0];
         currentAnimationFrame = 0;
         animationUpdateIntervalSeconds = 0;
         lastAnimationUpdateTimeSeconds = 0;
