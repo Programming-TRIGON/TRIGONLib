@@ -177,7 +177,7 @@ public class LEDCommands {
                 (interrupted) -> ledBoard.clearBoard(),
                 () -> false,
                 ledBoard.getLEDStrips()
-        ).ignoringDisable(true).until(() -> shouldLoop && ledBoard.hasAnimationEnded()).asProxy();
+        ).ignoringDisable(true).until(() -> !shouldLoop && ledBoard.hasAnimationEnded()).asProxy();
     }
 
     /**
