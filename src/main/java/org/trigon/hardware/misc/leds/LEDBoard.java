@@ -59,7 +59,6 @@ public class LEDBoard {
     }
 
     boolean hasAnimationEnded() {
-        return Timer.getFPGATimestamp() - lastAnimationUpdateTimeSeconds >= animationUpdateIntervalSeconds &&
-                currentAnimationFrame == currentAnimationFilePaths.length;
+        return currentAnimationFrame > currentAnimationFilePaths.length;
     }
 }
