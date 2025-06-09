@@ -166,7 +166,7 @@ public class LEDCommands {
         return new StartEndCommand(
                 () -> ledBoard.setImage(filePath),
                 ledBoard::clearBoard,
-                ledBoard.getLEDStrips()
+                ledBoard
         ).ignoringDisable(true);
     }
 
@@ -180,7 +180,7 @@ public class LEDCommands {
                         ledBoard.clearBoard();
                 },
                 () -> false,
-                ledBoard.getLEDStrips()
+                ledBoard
         ).ignoringDisable(true).until(() -> !shouldLoop && ledBoard.hasAnimationEnded());
     }
 

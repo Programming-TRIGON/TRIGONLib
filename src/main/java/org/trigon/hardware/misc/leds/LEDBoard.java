@@ -2,11 +2,12 @@ package org.trigon.hardware.misc.leds;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.trigon.utilities.RGBArrayUtils;
 
 import java.io.IOException;
 
-public class LEDBoard {
+public class LEDBoard extends SubsystemBase {
     private final LEDStrip[] ledStrips;
     private String[] currentAnimationFilePaths;
     private int currentAnimationFrame;
