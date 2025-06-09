@@ -1,5 +1,6 @@
 package org.trigon.hardware.misc.leds;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import org.trigon.utilities.RGBArrayUtils;
 
@@ -7,6 +8,9 @@ import java.io.IOException;
 
 public class LEDBoard {
     private final LEDStrip[] ledStrips;
+    private String[] currentAnimationFilePaths;
+    private int currentAnimationFrame;
+    private double animationUpdateIntervalSeconds, lastAnimationUpdateTimeSeconds;
 
     public LEDBoard(LEDStrip... ledStrips) {
         this.ledStrips = ledStrips;
@@ -31,5 +35,18 @@ public class LEDBoard {
                 ledStrips[i].setSingleLEDColor(j, currentColor);
             }
         }
+    }
+
+    public void setAnimation(double framesPerSecond, String[] filePaths) throws IOException {
+        currentAnimationFilePaths = filePaths;
+        animationUpdateIntervalSeconds = framesPerSecond;
+        lastAnimationUpdateTimeSeconds = Timer.getFPGATimestamp();
+        currentAnimationFrame = 0;
+        setImage(filePaths[0]);
+    }
+
+    public void updateAnimationPeriodically() throws IOException {
+        if (Timer.getFPGATimestamp() - lastAnimationUpdateTimeSeconds >= animationUpdateIntervalSeconds)
+            setImage(currentAnimationFilePaths[currentAnimationFrame % currentAnimationFilePaths.length]);
     }
 }
