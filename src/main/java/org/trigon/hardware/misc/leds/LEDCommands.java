@@ -25,7 +25,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     /**
@@ -43,7 +43,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     /**
@@ -62,7 +62,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     /**
@@ -83,7 +83,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     /**
@@ -103,7 +103,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     /**
@@ -122,7 +122,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     /**
@@ -140,7 +140,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     /**
@@ -159,7 +159,7 @@ public class LEDCommands {
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
                 ledStrips
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     public static Command getSetImageCommand(String filePath, LEDBoard ledBoard) {
@@ -167,7 +167,7 @@ public class LEDCommands {
                 () -> ledBoard.setImage(filePath),
                 ledBoard::clearBoard,
                 ledBoard.getLEDStrips()
-        ).ignoringDisable(true).asProxy();
+        ).ignoringDisable(true);
     }
 
     public static Command getSetBoardAnimationCommand(String[] filePaths, double framesPerSecond, boolean shouldLoop, boolean shouldKeepLastFrame, LEDBoard ledBoard) {
@@ -181,7 +181,7 @@ public class LEDCommands {
                 },
                 () -> false,
                 ledBoard.getLEDStrips()
-        ).ignoringDisable(true).until(() -> !shouldLoop && ledBoard.hasAnimationEnded()).asProxy();
+        ).ignoringDisable(true).until(() -> !shouldLoop && ledBoard.hasAnimationEnded());
     }
 
     /**
