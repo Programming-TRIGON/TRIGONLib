@@ -170,11 +170,15 @@ public class LEDCommands {
         ).ignoringDisable(true).asProxy();
     }
 
-    public static Command getSetBoardAnimationCommand(String[] filePaths, double framesPerSecond, boolean shouldLoop, LEDBoard ledBoard) {
+    public static Command getSetBoardAnimationCommand(String[] filePaths, double framesPerSecond, boolean shouldLoop, boolean shouldKeepLastFrame, LEDBoard ledBoard) {
         return new FunctionalCommand(
                 () -> ledBoard.setAnimation(filePaths, framesPerSecond),
                 ledBoard::updateAnimationPeriodically,
-                (interrupted) -> ledBoard.clearBoard(),
+                (interrupted) -> {
+                    ledBoard.resetAnimation();
+                    if (!shouldKeepLastFrame)
+                        ledBoard.clearBoard();
+                },
                 () -> false,
                 ledBoard.getLEDStrips()
         ).ignoringDisable(true).until(() -> !shouldLoop && ledBoard.hasAnimationEnded()).asProxy();

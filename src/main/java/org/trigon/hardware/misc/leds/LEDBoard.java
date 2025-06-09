@@ -21,11 +21,6 @@ public class LEDBoard {
     }
 
     public void clearBoard() {
-        currentAnimationFilePaths = new String[0];
-        currentAnimationFrame = 0;
-        animationUpdateIntervalSeconds = 0;
-        lastAnimationUpdateTimeSeconds = 0;
-
         for (LEDStrip ledStrip : ledStrips)
             ledStrip.clearLEDColors();
     }
@@ -65,5 +60,12 @@ public class LEDBoard {
 
     boolean hasAnimationEnded() {
         return currentAnimationFrame > currentAnimationFilePaths.length;
+    }
+
+    void resetAnimation() {
+        currentAnimationFilePaths = new String[0];
+        currentAnimationFrame = 0;
+        animationUpdateIntervalSeconds = 0;
+        lastAnimationUpdateTimeSeconds = 0;
     }
 }
