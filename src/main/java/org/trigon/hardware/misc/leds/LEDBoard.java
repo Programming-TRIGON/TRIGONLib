@@ -52,8 +52,10 @@ public class LEDBoard {
     }
 
     public void updateAnimationPeriodically() {
-        if (Timer.getFPGATimestamp() - lastAnimationUpdateTimeSeconds >= animationUpdateIntervalSeconds)
+        if (Timer.getFPGATimestamp() - lastAnimationUpdateTimeSeconds >= animationUpdateIntervalSeconds) {
             setImage(currentAnimationFilePaths[currentAnimationFrame++ % currentAnimationFilePaths.length]);
+            lastAnimationUpdateTimeSeconds = Timer.getFPGATimestamp();
+        }
     }
 
     boolean hasAnimationEnded() {
