@@ -21,6 +21,11 @@ public class LEDBoard {
     }
 
     public void clearBoard() {
+        currentAnimationFilePaths = null;
+        currentAnimationFrame = 0;
+        animationUpdateIntervalSeconds = 0;
+        lastAnimationUpdateTimeSeconds = 0;
+
         for (LEDStrip ledStrip : ledStrips)
             ledStrip.clearLEDColors();
     }
