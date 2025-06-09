@@ -25,8 +25,14 @@ public class LEDBoard {
             ledStrip.clearLEDColors();
     }
 
-    public void setImage(String filePath) throws IOException {
-        final int[][][] rgbArray = RGBArrayUtils.convertPngToRgbArray(filePath, ledStrips[0].getNumberOfLEDS(), ledStrips.length);
+    public void setImage(String filePath) {
+        int[][][] rgbArray;
+        try {
+            rgbArray = RGBArrayUtils.convertPngToRgbArray(filePath, ledStrips[0].getNumberOfLEDS(), ledStrips.length);
+        } catch (IOException e) {
+            e.printStackTrace();
+            rgbArray = new int[0][0][0];
+        }
 
         for (int i = 0; i < rgbArray.length; i++) {
             for (int j = 0; j < rgbArray[0].length; j++) {
@@ -37,16 +43,21 @@ public class LEDBoard {
         }
     }
 
-    public void setAnimation(double framesPerSecond, String[] filePaths) throws IOException {
+    public void setAnimation(String[] filePaths, double framesPerSecond) {
         currentAnimationFilePaths = filePaths;
-        animationUpdateIntervalSeconds = framesPerSecond;
+        animationUpdateIntervalSeconds = 1 / framesPerSecond;
         lastAnimationUpdateTimeSeconds = Timer.getFPGATimestamp();
         currentAnimationFrame = 0;
         setImage(filePaths[0]);
     }
 
-    public void updateAnimationPeriodically() throws IOException {
+    public void updateAnimationPeriodically() {
         if (Timer.getFPGATimestamp() - lastAnimationUpdateTimeSeconds >= animationUpdateIntervalSeconds)
             setImage(currentAnimationFilePaths[currentAnimationFrame % currentAnimationFilePaths.length]);
+    }
+
+    boolean hasAnimationEnded() {
+        return Timer.getFPGATimestamp() - lastAnimationUpdateTimeSeconds >= animationUpdateIntervalSeconds &&
+                currentAnimationFrame == currentAnimationFilePaths.length;
     }
 }

@@ -3,9 +3,9 @@ package org.trigon.hardware.misc.leds;
 import com.ctre.phoenix.led.LarsonAnimation;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -164,16 +164,20 @@ public class LEDCommands {
 
     public static Command getSetImageCommand(String filePath, LEDBoard ledBoard) {
         return new StartEndCommand(
-                () -> {
-                    try {
-                        ledBoard.setImage(filePath);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                },
+                () -> ledBoard.setImage(filePath),
                 ledBoard::clearBoard,
                 ledBoard.getLEDStrips()
         ).ignoringDisable(true).asProxy();
+    }
+
+    public static Command getSetBoardAnimationCommand(String[] filePaths, double framesPerSecond, boolean shouldLoop, LEDBoard ledBoard) {
+        return new FunctionalCommand(
+                () -> ledBoard.setAnimation(filePaths, framesPerSecond),
+                ledBoard::updateAnimationPeriodically,
+                (interrupted) -> ledBoard.clearBoard(),
+                () -> false,
+                ledBoard.getLEDStrips()
+        ).ignoringDisable(true).until(() -> shouldLoop && ledBoard.hasAnimationEnded()).asProxy();
     }
 
     /**
