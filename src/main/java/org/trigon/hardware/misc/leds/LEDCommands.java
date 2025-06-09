@@ -172,7 +172,7 @@ public class LEDCommands {
                     }
                 },
                 ledBoard::clearBoard,
-                ledBoard
+                ledBoard.getLEDStrips()
         ).ignoringDisable(true).asProxy();
     }
 
