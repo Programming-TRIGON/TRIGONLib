@@ -87,7 +87,7 @@ public class LEDBoard extends SubsystemBase {
 
     void updateBreathingPeriodically() {
         if (Timer.getFPGATimestamp() - lastBreatheMovementTimeSeconds >= breathingUpdateIntervalSeconds) {
-            currentBreatheLEDIndex += (shouldBreatheInverted ? -1 : 1);
+            updateCurrentLEDIndex();
             updateBreathingLEDs();
             lastBreatheMovementTimeSeconds = Timer.getFPGATimestamp();
         }
@@ -102,12 +102,17 @@ public class LEDBoard extends SubsystemBase {
 
     private void updateBreathingLEDs() {
         for (int i = 0; i < ledStrips.length; i++)
-            updateLEDStrip((i * breatheLEDSpacing) + currentBreatheLEDIndex, ledStrips[i]);
+            updateLEDStrip((i * (shouldBreatheInverted ? -breatheLEDSpacing : breatheLEDSpacing)) + currentBreatheLEDIndex, ledStrips[i]);
     }
 
     private void updateLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
         ledStrip.clearLEDColors();
-        for (int currentLED = ledStartIndex; shouldBreatheInverted ? currentLED < numberOfBreathingLEDs + ledStartIndex : currentLED > -numberOfBreathingLEDs + ledStartIndex; currentLED += (shouldBreatheInverted ? -1 : 1))
-            ledStrip.setSingleLEDColor(currentLED + (2 * ledStrip.getNumberOfLEDS()) % ledStrip.getNumberOfLEDS(), breatheColor);
+        for (int currentLED = ledStartIndex; currentLED < ledStartIndex + numberOfBreathingLEDs; currentLED++)
+            ledStrip.setSingleLEDColor((currentLED + ledStrip.getNumberOfLEDS()) % ledStrip.getNumberOfLEDS(), breatheColor);
+    }
+
+    private void updateCurrentLEDIndex() {
+        currentBreatheLEDIndex++;
+        currentBreatheLEDIndex %= ledStrips[0].getNumberOfLEDS();
     }
 }
