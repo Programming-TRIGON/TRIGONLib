@@ -151,14 +151,14 @@ public class LEDCommands {
      * @param color                 the color of the breathing LEDs
      * @param numberOfBreathingLEDs the amount of breathing LEDs in each strip
      * @param speedLEDsPerSecond    the amount of LEDs the animation should move by per second
-     * @param spacing               the lateral distance in LEDs of each layer's moving LEDs from the next layer
+     * @param levelSpacing          the lateral distance in LEDs of each layer's moving LEDs from the next layer
      * @param inverted              whether the breathing should be inverted or not
      * @param ledBoard              the LED board to animate
      * @return the command
      */
-    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int spacing, boolean inverted, LEDBoard ledBoard) {
+    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int levelSpacing, boolean inverted, LEDBoard ledBoard) {
         return new FunctionalCommand(
-                () -> ledBoard.breathe(color, numberOfBreathingLEDs, speedLEDsPerSecond, spacing, inverted),
+                () -> ledBoard.breathe(color, numberOfBreathingLEDs, speedLEDsPerSecond, levelSpacing, inverted),
                 ledBoard::updateBreathingPeriodically,
                 (interrupted) -> ledBoard.clearBoard(),
                 () -> false,
@@ -355,6 +355,16 @@ public class LEDCommands {
                 () -> false,
                 ledBoard
         ).ignoringDisable(true).until(() -> !shouldLoop && ledBoard.hasAnimationEnded());
+    }
+
+    public static Command getSetBoardBounceCommand(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond, LEDBoard ledBoard) {
+        return new FunctionalCommand(
+                () -> ledBoard.bounce(color, numberOfMovingLEDs, speedLEDsPerSecond),
+                ledBoard::updateBouncingPeriodically,
+                (interrupted) -> ledBoard.clearBoard(),
+                () -> false,
+                ledBoard
+        ).ignoringDisable(true);
     }
 
     /**
