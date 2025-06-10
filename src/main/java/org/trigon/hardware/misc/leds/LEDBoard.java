@@ -126,7 +126,7 @@ public class LEDBoard extends SubsystemBase {
 
     private void updateBouncingLEDs() {
         for (int i = ledStrips.length; i > 0; i--)
-            updateBouncingLEDStrip(Math.abs(currentMovingLEDIndex - i), ledStrips[32 - i]);
+            updateBouncingLEDStrip(Math.abs(currentMovingLEDIndex - i), ledStrips[ledStrips[0].getNumberOfLEDS() - i]);
     }
 
     private void updateBreathingLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
@@ -147,8 +147,8 @@ public class LEDBoard extends SubsystemBase {
     }
 
     private void incrementAndBounceCurrentLEDIndex() {
-        currentMovingLEDIndex += shouldMoveInverted ? 1 : -1;
-        if (currentMovingLEDIndex <= numberOfMovingLEDs || currentMovingLEDIndex >= ledStrips[0].getNumberOfLEDS())
-            shouldMoveInverted = !shouldMoveInverted;
+        if (currentMovingLEDIndex <= numberOfMovingLEDs)
+            currentMovingLEDIndex = ledStrips[0].getNumberOfLEDS();
+        currentMovingLEDIndex--;
     }
 }
