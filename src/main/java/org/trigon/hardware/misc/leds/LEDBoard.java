@@ -102,12 +102,12 @@ public class LEDBoard extends SubsystemBase {
 
     private void updateBreathingLEDs() {
         for (int i = 0; i < ledStrips.length; i++)
-            updateLEDStrip((i * 2) + currentBreatheLEDIndex, ledStrips[i]);
+            updateLEDStrip((i * breatheLEDSpacing) + currentBreatheLEDIndex, ledStrips[i]);
     }
 
     private void updateLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
         ledStrip.clearLEDColors();
-        for (int currentLED = ledStartIndex; currentLED < numberOfBreathingLEDs + ledStartIndex; currentLED += (shouldBreatheInverted ? -1 : 1))
-            ledStrip.setSingleLEDColor(currentLED % ledStrip.getNumberOfLEDS(), breatheColor);
+        for (int currentLED = ledStartIndex; shouldBreatheInverted ? currentLED < numberOfBreathingLEDs + ledStartIndex : currentLED > -numberOfBreathingLEDs + ledStartIndex; currentLED += (shouldBreatheInverted ? -1 : 1))
+            ledStrip.setSingleLEDColor(currentLED + (2 * ledStrip.getNumberOfLEDS()) % ledStrip.getNumberOfLEDS(), breatheColor);
     }
 }
