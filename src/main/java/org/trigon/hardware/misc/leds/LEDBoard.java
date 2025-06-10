@@ -87,7 +87,7 @@ public class LEDBoard extends SubsystemBase {
 
     void updateBreathingPeriodically() {
         if (Timer.getFPGATimestamp() - lastBreatheMovementTimeSeconds >= breathingUpdateIntervalSeconds) {
-            currentBreatheLEDIndex += (shouldBreatheInverted ? -breatheLEDSpacing : breatheLEDSpacing);
+            currentBreatheLEDIndex += (shouldBreatheInverted ? -1 : 1);
             updateBreathingLEDs();
             lastBreatheMovementTimeSeconds = Timer.getFPGATimestamp();
         }
@@ -102,7 +102,7 @@ public class LEDBoard extends SubsystemBase {
 
     private void updateBreathingLEDs() {
         for (int i = 0; i < ledStrips.length; i++)
-            updateLEDStrip(i + currentBreatheLEDIndex, ledStrips[i]);
+            updateLEDStrip((i * 2) + currentBreatheLEDIndex, ledStrips[i]);
     }
 
     private void updateLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
