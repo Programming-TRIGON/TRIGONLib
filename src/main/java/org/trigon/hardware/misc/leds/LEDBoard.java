@@ -11,8 +11,13 @@ public class LEDBoard extends SubsystemBase {
     private final LEDStrip[] ledStrips;
     private String[] currentAnimationFilePaths;
     private Color breatheColor;
-    private int currentAnimationFrame, numberOfBreathingLEDs, currentBreatheLEDIndex;
-    private double animationUpdateIntervalSeconds,
+    private int
+            currentAnimationFrame,
+            numberOfBreathingLEDs,
+            currentBreatheLEDIndex,
+            breatheLEDSpacing;
+    private double
+            animationUpdateIntervalSeconds,
             lastAnimationUpdateTimeSeconds,
             breathingUpdateIntervalSeconds,
             lastBreatheMovementTimeSeconds;
@@ -61,10 +66,11 @@ public class LEDBoard extends SubsystemBase {
         setImage(filePaths[0]);
     }
 
-    void breathe(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, boolean inverted) {
+    void breathe(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int spacing, boolean inverted) {
         breatheColor = color;
         this.numberOfBreathingLEDs = numberOfBreathingLEDs;
         currentBreatheLEDIndex = 0;
+        breatheLEDSpacing = spacing;
         breathingUpdateIntervalSeconds = (double) 1 / speedLEDsPerSecond;
         lastBreatheMovementTimeSeconds = Timer.getFPGATimestamp();
         shouldBreatheInverted = inverted;
@@ -81,7 +87,7 @@ public class LEDBoard extends SubsystemBase {
 
     void updateBreathingPeriodically() {
         if (Timer.getFPGATimestamp() - lastBreatheMovementTimeSeconds >= breathingUpdateIntervalSeconds) {
-            currentBreatheLEDIndex += (shouldBreatheInverted ? -1 : 1);
+            currentBreatheLEDIndex += (shouldBreatheInverted ? -breatheLEDSpacing : breatheLEDSpacing);
             updateBreathingLEDs();
             lastBreatheMovementTimeSeconds = Timer.getFPGATimestamp();
         }
@@ -100,6 +106,7 @@ public class LEDBoard extends SubsystemBase {
     }
 
     private void updateLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
+        ledStrip.clearLEDColors();
         for (int currentLED = ledStartIndex; currentLED < numberOfBreathingLEDs + ledStartIndex; currentLED += (shouldBreatheInverted ? -1 : 1))
             ledStrip.setSingleLEDColor(currentLED % ledStrip.getNumberOfLEDS(), breatheColor);
     }
