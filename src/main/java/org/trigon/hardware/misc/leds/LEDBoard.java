@@ -81,7 +81,7 @@ public class LEDBoard extends SubsystemBase {
     void bounce(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond) {
         movingLEDColor = color;
         this.numberOfMovingLEDs = numberOfMovingLEDs;
-        currentMovingLEDIndex = ledStrips[0].getNumberOfLEDS();
+        currentMovingLEDIndex = 0;
         movingUpdateIntervalSeconds = (double) 1 / speedLEDsPerSecond;
         lastLEDMovementTimeSeconds = Timer.getFPGATimestamp();
         shouldMoveInverted = false;
@@ -125,8 +125,8 @@ public class LEDBoard extends SubsystemBase {
     }
 
     private void updateBouncingLEDs() {
-        for (int i = ledStrips.length; i > 0; i--)
-            updateBouncingLEDStrip(Math.abs(currentMovingLEDIndex - i), ledStrips[32 - i]);
+        for (int i = 0; i < ledStrips.length; i++)
+            updateBouncingLEDStrip(i + currentMovingLEDIndex % (ledStrips[0].getNumberOfLEDS() - numberOfMovingLEDs + 1), ledStrips[i]);
     }
 
     private void updateBreathingLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
@@ -147,8 +147,9 @@ public class LEDBoard extends SubsystemBase {
     }
 
     private void incrementAndBounceCurrentLEDIndex() {
-        currentMovingLEDIndex += shouldMoveInverted ? 1 : -1;
-        if (currentMovingLEDIndex <= numberOfMovingLEDs || currentMovingLEDIndex >= ledStrips[0].getNumberOfLEDS())
+        currentMovingLEDIndex += shouldMoveInverted ? -1 : 1;
+        System.out.println(currentMovingLEDIndex);
+        if (currentMovingLEDIndex >= ledStrips[0].getNumberOfLEDS() - numberOfMovingLEDs || currentMovingLEDIndex <= 0)
             shouldMoveInverted = !shouldMoveInverted;
     }
 }
