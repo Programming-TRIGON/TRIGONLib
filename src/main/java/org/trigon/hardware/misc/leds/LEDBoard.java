@@ -125,8 +125,8 @@ public class LEDBoard extends SubsystemBase {
     }
 
     private void updateBouncingLEDs() {
-//        for (int i = 0; i < ledStrips.length; i++)
-        updateBouncingLEDStrip(0 + currentMovingLEDIndex % (ledStrips[0].getNumberOfLEDS() - numberOfMovingLEDs + 1), ledStrips[0]);
+        for (int i = 0; i < ledStrips.length; i++)
+            updateBouncingLEDStrip((i + currentMovingLEDIndex) % (ledStrips[0].getNumberOfLEDS() - numberOfMovingLEDs + 1), ledStrips[i]);
     }
 
     private void updateBreathingLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
