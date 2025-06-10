@@ -10,8 +10,13 @@ import java.io.IOException;
 public class LEDBoard extends SubsystemBase {
     private final LEDStrip[] ledStrips;
     private String[] currentAnimationFilePaths;
-    private int currentAnimationFrame;
-    private double animationUpdateIntervalSeconds, lastAnimationUpdateTimeSeconds;
+    private Color breatheColor;
+    private int currentAnimationFrame, numberOfBreathingLEDs, currentBreatheLEDIndex;
+    private double animationUpdateIntervalSeconds,
+            lastAnimationUpdateTimeSeconds,
+            breathingUpdateIntervalSeconds,
+            lastBreatheMovementTimeSeconds;
+    private boolean shouldBreatheInverted;
 
     public LEDBoard(LEDStrip... ledStrips) {
         this.ledStrips = ledStrips;
@@ -48,12 +53,23 @@ public class LEDBoard extends SubsystemBase {
         }
     }
 
-    void setAnimation(String[] filePaths, double framesPerSecond) {
+    void setAnimation(String[] filePaths, int framesPerSecond) {
         currentAnimationFilePaths = filePaths;
-        animationUpdateIntervalSeconds = 1 / framesPerSecond;
+        animationUpdateIntervalSeconds = (double) 1 / framesPerSecond;
         lastAnimationUpdateTimeSeconds = Timer.getFPGATimestamp();
         currentAnimationFrame = 0;
         setImage(filePaths[0]);
+    }
+
+    void breathe(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, boolean inverted) {
+        breatheColor = color;
+        this.numberOfBreathingLEDs = numberOfBreathingLEDs;
+        currentBreatheLEDIndex = 0;
+        breathingUpdateIntervalSeconds = (double) 1 / speedLEDsPerSecond;
+        lastBreatheMovementTimeSeconds = Timer.getFPGATimestamp();
+        shouldBreatheInverted = inverted;
+
+        updateBreathingLEDs();
     }
 
     void updateAnimationPeriodically() {
@@ -63,10 +79,28 @@ public class LEDBoard extends SubsystemBase {
         }
     }
 
+    void updateBreathingPeriodically() {
+        if (Timer.getFPGATimestamp() - lastBreatheMovementTimeSeconds >= breathingUpdateIntervalSeconds) {
+            currentBreatheLEDIndex += (shouldBreatheInverted ? -1 : 1);
+            updateBreathingLEDs();
+            lastBreatheMovementTimeSeconds = Timer.getFPGATimestamp();
+        }
+    }
+
     void resetAnimation() {
         currentAnimationFilePaths = new String[0];
         currentAnimationFrame = 0;
         animationUpdateIntervalSeconds = 0;
         lastAnimationUpdateTimeSeconds = 0;
+    }
+
+    private void updateBreathingLEDs() {
+        for (int i = 0; i < ledStrips.length; i++)
+            updateLEDStrip(i + currentBreatheLEDIndex, ledStrips[i]);
+    }
+
+    private void updateLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
+        for (int currentLED = ledStartIndex; currentLED < numberOfBreathingLEDs + ledStartIndex; currentLED += (shouldBreatheInverted ? -1 : 1))
+            ledStrip.setSingleLEDColor(currentLED % ledStrip.getNumberOfLEDS(), breatheColor);
     }
 }

@@ -150,19 +150,17 @@ public class LEDCommands {
      *
      * @param color                 the color of the breathing LEDs
      * @param numberOfBreathingLEDs the amount of breathing LEDs in each strip
-     * @param speed                 the speed at which the color should travel throughout each strip from 0 to 1
+     * @param speedLEDsPerSecond    the amount of LEDs the animation should move by per second
      * @param inverted              whether the breathing should be inverted or not
-     * @param bounceMode            where the breathing LEDs should restart their cycle throughout each strip
      * @param ledBoard              the LED board to animate
      * @return the command
      */
-    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDBoard ledBoard) {
-        return new StartEndCommand(
-                () -> {
-                    runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips());
-                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.breathe(color, numberOfBreathingLEDs, speed, inverted, bounceMode)), ledBoard.getLEDStrips());
-                },
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips()),
+    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, boolean inverted, LEDBoard ledBoard) {
+        return new FunctionalCommand(
+                () -> ledBoard.breathe(color, numberOfBreathingLEDs, speedLEDsPerSecond, inverted),
+                ledBoard::updateBreathingPeriodically,
+                (interrupted) -> ledBoard.clearBoard(),
+                () -> false,
                 ledBoard
         ).ignoringDisable(true);
     }
@@ -344,7 +342,7 @@ public class LEDCommands {
      * @param ledBoard            the LED board to animate
      * @return the command
      */
-    public static Command getSetBoardAnimationCommand(String[] filePaths, double framesPerSecond, boolean shouldLoop, boolean shouldKeepLastFrame, LEDBoard ledBoard) {
+    public static Command getSetBoardAnimationCommand(String[] filePaths, int framesPerSecond, boolean shouldLoop, boolean shouldKeepLastFrame, LEDBoard ledBoard) {
         return new FunctionalCommand(
                 () -> ledBoard.setAnimation(filePaths, framesPerSecond),
                 ledBoard::updateAnimationPeriodically,
