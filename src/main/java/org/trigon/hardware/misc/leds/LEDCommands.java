@@ -151,14 +151,14 @@ public class LEDCommands {
      * @param color                 the color of the breathing LEDs
      * @param numberOfBreathingLEDs the amount of breathing LEDs in each strip
      * @param speedLEDsPerSecond    the amount of LEDs the animation should move by per second
-     * @param levelSpacing          the lateral distance in LEDs of each layer's moving LEDs from the next layer
+     * @param ledSpacing            the lateral distance in LEDs of each layer's moving LEDs from the next layer
      * @param inverted              whether the breathing should be inverted or not
      * @param ledBoard              the LED board to animate
      * @return the command
      */
-    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int levelSpacing, boolean inverted, LEDBoard ledBoard) {
+    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int ledSpacing, boolean inverted, LEDBoard ledBoard) {
         return new FunctionalCommand(
-                () -> ledBoard.breathe(color, numberOfBreathingLEDs, speedLEDsPerSecond, levelSpacing, inverted),
+                () -> ledBoard.breathe(color, numberOfBreathingLEDs, speedLEDsPerSecond, ledSpacing, inverted),
                 ledBoard::updateBreathingPeriodically,
                 (interrupted) -> ledBoard.clearBoard(),
                 () -> false,
@@ -357,9 +357,20 @@ public class LEDCommands {
         ).ignoringDisable(true).until(() -> !shouldLoop && ledBoard.hasAnimationEnded());
     }
 
-    public static Command getSetBoardBounceCommand(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond, LEDBoard ledBoard) {
+    /**
+     * Gets a command that animated an LED board so that each strip "bounces" LEDs from side to side.
+     *
+     * @param color              the color to bounce around the LED strips
+     * @param numberOfMovingLEDs the number of LEDs to bounce in each strip
+     * @param speedLEDsPerSecond the number of LEDs to move per second
+     * @param ledSpacing         the distance that the LEDs should move along the strip per movement. Must fit evenly into the number of LEDs per strip.
+     * @param stripSpacing       the amount of LED strips to skip over in between active LED strips
+     * @param ledBoard           the LED board to animate
+     * @return the command
+     */
+    public static Command getSetBoardBounceCommand(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond, int ledSpacing, int stripSpacing, LEDBoard ledBoard) {
         return new FunctionalCommand(
-                () -> ledBoard.bounce(color, numberOfMovingLEDs, speedLEDsPerSecond),
+                () -> ledBoard.bounce(color, numberOfMovingLEDs, speedLEDsPerSecond, ledSpacing, stripSpacing),
                 ledBoard::updateBouncingPeriodically,
                 (interrupted) -> ledBoard.clearBoard(),
                 () -> false,

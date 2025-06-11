@@ -15,7 +15,8 @@ public class LEDBoard extends SubsystemBase {
             currentAnimationFrame,
             numberOfMovingLEDs,
             currentMovingLEDIndex,
-            movingLEDLayerSpacing;
+            movingLEDSpacing,
+            movingLEDStripSpacing;
     private double
             animationUpdateIntervalSeconds,
             lastAnimationUpdateTimeSeconds,
@@ -66,23 +67,25 @@ public class LEDBoard extends SubsystemBase {
         setImage(filePaths[0]);
     }
 
-    void breathe(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int levelSpacing, boolean inverted) {
+    void breathe(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int ledSpacing, boolean inverted) {
         movingLEDColor = color;
         this.numberOfMovingLEDs = numberOfBreathingLEDs;
         currentMovingLEDIndex = 0;
         movingUpdateIntervalSeconds = (double) 1 / speedLEDsPerSecond;
-        movingLEDLayerSpacing = levelSpacing;
+        movingLEDSpacing = ledSpacing;
         lastLEDMovementTimeSeconds = Timer.getFPGATimestamp();
         shouldMoveInverted = inverted;
 
         updateBreathingLEDs();
     }
 
-    void bounce(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond) {
+    void bounce(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond, int ledSpacing, int stripSpacing) {
         movingLEDColor = color;
         this.numberOfMovingLEDs = numberOfMovingLEDs;
         currentMovingLEDIndex = 0;
         movingUpdateIntervalSeconds = (double) 1 / speedLEDsPerSecond;
+        movingLEDSpacing = ledStrips[0].getNumberOfLEDS() % ledSpacing == 0 ? ledSpacing : 1;
+        movingLEDStripSpacing = stripSpacing + 1;
         lastLEDMovementTimeSeconds = Timer.getFPGATimestamp();
         shouldMoveInverted = false;
 
@@ -121,11 +124,11 @@ public class LEDBoard extends SubsystemBase {
 
     private void updateBreathingLEDs() {
         for (int i = 0; i < ledStrips.length; i++)
-            updateBreathingLEDStrip((i * (shouldMoveInverted ? -movingLEDLayerSpacing : movingLEDLayerSpacing)) + currentMovingLEDIndex, ledStrips[i]);
+            updateBreathingLEDStrip((i * (shouldMoveInverted ? -movingLEDSpacing : movingLEDSpacing)) + currentMovingLEDIndex, ledStrips[i]);
     }
 
     private void updateBouncingLEDs(int ledStripIndex, int startIndex, boolean movingRight) {
-        if (ledStripIndex == ledStrips.length)
+        if (ledStripIndex >= ledStrips.length)
             return;
 
         ledStrips[ledStripIndex].clearLEDColors();
@@ -137,7 +140,7 @@ public class LEDBoard extends SubsystemBase {
         else if (startIndex + numberOfMovingLEDs >= ledStrips[ledStripIndex].getNumberOfLEDS())
             movingRight = false;
 
-        updateBouncingLEDs(ledStripIndex + 1, startIndex + (movingRight ? 1 : -1), movingRight);
+        updateBouncingLEDs(ledStripIndex + movingLEDStripSpacing, startIndex + (movingRight ? movingLEDSpacing : -movingLEDSpacing), movingRight);
     }
 
     private void updateBreathingLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
@@ -146,19 +149,13 @@ public class LEDBoard extends SubsystemBase {
             ledStrip.setSingleLEDColor((currentLED + ledStrip.getNumberOfLEDS()) % ledStrip.getNumberOfLEDS(), movingLEDColor);
     }
 
-    private void updateBouncingLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
-        ledStrip.clearLEDColors();
-        for (int currentLED = ledStartIndex; currentLED < ledStartIndex + numberOfMovingLEDs; currentLED++)
-            ledStrip.setSingleLEDColor(currentLED, movingLEDColor);
-    }
-
     private void incrementAndWrapCurrentLEDIndex() {
         currentMovingLEDIndex++;
         currentMovingLEDIndex %= ledStrips[0].getNumberOfLEDS();
     }
 
     private void incrementAndBounceCurrentLEDIndex() {
-        currentMovingLEDIndex += shouldMoveInverted ? -1 : 1;
+        currentMovingLEDIndex += shouldMoveInverted ? -movingLEDSpacing : movingLEDSpacing;
         if (currentMovingLEDIndex >= ledStrips[0].getNumberOfLEDS() - numberOfMovingLEDs || currentMovingLEDIndex <= 0)
             shouldMoveInverted = !shouldMoveInverted;
     }
