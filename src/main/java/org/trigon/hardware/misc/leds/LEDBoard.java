@@ -86,7 +86,7 @@ public class LEDBoard extends SubsystemBase {
         lastLEDMovementTimeSeconds = Timer.getFPGATimestamp();
         shouldMoveInverted = false;
 
-        updateBouncingLEDs();
+        updateBouncingLEDs(0, 0, false);
     }
 
     void updateAnimationPeriodically() {
@@ -107,7 +107,7 @@ public class LEDBoard extends SubsystemBase {
     void updateBouncingPeriodically() {
         if (Timer.getFPGATimestamp() - lastLEDMovementTimeSeconds >= movingUpdateIntervalSeconds) {
             incrementAndBounceCurrentLEDIndex();
-            updateBouncingLEDs();
+            updateBouncingLEDs(0, currentMovingLEDIndex, true);
             lastLEDMovementTimeSeconds = Timer.getFPGATimestamp();
         }
     }
@@ -124,13 +124,19 @@ public class LEDBoard extends SubsystemBase {
             updateBreathingLEDStrip((i * (shouldMoveInverted ? -movingLEDLayerSpacing : movingLEDLayerSpacing)) + currentMovingLEDIndex, ledStrips[i]);
     }
 
-    private void updateBouncingLEDs() {
-        for (int i = 0; i < ledStrips.length; i++) {
-            final int
-                    firstLED = i + currentMovingLEDIndex,
-                    lastLED = firstLED + numberOfMovingLEDs;
-            updateBouncingLEDStrip(lastLED >= ledStrips[i].getNumberOfLEDS() ? ledStrips[i].getNumberOfLEDS() - numberOfMovingLEDs - (lastLED % ledStrips[i].getNumberOfLEDS()) : firstLED, ledStrips[i]);
-        }
+    private void updateBouncingLEDs(int ledStripIndex, int startIndex, boolean movingRight) {
+        if (ledStripIndex == ledStrips.length)
+            return;
+
+        for (int i = 0; i < numberOfMovingLEDs; i++)
+            ledStrips[ledStripIndex].setSingleLEDColor(startIndex + i, movingLEDColor);
+
+        if (startIndex == 0)
+            movingRight = true;
+        else if (startIndex + numberOfMovingLEDs >= ledStrips[ledStripIndex].getNumberOfLEDS())
+            movingRight = false;
+
+        updateBouncingLEDs(ledStripIndex + 1, startIndex + (movingRight ? 1 : -1), movingRight);
     }
 
     private void updateBreathingLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
