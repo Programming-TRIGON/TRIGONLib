@@ -128,6 +128,7 @@ public class LEDBoard extends SubsystemBase {
         if (ledStripIndex == ledStrips.length)
             return;
 
+        ledStrips[ledStripIndex].clearLEDColors();
         for (int i = 0; i < numberOfMovingLEDs; i++)
             ledStrips[ledStripIndex].setSingleLEDColor(startIndex + i, movingLEDColor);
 
