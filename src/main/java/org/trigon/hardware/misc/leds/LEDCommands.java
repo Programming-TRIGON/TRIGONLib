@@ -363,7 +363,7 @@ public class LEDCommands {
      * @param color              the color to bounce around the LED strips
      * @param numberOfMovingLEDs the number of LEDs to bounce in each strip
      * @param speedLEDsPerSecond the number of LEDs to move per second
-     * @param ledSpacing         the distance that the LEDs should move along the strip per movement. Must fit evenly into the number of LEDs per strip.
+     * @param ledSpacing         the distance that the LEDs should move along the strip per movement. Must fit evenly into the number of LEDs per strip
      * @param stripSpacing       the amount of LED strips to skip over in between active LED strips
      * @param ledBoard           the LED board to animate
      * @return the command
