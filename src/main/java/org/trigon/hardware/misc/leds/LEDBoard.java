@@ -146,7 +146,7 @@ public class LEDBoard extends SubsystemBase {
     private void updateBreathingLEDStrip(int ledStartIndex, LEDStrip ledStrip) {
         ledStrip.clearLEDColors();
         for (int currentLED = ledStartIndex; currentLED < ledStartIndex + numberOfMovingLEDs; currentLED++)
-            ledStrip.setSingleLEDColor((currentLED + ledStrip.getNumberOfLEDS()) % ledStrip.getNumberOfLEDS(), movingLEDColor);
+            ledStrip.setSingleLEDColor(((currentLED % ledStrip.getNumberOfLEDS()) + ledStrip.getNumberOfLEDS()) % ledStrip.getNumberOfLEDS(), movingLEDColor);
     }
 
     private void incrementAndWrapCurrentLEDIndex() {
