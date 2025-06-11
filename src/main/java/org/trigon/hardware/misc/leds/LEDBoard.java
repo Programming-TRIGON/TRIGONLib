@@ -107,7 +107,7 @@ public class LEDBoard extends SubsystemBase {
     void updateBouncingPeriodically() {
         if (Timer.getFPGATimestamp() - lastLEDMovementTimeSeconds >= movingUpdateIntervalSeconds) {
             incrementAndBounceCurrentLEDIndex();
-            updateBouncingLEDs(0, currentMovingLEDIndex, true);
+            updateBouncingLEDs(0, currentMovingLEDIndex, !shouldMoveInverted);
             lastLEDMovementTimeSeconds = Timer.getFPGATimestamp();
         }
     }
