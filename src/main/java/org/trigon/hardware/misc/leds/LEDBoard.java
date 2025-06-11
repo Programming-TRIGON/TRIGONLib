@@ -47,6 +47,7 @@ public class LEDBoard extends SubsystemBase {
             rgbArray = RGBArrayUtils.convertPngToRgbArray(filePath, ledStrips[0].getNumberOfLEDS(), ledStrips.length);
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Couldn't find file at " + filePath);
             rgbArray = new int[0][0][0];
         }
 
