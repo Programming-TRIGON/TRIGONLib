@@ -10,6 +10,7 @@ import org.trigon.hardware.phoenix6.Phoenix6Inputs;
 import org.trigon.hardware.phoenix6.talonfx.io.RealTalonFXIO;
 import org.trigon.hardware.phoenix6.talonfx.io.SimulationTalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
+import org.trigon.utilities.Orchestra;
 
 /**
  * A class that represents a TalonFX motor controller.
@@ -31,6 +32,7 @@ public class TalonFXMotor {
      */
     public TalonFXMotor(int id, String motorName) {
         this(id, motorName, "");
+        Orchestra.addMotor(motorIO.getTalonFX());
     }
 
     /**
@@ -190,7 +192,7 @@ public class TalonFXMotor {
     public void setBrake(boolean brake) {
         motorIO.setBrake(brake);
     }
-
+    
     private BaseStatusSignal motorSignalToStatusSignal(TalonFXSignal signal) {
         final TalonFX talonFX = motorIO.getTalonFX();
         if (RobotHardwareStats.isReplay() || talonFX == null)
