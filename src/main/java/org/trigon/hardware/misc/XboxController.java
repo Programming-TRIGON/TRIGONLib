@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  * A class that represents an Xbox controller. Used to get the values of the sticks and buttons on a controller, with the option of a deadband and exponentiation.
  */
 public class XboxController extends CommandXboxController {
-    private int exponent = 1;
+    private
+    int
+            rightStickExponent = 1,
+            leftStickExponent = 1;
     private double deadband = 0;
     private Command stopRumbleCommand = null;
 
@@ -25,34 +28,36 @@ public class XboxController extends CommandXboxController {
     /**
      * Constructs an instance of a controller.
      *
-     * @param port     the port index on the Driver Station that the controller is plugged into
-     * @param exponent how much to exponentiate the raw values of the sticks by
-     * @param deadband the deadband for the controller
+     * @param port               the port index on the Driver Station that the controller is plugged into
+     * @param rightStickExponent how much to exponentiate the raw values of the right stick by
+     * @param leftStickExponent  how much to exponentiate the raw values of the right stick by
+     * @param deadband           the deadband for the controller
      */
-    public XboxController(int port, int exponent, double deadband) {
+    public XboxController(int port, int rightStickExponent, int leftStickExponent, double deadband) {
         this(port);
-        this.exponent = exponent;
+        this.rightStickExponent = rightStickExponent;
+        this.leftStickExponent = leftStickExponent;
         this.deadband = deadband;
     }
 
     @Override
-    public double getLeftX() {
-        return calculateValue(super.getLeftX());
-    }
-
-    @Override
     public double getRightX() {
-        return calculateValue(super.getRightX());
-    }
-
-    @Override
-    public double getLeftY() {
-        return calculateValue(super.getLeftY());
+        return calculateRightStickValue(super.getRightX());
     }
 
     @Override
     public double getRightY() {
-        return calculateValue(super.getRightY());
+        return calculateRightStickValue(super.getRightY());
+    }
+
+    @Override
+    public double getLeftX() {
+        return calculateLeftStickValue(super.getLeftX());
+    }
+
+    @Override
+    public double getLeftY() {
+        return calculateLeftStickValue(super.getLeftY());
     }
 
     /**
@@ -61,7 +66,26 @@ public class XboxController extends CommandXboxController {
      * @param exponent the exponent
      */
     public void setExponent(int exponent) {
-        this.exponent = exponent;
+        this.rightStickExponent = exponent;
+        this.leftStickExponent = exponent;
+    }
+
+    /**
+     * Sets the exponent for the right stick on the controller, which will exponentiate the raw values of the stick by the exponent.
+     *
+     * @param exponent the exponent
+     */
+    public void setRightStickExponent(int exponent) {
+        this.rightStickExponent = exponent;
+    }
+
+    /**
+     * Sets the exponent for the left stick on the controller, which will exponentiate the raw values of the stick by the exponent.
+     *
+     * @param exponent the exponent
+     */
+    public void setLeftStickExponent(int exponent) {
+        this.leftStickExponent = exponent;
     }
 
     /**
@@ -93,7 +117,15 @@ public class XboxController extends CommandXboxController {
         return super.getHID().getPOV();
     }
 
-    private double calculateValue(double value) {
+    private double calculateRightStickValue(double value) {
+        return calculateStickValue(value, rightStickExponent);
+    }
+
+    private double calculateLeftStickValue(double value) {
+        return calculateStickValue(value, leftStickExponent);
+    }
+
+    private double calculateStickValue(double value, double exponent) {
         if (Math.abs(value) < deadband)
             return 0;
 
