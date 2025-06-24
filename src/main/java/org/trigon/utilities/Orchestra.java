@@ -46,9 +46,10 @@ public class Orchestra {
      * @param filePath       the path of the .chrp file to be added to the Orchestra
      * @param motorsPerTrack number of motors that should be assigned to each track
      */
-    public static void playFile(String filePath, int... motorsPerTrack) throws IllegalStateException {
+    public static void playFile(String filePath, int... motorsPerTrack) {
         int totalUsedMotors = 0;
         int motorsAssignedTracks = 0;
+
         for (int i = 0; i < motorsPerTrack.length; i++) {
             totalUsedMotors += motorsPerTrack[i];
             if (totalUsedMotors > MOTORS.size()) {
@@ -85,7 +86,7 @@ public class Orchestra {
     }
 
     /**
-     * @return if music is playing
+     * @return whether music is playing or not
      */
     public static boolean isOrchestraCurrentlyPlayingMusic() {
         return ORCHESTRA.isPlaying();
