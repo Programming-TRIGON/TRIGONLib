@@ -97,6 +97,8 @@ public abstract class LEDStrip extends SubsystemBase {
 
     protected abstract void rainbow(double brightness, double speed, boolean inverted);
 
+    protected abstract void setSingleLEDColor(int index, Color color);
+
     private void addLEDStripToLEDStripsArray(LEDStrip ledStrip) {
         final LEDStrip[] newLEDStrips = new LEDStrip[LED_STRIPS.length + 1];
         System.arraycopy(LED_STRIPS, 0, newLEDStrips, 0, LED_STRIPS.length);
