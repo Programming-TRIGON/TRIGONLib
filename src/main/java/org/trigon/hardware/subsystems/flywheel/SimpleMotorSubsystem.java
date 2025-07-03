@@ -66,6 +66,13 @@ public class SimpleMotorSubsystem {
                 .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
     }
 
+    public void updateMechanism() {
+        mechanism.update(
+                getVoltage(),
+                getVelocityRotationsPerSecond()
+        );
+    }
+
     public void updatePeriodically() {
         motor.update();
         Logger.recordOutput(name + "/CurrentVelocityRotationsPerSecond", motor.getSignal(TalonFXSignal.VELOCITY));
