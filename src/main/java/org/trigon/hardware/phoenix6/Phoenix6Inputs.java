@@ -1,7 +1,6 @@
 package org.trigon.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusSignal;
 import org.littletonrobotics.junction.LogTable;
 import org.trigon.hardware.InputsBase;
 import org.trigon.hardware.RobotHardwareStats;
@@ -93,6 +92,8 @@ public class Phoenix6Inputs extends InputsBase {
         for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
             final double[] queueAsArray = SignalThreadBase.queueToDoubleArray(entry.getValue());
             table.put(entry.getKey() + "_Threaded", queueAsArray);
+            if (queueAsArray.length == 0)
+                continue;
             table.put(entry.getKey(), queueAsArray[queueAsArray.length - 1]);
         }
     }
@@ -103,9 +104,6 @@ public class Phoenix6Inputs extends InputsBase {
 
         for (int i = firstInputIndex; i < firstInputIndex + numberOfInputs; i++) {
             final BaseStatusSignal signal = isCanivore ? CANIVORE_SIGNALS[i] : RIO_SIGNALS[i];
-            if (signal.getName().equals("ClosedLoopReference")) // This signal isn't updated correctly by `BaseStatusSignal.refreshAll()` for some reason.
-                ((StatusSignal<Double>) signal).refresh();
-
             table.put(signal.getName(), signal.getValueAsDouble());
         }
     }

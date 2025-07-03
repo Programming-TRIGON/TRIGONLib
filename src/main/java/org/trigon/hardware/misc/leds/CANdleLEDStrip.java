@@ -13,6 +13,7 @@ public class CANdleLEDStrip extends LEDStrip {
     private static CANdle CANDLE;
     private static int LAST_CREATED_LED_STRIP_ANIMATION_SLOT = 0;
     private final int animationSlot;
+    private boolean shouldRunPeriodically = false;
 
     /**
      * Sets the CANdle instance to be used for controlling the LED strips. Must be set before using any LED strips. Should only be called once.
@@ -21,7 +22,7 @@ public class CANdleLEDStrip extends LEDStrip {
      * @param candle the CANdle instance to be used
      */
     public static void setCANdle(CANdle candle) {
-        if (CANDLE == null)
+        if (CANDLE == null && !RobotHardwareStats.isSimulation())
             CANDLE = candle;
     }
 
@@ -37,7 +38,7 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     /**
-     * Constructs a new CANdleLEDStrip. Before any commands are sent to the LED strip, the setCANdle method must be called.
+     * Constructs a new CANdleLEDStrip. Before any commands are sent to the LED strip, the {@link CANdleLEDStrip#setCANdle(CANdle)} method must be called.
      *
      * @param inverted     whether the LED strip is inverted
      * @param numberOfLEDs the amount of LEDs in the strip
@@ -50,17 +51,24 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void clearLEDColors() {
+    public void periodic() {
+        if (shouldRunPeriodically)
+            currentAnimation.run();
+    }
+
+    @Override
+    protected void clearLEDColors() {
         CANDLE.clearAnimation(animationSlot);
     }
 
     @Override
-    void blink(Color firstColor, double speed) {
+    protected void blink(Color color, double speed) {
+        shouldRunPeriodically = false;
         CANDLE.animate(
                 new SingleFadeAnimation(
-                        (int) firstColor.red,
-                        (int) firstColor.green,
-                        (int) firstColor.blue,
+                        (int) (color.red * 255),
+                        (int) (color.green * 255),
+                        (int) (color.blue * 255),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -71,22 +79,31 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void staticColor(Color color) {
-        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, indexOffset, numberOfLEDs);
+    protected void staticColor(Color color) {
+        shouldRunPeriodically = false;
+        CANDLE.setLEDs(
+                ((int) color.red * 255),
+                ((int) color.green * 255),
+                ((int) color.blue * 255),
+                0,
+                indexOffset,
+                numberOfLEDs
+        );
     }
 
     @Override
-    void breathe(Color color, int amountOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    protected void breathe(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+        shouldRunPeriodically = false;
         CANDLE.animate(
                 new LarsonAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        (int) (color.red * 255),
+                        (int) (color.green * 255),
+                        (int) (color.blue * 255),
                         0,
                         speed,
                         this.numberOfLEDs,
                         bounceMode,
-                        amountOfBreathingLEDs,
+                        numberOfBreathingLEDs,
                         indexOffset
                 ),
                 animationSlot
@@ -94,12 +111,13 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void alternateColor(Color firstColor, Color secondColor) {
+    protected void alternateColor(Color firstColor, Color secondColor) {
+        shouldRunPeriodically = false;
         for (int i = 0; i < numberOfLEDs; i++)
             CANDLE.setLEDs(
-                    (int) (isEven(i) ? firstColor.red : secondColor.red),
-                    (int) (isEven(i) ? firstColor.green : secondColor.green),
-                    (int) (isEven(i) ? firstColor.blue : secondColor.blue),
+                    (int) ((isEven(i) ? firstColor.red : secondColor.red) * 255),
+                    (int) ((isEven(i) ? firstColor.green : secondColor.green) * 255),
+                    (int) ((isEven(i) ? firstColor.blue : secondColor.blue) * 255),
                     0,
                     i + indexOffset,
                     1
@@ -107,13 +125,14 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void colorFlow(Color color, double speed, boolean inverted) {
+    protected void colorFlow(Color color, double speed, boolean inverted) {
+        shouldRunPeriodically = false;
         final boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new ColorFlowAnimation(
-                        (int) color.red,
-                        (int) color.green,
-                        (int) color.blue,
+                        (int) (color.red * 255),
+                        (int) (color.green * 255),
+                        (int) (color.blue * 255),
                         0,
                         speed,
                         this.numberOfLEDs,
@@ -125,7 +144,8 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void rainbow(double brightness, double speed, boolean inverted) {
+    protected void rainbow(double brightness, double speed, boolean inverted) {
+        shouldRunPeriodically = false;
         final boolean correctedInverted = this.inverted != inverted;
         CANDLE.animate(
                 new RainbowAnimation(
@@ -140,17 +160,23 @@ public class CANdleLEDStrip extends LEDStrip {
     }
 
     @Override
-    void sectionColor(Supplier<Color>[] colors) {
-        final int ledsPerSection = (int) Math.floor(numberOfLEDs / colors.length);
+    protected void sectionColor(Supplier<Color>[] colors) {
+        shouldRunPeriodically = true;
+        final int ledsPerSection = (int) Math.floor((double) numberOfLEDs / colors.length);
         setSectionColor(colors.length, ledsPerSection, colors);
+    }
+
+    @Override
+    protected void setSingleLEDColor(int index, Color color) {
+        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, index, 1);
     }
 
     private void setSectionColor(int amountOfSections, int ledsPerSection, Supplier<Color>[] colors) {
         for (int i = 0; i < amountOfSections; i++) {
             CANDLE.setLEDs(
-                    (int) (inverted ? colors[amountOfSections - i - 1].get().red : colors[i].get().red),
-                    (int) (inverted ? colors[amountOfSections - i - 1].get().green : colors[i].get().green),
-                    (int) (inverted ? colors[amountOfSections - i - 1].get().blue : colors[i].get().blue),
+                    (int) ((inverted ? colors[amountOfSections - i - 1].get().red : colors[i].get().red) * 255),
+                    (int) ((inverted ? colors[amountOfSections - i - 1].get().green : colors[i].get().green) * 255),
+                    (int) ((inverted ? colors[amountOfSections - i - 1].get().blue : colors[i].get().blue) * 255),
                     0,
                     ledsPerSection * i + indexOffset,
                     i == amountOfSections - 1 ? numberOfLEDs - 1 : ledsPerSection * (i + 1) - 1

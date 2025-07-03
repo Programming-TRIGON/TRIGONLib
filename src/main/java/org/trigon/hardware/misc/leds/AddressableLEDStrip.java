@@ -40,7 +40,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     /**
-     * Constructs a new AddressableLEDStrip. Before any commands are sent to the LED strip, the setAddressableLED and setAddressableLEDBuffer methods must be called.
+     * Constructs a new AddressableLEDStrip. Before any commands are sent to the LED strip, the {@link AddressableLEDStrip#initiateAddressableLED(int, int)} method must be called.
      *
      * @param inverted     whether the LED strip is inverted
      * @param numberOfLEDs the amount of LEDs in the strip
@@ -58,12 +58,12 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void clearLEDColors() {
-        staticColor(Color.kBlack);
+    protected void clearLEDColors() {
+        setStaticColor(Color.kBlack);
     }
 
     @Override
-    void blink(Color firstColor, double speed) {
+    protected void blink(Color color, double speed) {
         final double correctedSpeed = 1 - speed;
         final double currentTime = Timer.getTimestamp();
 
@@ -73,19 +73,19 @@ public class AddressableLEDStrip extends LEDStrip {
         }
 
         if (isLEDAnimationChanged) {
-            staticColor(firstColor);
+            setStaticColor(color);
             return;
         }
         clearLEDColors();
     }
 
     @Override
-    void staticColor(Color color) {
-        setLEDColors(color, 0, numberOfLEDs - 1);
+    protected void staticColor(Color color) {
+        setStaticColor(color);
     }
 
     @Override
-    void breathe(Color color, int breathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    protected void breathe(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
@@ -99,12 +99,12 @@ public class AddressableLEDStrip extends LEDStrip {
                 lastBreatheLED++;
         }
 
-        checkIfBreathingHasHitEnd(breathingLEDs, correctedInverted, bounceMode);
-        setBreathingLEDs(color, breathingLEDs, bounceMode);
+        checkIfBreathingHasHitEnd(numberOfBreathingLEDs, correctedInverted, bounceMode);
+        setBreathingLEDs(color, numberOfBreathingLEDs, bounceMode);
     }
 
     @Override
-    void colorFlow(Color color, double speed, boolean inverted) {
+    protected void colorFlow(Color color, double speed, boolean inverted) {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
@@ -123,13 +123,13 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void alternateColor(Color firstColor, Color secondColor) {
+    protected void alternateColor(Color firstColor, Color secondColor) {
         for (int i = 0; i < numberOfLEDs; i++)
             LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? firstColor : secondColor);
     }
 
     @Override
-    void rainbow(double brightness, double speed, boolean inverted) {
+    protected void rainbow(double brightness, double speed, boolean inverted) {
         final boolean correctedInverted = this.inverted != inverted;
         final int adjustedBrightness = (int) (brightness * 255);
         final int hueIncrement = (int) (speed * 8);
@@ -150,9 +150,9 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void sectionColor(Supplier<Color>[] colors) {
+    protected void sectionColor(Supplier<Color>[] colors) {
         final int amountOfSections = colors.length;
-        final int ledsPerSection = (int) Math.floor(numberOfLEDs / amountOfSections);
+        final int ledsPerSection = (int) Math.floor((double) numberOfLEDs / amountOfSections);
 
         for (int i = 0; i < amountOfSections; i++)
             setLEDColors(
@@ -163,12 +163,21 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    void resetLEDSettings() {
+    protected void resetLEDSettings() {
         lastBreatheLED = indexOffset;
         lastLEDAnimationChangeTime = Timer.getTimestamp();
         rainbowFirstPixelHue = 0;
         isLEDAnimationChanged = false;
         amountOfColorFlowLEDs = 0;
+    }
+
+    @Override
+    protected void setSingleLEDColor(int index, Color color) {
+        LED_BUFFER.setLED(indexOffset + index, color);
+    }
+
+    private void setStaticColor(Color color) {
+        setLEDColors(color, 0, numberOfLEDs - 1);
     }
 
     private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
