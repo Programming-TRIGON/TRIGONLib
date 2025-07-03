@@ -2,7 +2,6 @@ package org.trigon.hardware.subsystems.flywheel;
 
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VoltageOut;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -10,7 +9,6 @@ import org.littletonrobotics.junction.Logger;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
 import org.trigon.hardware.simulation.SimpleMotorSimulation;
-import org.trigon.hardware.subsystems.arm.ArmSubsystem;
 import org.trigon.utilities.mechanisms.SpeedMechanism2d;
 
 public class SimpleMotorSubsystem {
@@ -64,18 +62,8 @@ public class SimpleMotorSubsystem {
 
     public void updateLog(SysIdRoutineLog log) {
         log.motor(name)
-                .angularPosition(Units.Rotations.of(motor.getSignal(TalonFXSignal.POSITION)))
-                .angularVelocity(Units.RotationsPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
+                .linearVelocity(Units.MetersPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
                 .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
-    }
-
-    public void updateMechanism() {
-        logComponentPose();
-
-        mechanism.update(
-                getAngle(),
-                Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE))
-        );
     }
 
     public void updatePeriodically() {
@@ -88,20 +76,32 @@ public class SimpleMotorSubsystem {
         motor.setControl(voltageRequest.withOutput(targetVoltage));
     }
 
-    public boolean atState(ArmSubsystem.ArmState targetState) {
+    public boolean atState(SimpleMotorSubsystem.SimpleMotorState targetState) {
         return this.targetState == targetState && atTargetState();
     }
 
     public boolean atTargetState() {
         if (targetState == null)
             return false;
-        final double currentToTargetStateDifferenceDegrees = Math.abs(targetState.getTargetVelocityRotationsPerSecond() - getVelocityRotationsPerSecond().getDegrees());
-        return currentToTargetStateDifferenceDegrees < angleTolerance.getDegrees();
+        return getVoltage() == targetState.getTargetVoltage();
+    }
+
+    public double getVelocityRotationsPerSecond() {
+        return motor.getSignal(TalonFXSignal.VELOCITY);
+    }
+
+    public double getVoltage() {
+        return motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE);
     }
 
 
-    public void setTargetState(Rotation2d targetAngle, double speedScalar) {
-        setTargetAngle(targetAngle);
+    public void setTargetState(SimpleMotorSubsystem.SimpleMotorState targetState) {
+        setTargetVoltage(targetState.getTargetVoltage());
+        this.targetState = targetState;
+    }
+
+    public void setTargetVoltage(double targetVoltage) {
+        setControl(voltageRequest.withOutput(targetVoltage));
     }
 
     public void setControl(ControlRequest request) {
