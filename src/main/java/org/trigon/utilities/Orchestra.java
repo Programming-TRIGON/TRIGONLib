@@ -61,7 +61,7 @@ public class Orchestra {
                 ORCHESTRA.clearInstruments();
                 return;
             }
-            for (int j = 0; j < motorsPerTrack[i]; i++)
+            for (int j = 0; j < motorsPerTrack[i]; j++)
                 if (!shouldSkipMotor(motorsAssignedTracks, skippedIDs))
                     ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks), i + 1);
             motorsAssignedTracks++;
