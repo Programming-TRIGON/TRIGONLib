@@ -27,11 +27,14 @@ public class Orchestra {
      * The tracks are assigned linearly and loop back if there are extra motors.
      *
      * @param filePath    the path of the .chrp file to be played by the Orchestra
-     * @param totalTracks the number of tracks in the .chrp file.
+     * @param totalTracks the number of tracks in the .chrp file
+     * @param skippedIDs  the IDs of motors that should not be assigned a track
      */
-    public static void playFile(String filePath, int totalTracks) {
-        for (int i = 0; i < MOTORS.size(); i++)
-            ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks + 1);
+    public static void playFile(String filePath, int totalTracks, int... skippedIDs) {
+        for (int i = 0; i < MOTORS.size(); i++) {
+            if (!shouldSkipMotor(i, skippedIDs))
+                ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks + 1);
+        }
 
         addAndPlayFile(filePath);
     }
@@ -45,8 +48,9 @@ public class Orchestra {
      *
      * @param filePath       the path of the .chrp file to be added to the Orchestra
      * @param motorsPerTrack number of motors that should be assigned to each track
+     * @param skippedIDs     the IDs of motors that should not be assigned a track
      */
-    public static void playFile(String filePath, int... motorsPerTrack) {
+    public static void playFile(String filePath, int[] motorsPerTrack, int... skippedIDs) {
         int totalUsedMotors = 0;
         int motorsAssignedTracks = 0;
 
@@ -58,7 +62,9 @@ public class Orchestra {
                 return;
             }
             for (int j = 0; j < motorsPerTrack[i]; i++)
-                ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks++), i + 1);
+                if (!shouldSkipMotor(motorsAssignedTracks, skippedIDs))
+                    ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks), i + 1);
+            motorsAssignedTracks++;
         }
         addAndPlayFile(filePath);
     }
@@ -107,5 +113,14 @@ public class Orchestra {
     private static void addAndPlayFile(String filePath) {
         ORCHESTRA.loadMusic(filePath);
         play();
+    }
+
+    private static boolean shouldSkipMotor(int id, int[] skippedIDs) {
+        for (int skippedID : skippedIDs) {
+            if (id == skippedID) {
+                return true;
+            }
+        }
+        return false;
     }
 }

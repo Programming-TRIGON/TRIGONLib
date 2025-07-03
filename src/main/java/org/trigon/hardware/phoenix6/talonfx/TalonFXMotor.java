@@ -32,7 +32,6 @@ public class TalonFXMotor {
      */
     public TalonFXMotor(int id, String motorName) {
         this(id, motorName, "");
-        Orchestra.addMotor(motorIO.getTalonFX());
     }
 
     /**
@@ -48,6 +47,8 @@ public class TalonFXMotor {
         this.motorInputs = new Phoenix6Inputs(motorName, !canbus.isEmpty());
         this.id = id;
         motorIO.optimizeBusUsage();
+
+        Orchestra.addMotor(motorIO.getTalonFX());
     }
 
     /**
@@ -192,7 +193,7 @@ public class TalonFXMotor {
     public void setBrake(boolean brake) {
         motorIO.setBrake(brake);
     }
-    
+
     private BaseStatusSignal motorSignalToStatusSignal(TalonFXSignal signal) {
         final TalonFX talonFX = motorIO.getTalonFX();
         if (RobotHardwareStats.isReplay() || talonFX == null)
