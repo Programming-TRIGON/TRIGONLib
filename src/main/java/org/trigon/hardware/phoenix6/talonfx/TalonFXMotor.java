@@ -48,7 +48,7 @@ public class TalonFXMotor {
         this.id = id;
         motorIO.optimizeBusUsage();
 
-        Orchestra.addMotor(motorIO.getTalonFX());
+        Orchestra.addMotor(motorIO.getTalonFX(), id);
     }
 
     /**

@@ -2,14 +2,14 @@ package org.trigon.utilities;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A class that uses the {@link com.ctre.phoenix6.Orchestra} library in Phoenix 6 to play a .chrp file.
  */
 public class Orchestra {
     private static final com.ctre.phoenix6.Orchestra ORCHESTRA = new com.ctre.phoenix6.Orchestra();
-    private static final ArrayList<TalonFX> MOTORS = new ArrayList<>();
+    private static final HashMap<Integer, TalonFX> MOTORS = new HashMap<>();
 
     /**
      * Adds a motor to the Orchestra.
@@ -17,8 +17,8 @@ public class Orchestra {
      *
      * @param motor the motor to be added to the Orchestra
      */
-    public static void addMotor(TalonFX motor) {
-        MOTORS.add(motor);
+    public static void addMotor(TalonFX motor, int id) {
+        MOTORS.put(id, motor);
     }
 
     /**
@@ -32,7 +32,7 @@ public class Orchestra {
      */
     public static void playFile(String filePath, int totalTracks, int... skippedIDs) {
         for (int i = 0; i < MOTORS.size(); i++) {
-            if (!shouldSkipMotor(MOTORS.get(i).getDeviceID(), skippedIDs))
+            if (!shouldSkipMotor(i, skippedIDs))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
         }
 
@@ -62,7 +62,7 @@ public class Orchestra {
                 return;
             }
             for (int j = 0; j < motorsPerTrack[i]; j++) {
-                if (!shouldSkipMotor(MOTORS.get(motorsAssignedTracks).getDeviceID(), skippedIDs))
+                if (!shouldSkipMotor(motorsAssignedTracks, skippedIDs))
                     ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks), i);
                 motorsAssignedTracks++;
             }
