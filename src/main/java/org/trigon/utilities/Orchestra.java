@@ -32,8 +32,8 @@ public class Orchestra {
      */
     public static void playFile(String filePath, int totalTracks, int... skippedIDs) {
         for (int i = 0; i < MOTORS.size(); i++) {
-//            if (!shouldSkipMotor(MOTORS.get(i).getDeviceID(), skippedIDs))
-            ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
+            if (!shouldSkipMotor(MOTORS.get(i).getDeviceID(), skippedIDs))
+                ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
         }
 
         addAndPlayFile(filePath);
@@ -61,10 +61,11 @@ public class Orchestra {
                 ORCHESTRA.clearInstruments();
                 return;
             }
-            for (int j = 0; j < motorsPerTrack[i]; j++)
-//                if (!shouldSkipMotor(MOTORS.get(motorsAssignedTracks).getDeviceID(), skippedIDs))
-                ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks), i);
-            motorsAssignedTracks++;
+            for (int j = 0; j < motorsPerTrack[i]; j++) {
+                if (!shouldSkipMotor(MOTORS.get(motorsAssignedTracks).getDeviceID(), skippedIDs))
+                    ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks), i);
+                motorsAssignedTracks++;
+            }
         }
         addAndPlayFile(filePath);
     }
