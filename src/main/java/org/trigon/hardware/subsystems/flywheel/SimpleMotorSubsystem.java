@@ -1,6 +1,7 @@
 package org.trigon.hardware.subsystems.flywheel;
 
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -102,13 +103,22 @@ public class SimpleMotorSubsystem {
     }
 
 
-    public void setTargetState(SimpleMotorSubsystem.SimpleMotorState targetState) {
+    public void setTargetStateWithVoltage(SimpleMotorSubsystem.SimpleMotorState targetState) {
         setTargetVoltage(targetState.getTargetVoltage());
+        this.targetState = targetState;
+    }
+
+    public void setTargetStateWithVelocity(SimpleMotorSubsystem.SimpleMotorState targetState) {
+        setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
         this.targetState = targetState;
     }
 
     public void setTargetVoltage(double targetVoltage) {
         setControl(voltageRequest.withOutput(targetVoltage));
+    }
+
+    public void setTargetVelocity(double targetVelocity) {
+        setControl(new VelocityVoltage(targetVelocity).withAcceleration(targetVelocity));
     }
 
     public void setControl(ControlRequest request) {
