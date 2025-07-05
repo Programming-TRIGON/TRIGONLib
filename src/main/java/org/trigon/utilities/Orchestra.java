@@ -59,7 +59,7 @@ public class Orchestra {
                     System.out.println("Orchestra: Not enough motors");
                     return;
                 }
-                if (!shouldSkipMotor(motorIndex, skippedIDs))
+                if (!shouldSkipMotor(motorIndex, skippedIDs) && MOTORS.containsKey(motorIndex))
                     ORCHESTRA.addInstrument(MOTORS.get(motorIndex), trackIndex);
                 motorIndex++;
             }
