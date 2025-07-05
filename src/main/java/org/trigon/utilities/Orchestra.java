@@ -51,22 +51,20 @@ public class Orchestra {
      * @param skippedIDs     the IDs of motors that should not be assigned a track
      */
     public static void playFile(String filePath, int[] motorsPerTrack, int... skippedIDs) {
-        int totalUsedMotors = 0;
-        int motorsAssignedTracks = 0;
+        int motorIndex = 0;
 
-        for (int i = 0; i < motorsPerTrack.length; i++) {
-            totalUsedMotors += motorsPerTrack[i];
-            if (totalUsedMotors > MOTORS.size()) {
-                System.out.println("Orchestra: Fewer motors than requested tracks, can't play requested file.");
-                ORCHESTRA.clearInstruments();
-                return;
-            }
-            for (int j = 0; j < motorsPerTrack[i]; j++) {
-                if (!shouldSkipMotor(motorsAssignedTracks, skippedIDs))
-                    ORCHESTRA.addInstrument(MOTORS.get(motorsAssignedTracks), i);
-                motorsAssignedTracks++;
+        for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
+            for (int motorsInCurrentTrack = 0; motorsInCurrentTrack < motorsPerTrack[trackIndex]; motorsInCurrentTrack++) {
+                if (motorIndex >= MOTORS.size()) {
+                    System.out.println("Orchestra: Not enough motors");
+                    return;
+                }
+                if (!shouldSkipMotor(motorIndex, skippedIDs))
+                    ORCHESTRA.addInstrument(MOTORS.get(motorIndex), trackIndex);
+                motorIndex++;
             }
         }
+
         addAndPlayFile(filePath);
     }
 
