@@ -1,13 +1,19 @@
 package org.trigon.utilities;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 /**
  * A class that uses the {@link com.ctre.phoenix6.Orchestra} library in Phoenix 6 to play a .chrp file.
  */
-public class Orchestra {
+public class Orchestra extends SubsystemBase {
+    private static final Orchestra INSTANCE = new Orchestra();
     private static final com.ctre.phoenix6.Orchestra ORCHESTRA = new com.ctre.phoenix6.Orchestra();
     private static final HashMap<Integer, TalonFX> MOTORS = new HashMap<>();
 
@@ -21,6 +27,61 @@ public class Orchestra {
         MOTORS.put(id, motor);
     }
 
+    public static Command getPlayFileCommand(String filePath, int totalTracks, Supplier<Integer>... skippedIDs) {
+        return new FunctionalCommand(
+                () -> playFile(filePath, totalTracks, integerSupplierArrayToIntegerArray(skippedIDs)),
+                () -> updateMotors(totalTracks, skippedIDs),
+                (interrupted) -> stop(),
+                () -> false,
+                INSTANCE
+        );
+    }
+
+    public static Command getPlayFileCommand(String filePath, int[] motorsPerTrack, Supplier<Integer>... skippedIDs) {
+        return new FunctionalCommand(
+                () -> playFile(filePath, motorsPerTrack, integerSupplierArrayToIntegerArray(skippedIDs)),
+                () -> updateMotors(motorsPerTrack, skippedIDs),
+                (interrupted) -> stop(),
+                () -> false,
+                INSTANCE
+        );
+    }
+
+    public static Command getStopCommand() {
+        return new InstantCommand(
+                Orchestra::stop,
+                INSTANCE
+        );
+    }
+
+    public static Command getPauseCommand() {
+        return new InstantCommand(
+                Orchestra::pause,
+                INSTANCE
+        );
+    }
+
+    public static Command getPlayCommand() {
+        return new InstantCommand(
+                Orchestra::play,
+                INSTANCE
+        );
+    }
+
+    /**
+     * @return whether music is playing or not
+     */
+    public static boolean isOrchestraCurrentlyPlayingMusic() {
+        return ORCHESTRA.isPlaying();
+    }
+
+    /**
+     * @return the play time of the .chrp file in seconds
+     */
+    public static double getPlayTimeSeconds() {
+        return ORCHESTRA.getCurrentTime();
+    }
+
     /**
      * Plays a .chrp file and assigns a track to each motor.
      * A .chrp file stores music as tracks that can be played separately.
@@ -30,7 +91,7 @@ public class Orchestra {
      * @param totalTracks the number of tracks in the .chrp file
      * @param skippedIDs  the IDs of motors that should not be assigned a track
      */
-    public static void playFile(String filePath, int totalTracks, int... skippedIDs) {
+    private static void playFile(String filePath, int totalTracks, int... skippedIDs) {
         for (int i = 1; i < MOTORS.size() + 1; i++) {
             if (!shouldSkipMotor(i, skippedIDs) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
@@ -50,7 +111,7 @@ public class Orchestra {
      * @param motorsPerTrack number of motors that should be assigned to each track
      * @param skippedIDs     the IDs of motors that should not be assigned a track
      */
-    public static void playFile(String filePath, int[] motorsPerTrack, int... skippedIDs) {
+    private static void playFile(String filePath, int[] motorsPerTrack, int... skippedIDs) {
         int motorIndex = 1;
 
         for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
@@ -68,40 +129,53 @@ public class Orchestra {
         addAndPlayFile(filePath);
     }
 
+    private static void updateMotors(int totalTracks, Supplier<Integer>[] skippedIDs) {
+        ORCHESTRA.clearInstruments();
+        int[] skippedIDsIntegerArray = integerSupplierArrayToIntegerArray(skippedIDs);
+
+        for (int i = 1; i < MOTORS.size() + 1; i++)
+            if (!shouldSkipMotor(i, skippedIDsIntegerArray) && MOTORS.containsKey(i))
+                ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
+    }
+
+    private static void updateMotors(int[] motorsPerTrack, Supplier<Integer>[] skippedIDs) {
+        ORCHESTRA.clearInstruments();
+        int[] skippedIDsIntegerArray = integerSupplierArrayToIntegerArray(skippedIDs);
+        int motorIndex = 1;
+
+        for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
+            for (int motorsInCurrentTrack = 0; motorsInCurrentTrack < motorsPerTrack[trackIndex]; motorsInCurrentTrack++) {
+                if (motorIndex > MOTORS.size()) {
+                    System.out.println("Orchestra: Not enough motors");
+                    return;
+                }
+                if (!shouldSkipMotor(motorIndex, skippedIDsIntegerArray) && MOTORS.containsKey(motorIndex))
+                    ORCHESTRA.addInstrument(MOTORS.get(motorIndex), trackIndex);
+                motorIndex++;
+            }
+        }
+    }
+
     /**
      * Stops the music and removes all tracks assigned to motors.
      */
-    public static void stop() {
+    private static void stop() {
         ORCHESTRA.stop();
         ORCHESTRA.clearInstruments();
     }
 
     /**
-     * Plays the stored .chrp file.
-     */
-    public static void play() {
-        ORCHESTRA.play();
-    }
-
-    /**
      * Pauses the music.
      */
-    public static void pause() {
+    private static void pause() {
         ORCHESTRA.pause();
     }
 
     /**
-     * @return whether music is playing or not
+     * Plays the stored .chrp file.
      */
-    public static boolean isOrchestraCurrentlyPlayingMusic() {
-        return ORCHESTRA.isPlaying();
-    }
-
-    /**
-     * @return the play time of the .chrp file in seconds
-     */
-    public static double getPlayTimeSeconds() {
-        return ORCHESTRA.getCurrentTime();
+    private static void play() {
+        ORCHESTRA.play();
     }
 
     /**
@@ -121,5 +195,13 @@ public class Orchestra {
             }
         }
         return false;
+    }
+
+    private static int[] integerSupplierArrayToIntegerArray(Supplier<Integer>[] supplierArray) {
+        int[] array = new int[supplierArray.length];
+        for (int i = 0; i < supplierArray.length; i++)
+            array[i] = supplierArray[i].get();
+
+        return array;
     }
 }
