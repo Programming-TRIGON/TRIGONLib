@@ -31,7 +31,7 @@ public class Orchestra {
      * @param skippedIDs  the IDs of motors that should not be assigned a track
      */
     public static void playFile(String filePath, int totalTracks, int... skippedIDs) {
-        for (int i = 1; i < MOTORS.size(); i++) {
+        for (int i = 1; i < MOTORS.size() + 1; i++) {
             if (!shouldSkipMotor(i, skippedIDs) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
         }
@@ -55,7 +55,7 @@ public class Orchestra {
 
         for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
             for (int motorsInCurrentTrack = 0; motorsInCurrentTrack < motorsPerTrack[trackIndex]; motorsInCurrentTrack++) {
-                if (motorIndex >= MOTORS.size()) {
+                if (motorIndex > MOTORS.size()) {
                     System.out.println("Orchestra: Not enough motors");
                     return;
                 }
