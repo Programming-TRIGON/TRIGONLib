@@ -16,6 +16,7 @@ public class Orchestra extends SubsystemBase {
     private static final Orchestra INSTANCE = new Orchestra();
     private static final com.ctre.phoenix6.Orchestra ORCHESTRA = new com.ctre.phoenix6.Orchestra();
     private static final HashMap<Integer, TalonFX> MOTORS = new HashMap<>();
+    private static int[] SKIPPED_IDS = new int[0];
 
     /**
      * Adds a motor to the Orchestra.
@@ -130,19 +131,27 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks, Supplier<int[]> skippedIDs) {
-        ORCHESTRA.clearInstruments();
-        int[] skippedIDsIntegerArray = skippedIDs.get();
+        if (skippedIDs.get() == SKIPPED_IDS)
+            return;
 
+        SKIPPED_IDS = skippedIDs.get();
+        ORCHESTRA.clearInstruments();
+
+        int[] skippedIDsIntegerArray = skippedIDs.get();
         for (int i = 1; i < MOTORS.size() + 1; i++)
             if (shouldUseMotor(i, skippedIDsIntegerArray) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
     }
 
     private static void updateMotors(int[] motorsPerTrack, Supplier<int[]> skippedIDs) {
+        if (skippedIDs.get() == SKIPPED_IDS)
+            return;
+
+        SKIPPED_IDS = skippedIDs.get();
         ORCHESTRA.clearInstruments();
+
         int[] skippedIDsIntegerArray = skippedIDs.get();
         int motorIndex = 1;
-
         for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
             for (int motorsInCurrentTrack = 0; motorsInCurrentTrack < motorsPerTrack[trackIndex]; motorsInCurrentTrack++) {
                 if (motorIndex > MOTORS.size()) {
