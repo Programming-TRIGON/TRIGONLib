@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Supplier;
 
@@ -131,6 +132,7 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks, Supplier<int[]> skippedIDs) {
+        System.out.println(Arrays.toString(skippedIDs.get()));
         if (skippedIDs.get() == SKIPPED_IDS)
             return;
 
