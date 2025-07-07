@@ -32,7 +32,10 @@ public class Orchestra extends SubsystemBase {
     public static Command getPlayFileCommand(String filePath, int totalTracks, Supplier<int[]> skippedIDs) {
         return new FunctionalCommand(
                 () -> playFile(filePath, totalTracks, skippedIDs.get()),
-                () -> updateMotors(totalTracks, skippedIDs),
+                () -> {
+                    updateMotors(totalTracks, skippedIDs);
+                    System.out.println(Arrays.toString(skippedIDs.get()));
+                },
                 (interrupted) -> stop(),
                 () -> false,
                 INSTANCE
@@ -132,7 +135,6 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks, Supplier<int[]> skippedIDs) {
-        System.out.println(Arrays.toString(skippedIDs.get()));
         if (skippedIDs.get() == SKIPPED_IDS)
             return;
 
