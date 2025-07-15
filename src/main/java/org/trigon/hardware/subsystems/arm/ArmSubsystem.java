@@ -20,7 +20,8 @@ public class ArmSubsystem {
     private final double
             maximumVelocity,
             maximumAcceleration,
-            maximumJerk;
+            maximumJerk,
+            visualizationOffset;
     private final Rotation2d angleTolerance;
     private final VoltageOut voltageRequest;
     private final DynamicMotionMagicVoltage positionRequest;
@@ -37,6 +38,7 @@ public class ArmSubsystem {
         maximumAcceleration = config.maximumAcceleration;
         maximumJerk = config.maximumJerk;
         angleTolerance = config.angleTolerance;
+        visualizationOffset = config.visualizationOffset;
         mechanism = new SingleJointedArmMechanism2d(name + "Mechanism", config.lengthMeters, config.mechanismColor);
         voltageRequest = new VoltageOut(0).withEnableFOC(config.focEnabled);
         positionRequest = new DynamicMotionMagicVoltage(0, maximumVelocity, maximumAcceleration, maximumJerk).withEnableFOC(config.focEnabled);

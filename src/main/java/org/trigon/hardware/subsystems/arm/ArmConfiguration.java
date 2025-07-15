@@ -14,7 +14,8 @@ public class ArmConfiguration {
             sysIDRampRate = 1,
             sysIDStepVoltage = 1,
             gearRatio = 1,
-            massKilograms = 1;
+            massKilograms = 1,
+            visualizationOffset = 1;
     public Rotation2d
             maximumAngle = Rotation2d.kZero,
             minimumAngle = Rotation2d.kZero,
