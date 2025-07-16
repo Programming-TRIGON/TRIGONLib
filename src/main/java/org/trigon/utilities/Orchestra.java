@@ -150,12 +150,12 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks) {
-        System.out.println(SKIPPED_IDS.get());
         ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
         if (currentSkippedIDs.equals(LAST_SKIPPED_IDS))
             return;
 
         ORCHESTRA.clearInstruments();
+        System.out.println(currentSkippedIDs.contains(1));
 
         for (int i = 1; i < MOTORS.size() + 1; i++)
             if (!currentSkippedIDs.contains(i) && MOTORS.containsKey(i))
