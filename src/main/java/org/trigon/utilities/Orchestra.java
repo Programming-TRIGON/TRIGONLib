@@ -19,7 +19,7 @@ public class Orchestra extends SubsystemBase {
     private static final com.ctre.phoenix6.Orchestra ORCHESTRA = new com.ctre.phoenix6.Orchestra();
     private static final HashMap<Integer, TalonFX> MOTORS = new HashMap<>();
     private static final AtomicReference<ArrayList<Integer>> SKIPPED_IDS = new AtomicReference<>(new ArrayList<>());
-    private static ArrayList<Integer> LAST_SKIPPED_IDS = new ArrayList<>();
+    private static boolean SHOULD_UPDATE_SKIPPED_MOTORS = false;
 
     /**
      * Adds a motor to the Orchestra.
@@ -91,6 +91,7 @@ public class Orchestra extends SubsystemBase {
         currentIDs.addAll(Arrays.asList(newIDs));
 
         SKIPPED_IDS.set(currentIDs);
+        SHOULD_UPDATE_SKIPPED_MOTORS = true;
     }
 
     public static void removeSkippedIDs(Integer... idsToRemove) {
@@ -98,10 +99,12 @@ public class Orchestra extends SubsystemBase {
         currentIDs.removeAll(Arrays.asList(idsToRemove));
 
         SKIPPED_IDS.set(currentIDs);
+        SHOULD_UPDATE_SKIPPED_MOTORS = true;
     }
 
     public static void clearSkippedIDs() {
         SKIPPED_IDS.set(new ArrayList<>());
+        SHOULD_UPDATE_SKIPPED_MOTORS = true;
     }
 
     /**
@@ -150,25 +153,20 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks) {
-        ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
-        System.out.println(currentSkippedIDs + " " + LAST_SKIPPED_IDS);
-        if (currentSkippedIDs.size() == LAST_SKIPPED_IDS.size())
+        if (!SHOULD_UPDATE_SKIPPED_MOTORS)
             return;
-
         ORCHESTRA.clearInstruments();
 
         for (int i = 1; i < MOTORS.size() + 1; i++)
             if (shouldUseMotor(i) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
 
-        LAST_SKIPPED_IDS = currentSkippedIDs;
+        SHOULD_UPDATE_SKIPPED_MOTORS = false;
     }
 
     private static void updateMotors(int[] motorsPerTrack) {
-        ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
-        if (currentSkippedIDs.size() == LAST_SKIPPED_IDS.size())
+        if (!SHOULD_UPDATE_SKIPPED_MOTORS)
             return;
-
         ORCHESTRA.clearInstruments();
 
         int motorIndex = 1;
@@ -184,7 +182,7 @@ public class Orchestra extends SubsystemBase {
             }
         }
 
-        LAST_SKIPPED_IDS = currentSkippedIDs;
+        SHOULD_UPDATE_SKIPPED_MOTORS = false;
     }
 
     /**
