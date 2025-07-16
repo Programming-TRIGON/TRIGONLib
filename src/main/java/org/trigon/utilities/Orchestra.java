@@ -155,12 +155,13 @@ public class Orchestra extends SubsystemBase {
         if (currentSkippedIDs.equals(LAST_SKIPPED_IDS))
             return;
 
-        LAST_SKIPPED_IDS = currentSkippedIDs;
         ORCHESTRA.clearInstruments();
 
         for (int i = 1; i < MOTORS.size() + 1; i++)
             if (shouldUseMotor(i) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
+
+        LAST_SKIPPED_IDS = currentSkippedIDs;
     }
 
     private static void updateMotors(int[] motorsPerTrack) {
@@ -218,7 +219,7 @@ public class Orchestra extends SubsystemBase {
         play();
     }
 
-    private static boolean shouldUseMotor(int id) {
+    private static boolean shouldUseMotor(Integer id) {
         return !SKIPPED_IDS.get().contains(id);
     }
 }
