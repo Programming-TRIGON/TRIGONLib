@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.function.Supplier;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A class that uses the {@link com.ctre.phoenix6.Orchestra} library in Phoenix 6 to play a .chrp file.
@@ -29,26 +29,20 @@ public class Orchestra extends SubsystemBase {
         MOTORS.put(id, motor);
     }
 
-    public static Command getPlayFileCommand(String filePath, int totalTracks, Supplier<int[]> skippedIDs) {
+    public static Command getPlayFileCommand(String filePath, int totalTracks, AtomicReference<int[]> skippedIDs) {
         return new FunctionalCommand(
-                () -> {
-                    playFile(filePath, totalTracks, skippedIDs.get());
-                    System.out.println("init" + Arrays.toString(skippedIDs.get()));
-                },
+                () -> playFile(filePath, totalTracks, skippedIDs.get()),
                 () -> {
                     updateMotors(totalTracks, skippedIDs);
                     System.out.println(Arrays.toString(skippedIDs.get()));
                 },
-                (interrupted) -> {
-                    stop();
-                    System.out.println("ended");
-                },
+                (interrupted) -> stop(),
                 () -> false,
                 INSTANCE
         ).ignoringDisable(true);
     }
 
-    public static Command getPlayFileCommand(String filePath, int[] motorsPerTrack, Supplier<int[]> skippedIDs) {
+    public static Command getPlayFileCommand(String filePath, int[] motorsPerTrack, AtomicReference<int[]> skippedIDs) {
         return new FunctionalCommand(
                 () -> playFile(filePath, motorsPerTrack, skippedIDs.get()),
                 () -> updateMotors(motorsPerTrack, skippedIDs),
@@ -140,7 +134,7 @@ public class Orchestra extends SubsystemBase {
         addAndPlayFile(filePath);
     }
 
-    private static void updateMotors(int totalTracks, Supplier<int[]> skippedIDs) {
+    private static void updateMotors(int totalTracks, AtomicReference<int[]> skippedIDs) {
         int[] currentSkippedIDs = skippedIDs.get();
         if (Arrays.equals(currentSkippedIDs, SKIPPED_IDS))
             return;
@@ -153,7 +147,7 @@ public class Orchestra extends SubsystemBase {
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
     }
 
-    private static void updateMotors(int[] motorsPerTrack, Supplier<int[]> skippedIDs) {
+    private static void updateMotors(int[] motorsPerTrack, AtomicReference<int[]> skippedIDs) {
         int[] currentSkippedIDs = skippedIDs.get();
         if (Arrays.equals(currentSkippedIDs, SKIPPED_IDS))
             return;
