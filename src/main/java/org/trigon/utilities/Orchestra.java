@@ -158,7 +158,7 @@ public class Orchestra extends SubsystemBase {
         ORCHESTRA.clearInstruments();
 
         for (int i = 1; i < MOTORS.size() + 1; i++)
-            if (shouldUseMotor(i) && MOTORS.containsKey(i))
+            if (!currentSkippedIDs.contains(i) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
 
         LAST_SKIPPED_IDS = currentSkippedIDs;
