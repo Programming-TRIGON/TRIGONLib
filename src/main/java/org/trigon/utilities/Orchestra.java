@@ -151,7 +151,8 @@ public class Orchestra extends SubsystemBase {
 
     private static void updateMotors(int totalTracks) {
         ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
-        if (currentSkippedIDs == LAST_SKIPPED_IDS)
+        System.out.println(currentSkippedIDs + " " + LAST_SKIPPED_IDS);
+        if (currentSkippedIDs.size() == LAST_SKIPPED_IDS.size())
             return;
 
         ORCHESTRA.clearInstruments();
@@ -165,7 +166,7 @@ public class Orchestra extends SubsystemBase {
 
     private static void updateMotors(int[] motorsPerTrack) {
         ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
-        if (currentSkippedIDs == LAST_SKIPPED_IDS)
+        if (currentSkippedIDs.size() == LAST_SKIPPED_IDS.size())
             return;
 
         ORCHESTRA.clearInstruments();
