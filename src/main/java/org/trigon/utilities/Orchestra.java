@@ -95,8 +95,7 @@ public class Orchestra extends SubsystemBase {
 
     public static void removeSkippedIDs(Integer... idsToRemove) {
         ArrayList<Integer> currentIDs = SKIPPED_IDS.get();
-        for (Integer id : idsToRemove)
-            currentIDs.remove(id);
+        currentIDs.removeAll(Arrays.asList(idsToRemove));
 
         SKIPPED_IDS.set(currentIDs);
     }
@@ -151,6 +150,7 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks) {
+        System.out.println(SKIPPED_IDS.get());
         ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
         if (currentSkippedIDs.equals(LAST_SKIPPED_IDS))
             return;
