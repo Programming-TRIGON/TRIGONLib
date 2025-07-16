@@ -32,10 +32,7 @@ public class Orchestra extends SubsystemBase {
     public static Command getPlayFileCommand(String filePath, int totalTracks, Supplier<int[]> skippedIDs) {
         return new FunctionalCommand(
                 () -> playFile(filePath, totalTracks, skippedIDs.get()),
-                () -> {
-                    updateMotors(totalTracks, skippedIDs);
-                    System.out.println(Arrays.toString(skippedIDs.get()));
-                },
+                () -> updateMotors(totalTracks, skippedIDs),
                 (interrupted) -> stop(),
                 () -> false,
                 INSTANCE
@@ -135,26 +132,26 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks, Supplier<int[]> skippedIDs) {
-        if (skippedIDs.get() == SKIPPED_IDS)
+        int[] currentSkippedIDs = skippedIDs.get();
+        if (Arrays.equals(currentSkippedIDs, SKIPPED_IDS))
             return;
 
-        SKIPPED_IDS = skippedIDs.get();
+        SKIPPED_IDS = currentSkippedIDs;
         ORCHESTRA.clearInstruments();
 
-        int[] skippedIDsIntegerArray = skippedIDs.get();
         for (int i = 1; i < MOTORS.size() + 1; i++)
-            if (shouldUseMotor(i, skippedIDsIntegerArray) && MOTORS.containsKey(i))
+            if (shouldUseMotor(i, SKIPPED_IDS) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
     }
 
     private static void updateMotors(int[] motorsPerTrack, Supplier<int[]> skippedIDs) {
-        if (skippedIDs.get() == SKIPPED_IDS)
+        int[] currentSkippedIDs = skippedIDs.get();
+        if (Arrays.equals(currentSkippedIDs, SKIPPED_IDS))
             return;
 
-        SKIPPED_IDS = skippedIDs.get();
+        SKIPPED_IDS = currentSkippedIDs;
         ORCHESTRA.clearInstruments();
 
-        int[] skippedIDsIntegerArray = skippedIDs.get();
         int motorIndex = 1;
         for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
             for (int motorsInCurrentTrack = 0; motorsInCurrentTrack < motorsPerTrack[trackIndex]; motorsInCurrentTrack++) {
@@ -162,7 +159,7 @@ public class Orchestra extends SubsystemBase {
                     System.out.println("Orchestra: Not enough motors");
                     return;
                 }
-                if (shouldUseMotor(motorIndex, skippedIDsIntegerArray) && MOTORS.containsKey(motorIndex))
+                if (shouldUseMotor(motorIndex, SKIPPED_IDS) && MOTORS.containsKey(motorIndex))
                     ORCHESTRA.addInstrument(MOTORS.get(motorIndex), trackIndex);
                 motorIndex++;
             }
