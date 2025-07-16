@@ -151,14 +151,13 @@ public class Orchestra extends SubsystemBase {
 
     private static void updateMotors(int totalTracks) {
         ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
-        if (currentSkippedIDs.equals(LAST_SKIPPED_IDS))
+        if (currentSkippedIDs == LAST_SKIPPED_IDS)
             return;
 
         ORCHESTRA.clearInstruments();
-        System.out.println(currentSkippedIDs.contains(1));
 
         for (int i = 1; i < MOTORS.size() + 1; i++)
-            if (!currentSkippedIDs.contains(i) && MOTORS.containsKey(i))
+            if (shouldUseMotor(i) && MOTORS.containsKey(i))
                 ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
 
         LAST_SKIPPED_IDS = currentSkippedIDs;
@@ -166,7 +165,7 @@ public class Orchestra extends SubsystemBase {
 
     private static void updateMotors(int[] motorsPerTrack) {
         ArrayList<Integer> currentSkippedIDs = SKIPPED_IDS.get();
-        if (currentSkippedIDs.equals(LAST_SKIPPED_IDS))
+        if (currentSkippedIDs == LAST_SKIPPED_IDS)
             return;
 
         ORCHESTRA.clearInstruments();
