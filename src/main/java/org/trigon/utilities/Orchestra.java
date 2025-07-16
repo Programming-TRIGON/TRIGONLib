@@ -73,37 +73,57 @@ public class Orchestra extends SubsystemBase {
     }
 
     /**
-     * @return whether music is playing or not
+     * @return whether orchestra is currently playing a file
      */
-    public static boolean isOrchestraCurrentlyPlayingMusic() {
+    public static boolean isOrchestraCurrentlyPlaying() {
         return ORCHESTRA.isPlaying();
     }
 
     /**
-     * @return the play time of the .chrp file in seconds
+     * @return the play time of the current file in seconds
      */
     public static double getPlayTimeSeconds() {
         return ORCHESTRA.getCurrentTime();
     }
 
+    /**
+     * Adds IDs of motors that should be skipped when playing a file.
+     *
+     * @param newIDs the IDs of motors that should be skipped
+     */
     public static void addSkippedIDs(Integer... newIDs) {
         ArrayList<Integer> currentIDs = SKIPPED_IDS.get();
         currentIDs.addAll(Arrays.asList(newIDs));
 
-        SKIPPED_IDS.set(currentIDs);
-        SHOULD_UPDATE_SKIPPED_MOTORS = true;
+        setSkippedIDs(currentIDs);
     }
 
+    /**
+     * Removes IDs of motors that should no longer be skipped when playing a file.
+     *
+     * @param idsToRemove the IDs of motors that should no longer be skipped
+     */
     public static void removeSkippedIDs(Integer... idsToRemove) {
         ArrayList<Integer> currentIDs = SKIPPED_IDS.get();
         currentIDs.removeAll(Arrays.asList(idsToRemove));
 
-        SKIPPED_IDS.set(currentIDs);
-        SHOULD_UPDATE_SKIPPED_MOTORS = true;
+        setSkippedIDs(currentIDs);
     }
 
+    /**
+     * Clears all skipped motor IDs.
+     */
     public static void clearSkippedIDs() {
-        SKIPPED_IDS.set(new ArrayList<>());
+        setSkippedIDs(new ArrayList<>());
+    }
+
+    /**
+     * Sets the skipped motor IDs to a specific list.
+     *
+     * @param skippedIDs the list of motor IDs to be skipped
+     */
+    public static void setSkippedIDs(ArrayList<Integer> skippedIDs) {
+        SKIPPED_IDS.set(skippedIDs);
         SHOULD_UPDATE_SKIPPED_MOTORS = true;
     }
 
@@ -116,11 +136,7 @@ public class Orchestra extends SubsystemBase {
      * @param totalTracks the number of tracks in the .chrp file
      */
     private static void playFile(String filePath, int totalTracks) {
-        for (int i = 1; i < MOTORS.size() + 1; i++) {
-            if (shouldUseMotor(i) && MOTORS.containsKey(i))
-                ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
-        }
-
+        applyTracks(totalTracks);
         addAndPlayFile(filePath);
     }
 
@@ -135,20 +151,7 @@ public class Orchestra extends SubsystemBase {
      * @param motorsPerTrack number of motors that should be assigned to each track
      */
     private static void playFile(String filePath, int[] motorsPerTrack) {
-        int motorIndex = 1;
-
-        for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
-            for (int motorsInCurrentTrack = 0; motorsInCurrentTrack < motorsPerTrack[trackIndex]; motorsInCurrentTrack++) {
-                if (motorIndex > MOTORS.size()) {
-                    System.out.println("Orchestra: Not enough motors");
-                    return;
-                }
-                if (shouldUseMotor(motorIndex) && MOTORS.containsKey(motorIndex))
-                    ORCHESTRA.addInstrument(MOTORS.get(motorIndex), trackIndex);
-                motorIndex++;
-            }
-        }
-
+        applyTracks(motorsPerTrack);
         addAndPlayFile(filePath);
     }
 
@@ -157,10 +160,7 @@ public class Orchestra extends SubsystemBase {
             return;
         ORCHESTRA.clearInstruments();
 
-        for (int i = 1; i < MOTORS.size() + 1; i++)
-            if (shouldUseMotor(i) && MOTORS.containsKey(i))
-                ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
-
+        applyTracks(totalTracks);
         SHOULD_UPDATE_SKIPPED_MOTORS = false;
     }
 
@@ -169,7 +169,19 @@ public class Orchestra extends SubsystemBase {
             return;
         ORCHESTRA.clearInstruments();
 
+        applyTracks(motorsPerTrack);
+        SHOULD_UPDATE_SKIPPED_MOTORS = false;
+    }
+
+    private static void applyTracks(int totalTracks) {
+        for (int i = 1; i < MOTORS.size() + 1; i++)
+            if (shouldUseMotor(i) && MOTORS.containsKey(i))
+                ORCHESTRA.addInstrument(MOTORS.get(i), i % totalTracks);
+    }
+
+    private static void applyTracks(int[] motorsPerTrack) {
         int motorIndex = 1;
+
         for (int trackIndex = 0; trackIndex < motorsPerTrack.length; trackIndex++) {
             for (int motorsInCurrentTrack = 0; motorsInCurrentTrack < motorsPerTrack[trackIndex]; motorsInCurrentTrack++) {
                 if (motorIndex > MOTORS.size()) {
@@ -181,8 +193,6 @@ public class Orchestra extends SubsystemBase {
                 motorIndex++;
             }
         }
-
-        SHOULD_UPDATE_SKIPPED_MOTORS = false;
     }
 
     /**
