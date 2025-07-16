@@ -31,12 +31,18 @@ public class Orchestra extends SubsystemBase {
 
     public static Command getPlayFileCommand(String filePath, int totalTracks, Supplier<int[]> skippedIDs) {
         return new FunctionalCommand(
-                () -> playFile(filePath, totalTracks, skippedIDs.get()),
+                () -> {
+                    playFile(filePath, totalTracks, skippedIDs.get());
+                    System.out.println("init" + Arrays.toString(skippedIDs.get()));
+                },
                 () -> {
                     updateMotors(totalTracks, skippedIDs);
                     System.out.println(Arrays.toString(skippedIDs.get()));
                 },
-                (interrupted) -> stop(),
+                (interrupted) -> {
+                    stop();
+                    System.out.println("ended");
+                },
                 () -> false,
                 INSTANCE
         ).ignoringDisable(true);
