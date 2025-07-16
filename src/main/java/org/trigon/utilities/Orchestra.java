@@ -95,7 +95,8 @@ public class Orchestra extends SubsystemBase {
 
     public static void removeSkippedIDs(Integer... idsToRemove) {
         ArrayList<Integer> currentIDs = SKIPPED_IDS.get();
-        currentIDs.removeAll(Arrays.asList(idsToRemove));
+        for (Integer id : idsToRemove)
+            currentIDs.remove(id);
 
         SKIPPED_IDS.set(currentIDs);
     }
