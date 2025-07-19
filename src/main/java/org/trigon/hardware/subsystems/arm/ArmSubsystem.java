@@ -8,6 +8,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
+import org.trigon.hardware.RobotHardwareStats;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
 import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
 import org.trigon.hardware.simulation.SingleJointedArmSimulation;
@@ -21,7 +22,7 @@ public class ArmSubsystem {
             maximumVelocity,
             maximumAcceleration,
             maximumJerk,
-            visualizationOffset;
+            visualizationOffsetFromGravityOffset;
     private final Rotation2d angleTolerance;
     private final VoltageOut voltageRequest;
     private final DynamicMotionMagicVoltage positionRequest;
@@ -38,7 +39,7 @@ public class ArmSubsystem {
         maximumAcceleration = config.maximumAcceleration;
         maximumJerk = config.maximumJerk;
         angleTolerance = config.angleTolerance;
-        visualizationOffset = config.visualizationOffset;
+        visualizationOffsetFromGravityOffset = config.visualizationOffset;
         mechanism = new SingleJointedArmMechanism2d(name + "Mechanism", config.lengthMeters, config.mechanismColor);
         voltageRequest = new VoltageOut(0).withEnableFOC(config.focEnabled);
         positionRequest = new DynamicMotionMagicVoltage(0, maximumVelocity, maximumAcceleration, maximumJerk).withEnableFOC(config.focEnabled);
@@ -87,7 +88,7 @@ public class ArmSubsystem {
 
         mechanism.update(
                 getAngle(),
-                Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE))
+                Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE) + (RobotHardwareStats.isSimulation() ? 0 : visualizationOffsetFromGravityOffset))
         );
     }
 
@@ -112,7 +113,7 @@ public class ArmSubsystem {
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.POSITION));
+        return Rotation2d.fromRotations(motor.getSignal(TalonFXSignal.POSITION) + (RobotHardwareStats.isSimulation() ? 0 : visualizationOffsetFromGravityOffset));
     }
 
     public void setTargetState(ArmState targetState) {
@@ -136,7 +137,7 @@ public class ArmSubsystem {
     }
 
     private void setTargetAngle(Rotation2d targetAngle) {
-        setControl(positionRequest.withPosition(targetAngle.getRotations()));
+        setControl(positionRequest.withPosition(targetAngle.getRotations() - (RobotHardwareStats.isSimulation() ? 0 : visualizationOffsetFromGravityOffset)));
     }
 
     private void logComponentPose() {
