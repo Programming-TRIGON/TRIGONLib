@@ -27,10 +27,12 @@ public class ServoIO {
     protected void set(double value) {
     }
 
-    protected void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {
+    protected void setPWMBoundaries(int maximumPulseWidthMicroseconds, int maximumDeadbandRangeMicroseconds,
+                                    int centerPulseMicroseconds, int minimumDeadbandRangeMicroseconds,
+                                    int minimumPulseWidthMicroseconds) {
     }
 
-    protected void setMaxAngle(Rotation2d maxAngle) {
+    protected void setMaximumAngle(Rotation2d maximumAngle) {
     }
 
     @AutoLog

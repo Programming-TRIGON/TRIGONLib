@@ -7,9 +7,8 @@ import org.trigon.hardware.misc.servo.ServoIO;
 import org.trigon.hardware.misc.servo.ServoInputsAutoLogged;
 
 public class RealServoIO extends ServoIO {
-    private static final Rotation2d MIN_SERVO_ANGLE = Rotation2d.fromDegrees(0);
     private final Servo servo;
-    private Rotation2d maxServoAngle = Rotation2d.fromDegrees(180);
+    private Rotation2d maximumServoAngle = Rotation2d.fromDegrees(180);
 
     public RealServoIO(int channel) {
         servo = new Servo(channel);
@@ -17,7 +16,7 @@ public class RealServoIO extends ServoIO {
 
     @Override
     protected void updateInputs(ServoInputsAutoLogged inputs) {
-        inputs.targetAngle = Rotation2d.fromDegrees(servo.get() * getServoAngleRange().getDegrees() + MIN_SERVO_ANGLE.getDegrees());
+        inputs.targetAngle = maximumServoAngle.times(servo.get());
         inputs.targetSpeed = servo.getSpeed();
     }
 
@@ -28,7 +27,7 @@ public class RealServoIO extends ServoIO {
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        final Rotation2d clampedTargetAngle = clampAngleToRange(targetAngle);
+        final Rotation2d clampedTargetAngle = clampAngleToServoRange(targetAngle);
         servo.set(calculateScaledPosition(clampedTargetAngle));
     }
 
@@ -38,24 +37,22 @@ public class RealServoIO extends ServoIO {
     }
 
     @Override
-    protected void setBoundsMicroseconds(int maxPulseWidthMicroseconds, int maxDeadbandRangeMicroseconds, int centerPulseMicroseconds, int minDeadbandRangeMicroseconds, int minPulseWidthMicroseconds) {
-        servo.setBoundsMicroseconds(maxPulseWidthMicroseconds, maxDeadbandRangeMicroseconds, centerPulseMicroseconds, minDeadbandRangeMicroseconds, minPulseWidthMicroseconds);
+    protected void setPWMBoundaries(int maximumPulseWidthMicroseconds, int maximumDeadbandRangeMicroseconds,
+                                    int centerPulseMicroseconds, int minimumDeadbandRangeMicroseconds,
+                                    int minimumPulseWidthMicroseconds) {
+        servo.setBoundsMicroseconds(maximumPulseWidthMicroseconds, maximumDeadbandRangeMicroseconds, centerPulseMicroseconds, minimumDeadbandRangeMicroseconds, minimumPulseWidthMicroseconds);
     }
 
     @Override
-    protected void setMaxAngle(Rotation2d maxAngle) {
-        maxServoAngle = maxAngle;
+    protected void setMaximumAngle(Rotation2d maximumAngle) {
+        maximumServoAngle = maximumAngle;
+    }
+
+    private Rotation2d clampAngleToServoRange(Rotation2d angle) {
+        return Rotation2d.fromDegrees(MathUtil.clamp(angle.getDegrees(), 0, maximumServoAngle.getDegrees()));
     }
 
     private double calculateScaledPosition(Rotation2d angle) {
-        return angle.minus(MIN_SERVO_ANGLE).getDegrees() / getServoAngleRange().getDegrees();
-    }
-
-    private Rotation2d clampAngleToRange(Rotation2d angle) {
-        return Rotation2d.fromDegrees(MathUtil.clamp(angle.getDegrees(), MIN_SERVO_ANGLE.getDegrees(), maxServoAngle.getDegrees()));
-    }
-
-    private Rotation2d getServoAngleRange() {
-        return maxServoAngle.minus(MIN_SERVO_ANGLE);
+        return angle.getDegrees() / maximumServoAngle.getDegrees();
     }
 }
