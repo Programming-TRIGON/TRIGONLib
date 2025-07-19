@@ -33,7 +33,7 @@ public class RealServoIO extends ServoIO {
 
     @Override
     protected void set(double value) {
-        servo.set(value);
+        servo.set(MathUtil.clamp(value, 0, 1));
     }
 
     @Override
