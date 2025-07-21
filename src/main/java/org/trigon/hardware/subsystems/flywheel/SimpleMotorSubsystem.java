@@ -49,7 +49,7 @@ public class SimpleMotorSubsystem {
         return name;
     }
 
-    public SysIdRoutine.Config getSysIdConfig() {
+    public SysIdRoutine.Config getSysIDConfig() {
         return sysIDConfig;
     }
 
@@ -91,7 +91,7 @@ public class SimpleMotorSubsystem {
     public boolean atTargetState() {
         if (targetState == null)
             return false;
-        return getVoltage() == targetState.getTargetVoltage();
+        return getVelocityRotationsPerSecond() == targetState.getTargetVelocityRotationsPerSecond();
     }
 
     public double getVelocityRotationsPerSecond() {
