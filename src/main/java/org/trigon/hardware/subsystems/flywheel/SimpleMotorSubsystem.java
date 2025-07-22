@@ -63,13 +63,12 @@ public class SimpleMotorSubsystem {
 
     public void updateLog(SysIdRoutineLog log) {
         log.motor(name)
-                .linearVelocity(Units.MetersPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
+                .angularVelocity(Units.RotationsPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
                 .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
     }
 
     public void updateMechanism() {
         mechanism.update(
-                getVoltage(),
                 getVelocityRotationsPerSecond()
         );
     }
@@ -81,7 +80,7 @@ public class SimpleMotorSubsystem {
     }
 
     public void sysIDDrive(double targetVoltage) {
-        motor.setControl(voltageRequest.withOutput(targetVoltage));
+        setTargetVoltage(targetVoltage);
     }
 
     public boolean atState(SimpleMotorSubsystem.SimpleMotorState targetState) {
@@ -118,7 +117,7 @@ public class SimpleMotorSubsystem {
     }
 
     public void setTargetVelocity(double targetVelocity) {
-        setControl(new VelocityVoltage(targetVelocity).withAcceleration(targetVelocity));
+        setTargetVoltage(new VelocityVoltage(targetVelocity).Velocity);
     }
 
     public void setControl(ControlRequest request) {
