@@ -45,7 +45,7 @@ public class Servo {
      * Sets the servo position using a scaled 0 to 1.0 value. 0 corresponds to one extreme of the servo and 1.0 corresponds to the other
      * This method works regardless of the types of servo being used.
      * For speed servos this will set the speed of the servo.
-     * For angle servos this will set the angle of the servo, dependent on the range given in {@link Servo#setMaxAngle(Rotation2d)}.
+     * For angle servos this will set the angle of the servo, dependent on the range given in {@link Servo#setMaximumAngle(Rotation2d)}.
      * In simulation, this will act as though it was setting the target speed of the servo from 0 to 1.
      *
      * @param value the target position/speed of the servo on a scale from 0 to 1
@@ -86,10 +86,10 @@ public class Servo {
      * This depends on the type of servo being used, and should be called once before being used.
      * The range is 0 to 180 degrees by default.
      *
-     * @param maxAngle the maximum angle of the servo
+     * @param maximumAngle the maximum angle of the servo
      */
-    public void setMaxAngle(Rotation2d maxAngle) {
-        servoIO.setMaximumAngle(maxAngle);
+    public void setMaximumAngle(Rotation2d maximumAngle) {
+        servoIO.setMaximumAngle(maximumAngle);
     }
 
     /**
