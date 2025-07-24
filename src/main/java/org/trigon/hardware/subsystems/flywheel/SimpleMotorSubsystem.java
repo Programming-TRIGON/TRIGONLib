@@ -103,13 +103,13 @@ public class SimpleMotorSubsystem {
 
 
     public void setTargetStateWithVoltage(SimpleMotorSubsystem.SimpleMotorState targetState) {
-        setTargetVoltage(targetState.getTargetVoltage());
         this.targetState = targetState;
+        setTargetVoltage(targetState.getTargetVoltage());
     }
 
     public void setTargetStateWithVelocity(SimpleMotorSubsystem.SimpleMotorState targetState) {
-        setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
         this.targetState = targetState;
+        setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
     }
 
     public void setTargetVoltage(double targetVoltage) {
