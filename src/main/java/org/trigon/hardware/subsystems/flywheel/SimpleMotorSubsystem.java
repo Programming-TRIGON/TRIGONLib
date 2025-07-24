@@ -67,9 +67,9 @@ public class SimpleMotorSubsystem {
 
     public void updateLog(SysIdRoutineLog log) {
         log.motor(name)
+                .angularPosition(Units.Degrees.of(motor.getSignal(TalonFXSignal.POSITION)))
                 .angularVelocity(Units.RotationsPerSecond.of(motor.getSignal(TalonFXSignal.VELOCITY)))
-                .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)))
-                .angularPosition(Units.Degrees.of(motor.getSignal(TalonFXSignal.POSITION)));
+                .voltage(Units.Volts.of(motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE)));
     }
 
     public void updateMechanism() {
