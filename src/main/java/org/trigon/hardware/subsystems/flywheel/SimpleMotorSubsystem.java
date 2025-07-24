@@ -72,16 +72,14 @@ public class SimpleMotorSubsystem {
     }
 
     public void updateMechanism() {
-        if(isControlModeVoltage){
+        if (isControlModeVoltage) {
+            mechanism.update(getVoltage());
+        } else {
             mechanism.update(
-                getVoltage());
+                    getVelocityRotationsPerSecond(),
+                    targetState.getTargetVelocityRotationsPerSecond()
+            );
         }
-        else{
-        mechanism.update(
-                getVelocityRotationsPerSecond(),
-                targetState.getTargetVelocityRotationsPerSecond()
-        );
-    }
     }
 
     public void updatePeriodically() {
