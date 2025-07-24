@@ -75,12 +75,12 @@ public class SimpleMotorSubsystem {
     public void updateMechanism() {
         if (isUsingVoltageControl) {
             mechanism.update(getVoltage());
-        } else {
-            mechanism.update(
+            return;
+        }
+        mechanism.update(
                     getVelocityRotationsPerSecond(),
                     targetState.getTargetVelocityRotationsPerSecond()
             );
-        }
     }
 
     public void updatePeriodically() {
@@ -100,7 +100,10 @@ public class SimpleMotorSubsystem {
     public boolean atTargetState() {
         if (targetState == null)
             return false;
-        return getVelocityRotationsPerSecond() == targetState.getTargetVelocityRotationsPerSecond();
+
+        return isUsingVoltageControl?
+            getVoltage() == targetState.getTargetVoltage():
+            getVelocityRotationsPerSecond() == targetState.getTargetVelocityRotationsPerSecond();
     }
 
     public double getVelocityRotationsPerSecond() {
