@@ -25,7 +25,7 @@ public class SimpleMotorSubsystem {
     private final SysIdRoutine.Config sysIDConfig;
     private SimpleMotorState targetState;
 
-    private boolean isControlModeVoltage = true;
+    private boolean isUsingVoltageControl = true;
 
     public SimpleMotorSubsystem(TalonFXMotor motor, SimpleMotorConfiguration config) {
         this.motor = motor;
@@ -73,7 +73,7 @@ public class SimpleMotorSubsystem {
     }
 
     public void updateMechanism() {
-        if (isControlModeVoltage) {
+        if (isUsingVoltageControl) {
             mechanism.update(getVoltage());
         } else {
             mechanism.update(
@@ -113,13 +113,13 @@ public class SimpleMotorSubsystem {
 
 
     public void setTargetStateWithVoltage(SimpleMotorSubsystem.SimpleMotorState targetState) {
-        isControlModeVoltage = true;
+        isUsingVoltageControl = true;
         this.targetState = targetState;
         setTargetVoltage(targetState.getTargetVoltage());
     }
 
     public void setTargetStateWithVelocity(SimpleMotorSubsystem.SimpleMotorState targetState) {
-        isControlModeVoltage = false;
+        isUsingVoltageControl = false;
         this.targetState = targetState;
         setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
     }
