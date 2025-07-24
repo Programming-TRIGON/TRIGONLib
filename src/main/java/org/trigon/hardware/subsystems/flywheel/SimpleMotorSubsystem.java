@@ -20,9 +20,12 @@ public class SimpleMotorSubsystem {
             maximumAcceleration,
             maximumJerk;
     private final VoltageOut voltageRequest;
+    private final VelocityVoltage velocityRequest;
     private final SpeedMechanism2d mechanism;
     private final SysIdRoutine.Config sysIDConfig;
     private SimpleMotorState targetState;
+
+    private boolean isControlModeVoltage = true;
 
     public SimpleMotorSubsystem(TalonFXMotor motor, SimpleMotorConfiguration config) {
         this.motor = motor;
@@ -32,6 +35,7 @@ public class SimpleMotorSubsystem {
         maximumJerk = config.maximumJerk;
         mechanism = new SpeedMechanism2d(name + "Mechanism", config.maximumDisplayableVelocity);
         voltageRequest = new VoltageOut(0).withEnableFOC(config.focEnabled);
+        velocityRequest = new VelocityVoltage(0).withEnableFOC(config.focEnabled);
         sysIDConfig = new SysIdRoutine.Config(
                 Units.Volts.of(config.sysIDRampRate).per(Units.Seconds),
                 Units.Volts.of(config.sysIDStepVoltage),
@@ -68,9 +72,16 @@ public class SimpleMotorSubsystem {
     }
 
     public void updateMechanism() {
+        if(isControlModeVoltage){
+            mechanism.update(
+                getVoltage());
+        }
+        else{
         mechanism.update(
-                getVelocityRotationsPerSecond()
+                getVelocityRotationsPerSecond(),
+                targetState.getTargetVelocityRotationsPerSecond()
         );
+    }
     }
 
     public void updatePeriodically() {
@@ -103,11 +114,13 @@ public class SimpleMotorSubsystem {
 
 
     public void setTargetStateWithVoltage(SimpleMotorSubsystem.SimpleMotorState targetState) {
+        isControlModeVoltage = true;
         this.targetState = targetState;
         setTargetVoltage(targetState.getTargetVoltage());
     }
 
     public void setTargetStateWithVelocity(SimpleMotorSubsystem.SimpleMotorState targetState) {
+        isControlModeVoltage = false;
         this.targetState = targetState;
         setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
     }
@@ -117,7 +130,7 @@ public class SimpleMotorSubsystem {
     }
 
     public void setTargetVelocity(double targetVelocity) {
-        setTargetVoltage(new VelocityVoltage(targetVelocity).Velocity);
+        setControl(velocityRequest.withVelocity(targetVelocity));
     }
 
     public void setControl(ControlRequest request) {
