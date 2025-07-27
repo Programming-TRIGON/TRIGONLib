@@ -28,7 +28,7 @@ public class SimpleMotorSubsystem {
     private final SysIdRoutine.Config sysIDConfig;
     private SimpleMotorState targetState;
 
-    private boolean isUsingVoltageControl;
+    private final boolean isUsingVoltageControl;
 
     public SimpleMotorSubsystem(TalonFXMotor motor, SimpleMotorConfiguration config, boolean useVoltageControl) {
         this.motor = motor;
