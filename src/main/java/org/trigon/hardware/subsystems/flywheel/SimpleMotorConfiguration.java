@@ -12,9 +12,9 @@ public class SimpleMotorConfiguration {
             maximumJerk = 1,
             maximumDisplayableVelocity = 1,
             velocityTolerance = 1,
-            voltageTolerance = 1,
             sysIDRampRate = 1,
             sysIDStepVoltage = 1;
     public boolean focEnabled = true;
+    public boolean useVoltageControl = false;
     public DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
 }
