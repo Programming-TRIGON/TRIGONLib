@@ -22,6 +22,9 @@ public class SimpleMotorSubsystem {
     private final VoltageOut voltageRequest;
     private final VelocityVoltage velocityRequest;
     private final SpeedMechanism2d mechanism;
+    private final double
+            velocityTolerance,
+            voltageTolerance;
     private final SysIdRoutine.Config sysIDConfig;
     private SimpleMotorState targetState;
 
@@ -33,6 +36,8 @@ public class SimpleMotorSubsystem {
         maximumVelocity = config.maximumVelocity;
         maximumAcceleration = config.maximumAcceleration;
         maximumJerk = config.maximumJerk;
+        velocityTolerance = config.velocityTolerance;
+        voltageTolerance = config.voltageTolerance;
         mechanism = new SpeedMechanism2d(name + "Mechanism", config.maximumDisplayableVelocity);
         voltageRequest = new VoltageOut(0).withEnableFOC(config.focEnabled);
         velocityRequest = new VelocityVoltage(0).withEnableFOC(config.focEnabled);
@@ -102,8 +107,8 @@ public class SimpleMotorSubsystem {
             return false;
 
         return isUsingVoltageControl?
-            getVoltage() == targetState.getTargetVoltage():
-            getVelocityRotationsPerSecond() == targetState.getTargetVelocityRotationsPerSecond();
+                Math.abs(getVoltage()-targetState.getTargetVoltage()) < voltageTolerance:
+                Math.abs(getVelocityRotationsPerSecond()-targetState.getTargetVelocityRotationsPerSecond()) < velocityTolerance;
     }
 
     public double getVelocityRotationsPerSecond() {

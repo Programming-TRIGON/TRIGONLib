@@ -11,6 +11,8 @@ public class SimpleMotorConfiguration {
             maximumAcceleration = 1,
             maximumJerk = 1,
             maximumDisplayableVelocity = 1,
+            velocityTolerance = 1,
+            voltageTolerance = 1,
             sysIDRampRate = 1,
             sysIDStepVoltage = 1;
     public boolean focEnabled = true;
