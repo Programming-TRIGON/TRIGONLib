@@ -28,11 +28,12 @@ public class SimpleMotorSubsystem {
     private final SysIdRoutine.Config sysIDConfig;
     private SimpleMotorState targetState;
 
-    private boolean isUsingVoltageControl = true;
+    private boolean isUsingVoltageControl;
 
-    public SimpleMotorSubsystem(TalonFXMotor motor, SimpleMotorConfiguration config) {
+    public SimpleMotorSubsystem(TalonFXMotor motor, SimpleMotorConfiguration config, boolean useVoltageControl) {
         this.motor = motor;
         name = config.name;
+        isUsingVoltageControl = useVoltageControl;
         maximumVelocity = config.maximumVelocity;
         maximumAcceleration = config.maximumAcceleration;
         maximumJerk = config.maximumJerk;
@@ -83,9 +84,9 @@ public class SimpleMotorSubsystem {
             return;
         }
         mechanism.update(
-                    getVelocityRotationsPerSecond(),
-                    targetState.getTargetVelocityRotationsPerSecond()
-            );
+                getVelocityRotationsPerSecond(),
+                targetState.getTargetVelocityRotationsPerSecond()
+        );
     }
 
     public void updatePeriodically() {
@@ -106,9 +107,9 @@ public class SimpleMotorSubsystem {
         if (targetState == null)
             return false;
 
-        return isUsingVoltageControl?
-                Math.abs(getVoltage()-targetState.getTargetVoltage()) < voltageTolerance:
-                Math.abs(getVelocityRotationsPerSecond()-targetState.getTargetVelocityRotationsPerSecond()) < velocityTolerance;
+        return isUsingVoltageControl ?
+                Math.abs(getVoltage() - targetState.getTargetVoltage()) < voltageTolerance :
+                Math.abs(getVelocityRotationsPerSecond() - targetState.getTargetVelocityRotationsPerSecond()) < velocityTolerance;
     }
 
     public double getVelocityRotationsPerSecond() {
@@ -119,29 +120,34 @@ public class SimpleMotorSubsystem {
         return motor.getSignal(TalonFXSignal.MOTOR_VOLTAGE);
     }
 
-
-    public void setTargetStateWithVoltage(SimpleMotorSubsystem.SimpleMotorState targetState) {
-        isUsingVoltageControl = true;
-        this.targetState = targetState;
-        setTargetVoltage(targetState.getTargetVoltage());
-    }
-
-    public void setTargetStateWithVelocity(SimpleMotorSubsystem.SimpleMotorState targetState) {
-        isUsingVoltageControl = false;
-        this.targetState = targetState;
-        setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
-    }
-
-    public void setTargetVoltage(double targetVoltage) {
-        setControl(voltageRequest.withOutput(targetVoltage));
-    }
-
-    public void setTargetVelocity(double targetVelocity) {
-        setControl(velocityRequest.withVelocity(targetVelocity));
+    public void setTargetState(SimpleMotorSubsystem.SimpleMotorState targetState) {
+        if (isUsingVoltageControl) {
+            setTargetStateWithVoltage(targetState);
+            return;
+        }
+        setTargetStateWithVelocity(targetState);
     }
 
     public void setControl(ControlRequest request) {
         motor.setControl(request);
+    }
+
+    private void setTargetStateWithVoltage(SimpleMotorSubsystem.SimpleMotorState targetState) {
+        this.targetState = targetState;
+        setTargetVoltage(targetState.getTargetVoltage());
+    }
+
+    private void setTargetStateWithVelocity(SimpleMotorSubsystem.SimpleMotorState targetState) {
+        this.targetState = targetState;
+        setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
+    }
+
+    private void setTargetVoltage(double targetVoltage) {
+        setControl(voltageRequest.withOutput(targetVoltage));
+    }
+
+    private void setTargetVelocity(double targetVelocity) {
+        setControl(velocityRequest.withVelocity(targetVelocity));
     }
 
     public interface SimpleMotorState {
