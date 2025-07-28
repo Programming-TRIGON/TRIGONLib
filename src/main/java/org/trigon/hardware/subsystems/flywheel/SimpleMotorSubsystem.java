@@ -31,7 +31,6 @@ public class SimpleMotorSubsystem {
     public SimpleMotorSubsystem(TalonFXMotor motor, SimpleMotorConfiguration config) {
         this.motor = motor;
         name = config.name;
-        shouldUseVoltageControl = config.shouldUseVoltageControl;
         maximumVelocity = config.maximumVelocity;
         maximumAcceleration = config.maximumAcceleration;
         maximumJerk = config.maximumJerk;
@@ -39,6 +38,7 @@ public class SimpleMotorSubsystem {
         mechanism = new SpeedMechanism2d(name + "Mechanism", config.maximumDisplayableVelocity);
         voltageRequest = new VoltageOut(0).withEnableFOC(config.focEnabled);
         velocityRequest = new VelocityVoltage(0).withEnableFOC(config.focEnabled);
+        shouldUseVoltageControl = config.shouldUseVoltageControl;
         sysIDConfig = new SysIdRoutine.Config(
                 Units.Volts.of(config.sysIDRampRate).per(Units.Seconds),
                 Units.Volts.of(config.sysIDStepVoltage),
