@@ -15,6 +15,6 @@ public class SimpleMotorConfiguration {
             sysIDRampRate = 1,
             sysIDStepVoltage = 1;
     public boolean focEnabled = true;
-    public boolean useVoltageControl = false;
+    public boolean shouldUseVoltageControl = false;
     public DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
 }

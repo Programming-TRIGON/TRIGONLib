@@ -26,12 +26,12 @@ public class SimpleMotorSubsystem {
     private final SysIdRoutine.Config sysIDConfig;
     private SimpleMotorState targetState;
 
-    private final boolean isUsingVoltageControl;
+    private final boolean shouldUseVoltageControl;
 
     public SimpleMotorSubsystem(TalonFXMotor motor, SimpleMotorConfiguration config) {
         this.motor = motor;
         name = config.name;
-        isUsingVoltageControl = config.useVoltageControl;
+        shouldUseVoltageControl = config.shouldUseVoltageControl;
         maximumVelocity = config.maximumVelocity;
         maximumAcceleration = config.maximumAcceleration;
         maximumJerk = config.maximumJerk;
@@ -76,7 +76,7 @@ public class SimpleMotorSubsystem {
     }
 
     public void updateMechanism() {
-        if (isUsingVoltageControl) {
+        if (shouldUseVoltageControl) {
             mechanism.update(getVoltage());
             return;
         }
@@ -104,7 +104,7 @@ public class SimpleMotorSubsystem {
         if (targetState == null)
             return false;
 
-        return isUsingVoltageControl ?
+        return shouldUseVoltageControl ?
                 targetState.getTargetVoltage() != 0 :
                 Math.abs(getVelocityRotationsPerSecond() - targetState.getTargetVelocityRotationsPerSecond()) < velocityTolerance;
     }
@@ -118,7 +118,7 @@ public class SimpleMotorSubsystem {
     }
 
     public void setTargetState(SimpleMotorSubsystem.SimpleMotorState targetState) {
-        if (isUsingVoltageControl) {
+        if (shouldUseVoltageControl) {
             setTargetStateWithVoltage(targetState);
             return;
         }
