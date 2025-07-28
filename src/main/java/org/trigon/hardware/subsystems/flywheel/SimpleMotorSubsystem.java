@@ -107,7 +107,6 @@ public class SimpleMotorSubsystem {
         if (shouldUseVoltageControl)
             return true;
         return Math.abs(getVelocityRotationsPerSecond() - targetState.getTargetVelocityRotationsPerSecond()) < velocityTolerance;
-
     }
 
     public double getVelocityRotationsPerSecond() {
