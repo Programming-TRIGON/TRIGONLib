@@ -10,6 +10,7 @@ import org.trigon.hardware.phoenix6.Phoenix6Inputs;
 import org.trigon.hardware.phoenix6.talonfx.io.RealTalonFXIO;
 import org.trigon.hardware.phoenix6.talonfx.io.SimulationTalonFXIO;
 import org.trigon.hardware.simulation.MotorPhysicsSimulation;
+import org.trigon.utilities.Orchestra;
 
 /**
  * A class that represents a TalonFX motor controller.
@@ -46,6 +47,9 @@ public class TalonFXMotor {
         this.motorInputs = new Phoenix6Inputs(motorName, !canbus.isEmpty());
         this.id = id;
         motorIO.optimizeBusUsage();
+
+        if (!RobotHardwareStats.isReplay())
+            Orchestra.addMotor(motorIO.getTalonFX(), id);
     }
 
     /**

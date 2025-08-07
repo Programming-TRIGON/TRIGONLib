@@ -25,6 +25,10 @@ public class RealTalonFXIO extends TalonFXIO {
 
     @Override
     public void applyConfiguration(TalonFXConfiguration configuration) {
+        configuration.Audio.BeepOnBoot = false;
+        configuration.Audio.BeepOnConfig = false;
+        configuration.Audio.AllowMusicDurDisable = true;
+
         talonFX.getConfigurator().apply(configuration);
     }
 
