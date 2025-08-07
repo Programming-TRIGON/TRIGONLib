@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A class that uses the {@link com.ctre.phoenix6.Orchestra} library in Phoenix 6 to play a .chrp file.
@@ -18,8 +17,8 @@ public class Orchestra extends SubsystemBase {
     private static final Orchestra INSTANCE = new Orchestra();
     private static final com.ctre.phoenix6.Orchestra ORCHESTRA = new com.ctre.phoenix6.Orchestra();
     private static final HashMap<Integer, TalonFX> MOTORS = new HashMap<>();
-    private static final AtomicReference<ArrayList<Integer>> SKIPPED_IDS = new AtomicReference<>(new ArrayList<>());
-    private static boolean SHOULD_UPDATE_SKIPPED_MOTORS = false;
+    private static ArrayList<Integer> USED_MOTOR_IDS = new ArrayList<>();
+    private static boolean SHOULD_UPDATE_USED_MOTORS = false;
 
     /**
      * Adds a motor to the Orchestra.
@@ -87,48 +86,46 @@ public class Orchestra extends SubsystemBase {
     }
 
     /**
-     * Adds IDs of motors that should be skipped when playing a file.
+     * Adds IDs of motors that should be used when playing a file.
      *
-     * @param newIDs the IDs of motors that should be skipped
+     * @param newIDs the IDs of the motors that should be used
      */
-    public static void addSkippedIDs(Integer... newIDs) {
-        ArrayList<Integer> currentIDs = SKIPPED_IDS.get();
-        if (currentIDs.containsAll(Arrays.asList(newIDs)))
+    public static void addUsedMotorIDs(Integer... newIDs) {
+        if (USED_MOTOR_IDS.containsAll(Arrays.asList(newIDs)))
             return;
 
-        currentIDs.addAll(Arrays.asList(newIDs));
-        setSkippedIDs(currentIDs);
+        USED_MOTOR_IDS.addAll(Arrays.asList(newIDs));
+        setUsedMotorIDs(USED_MOTOR_IDS);
     }
 
     /**
-     * Removes IDs of motors that should no longer be skipped when playing a file.
+     * Removes IDs of motors that should no longer be used when playing a file.
      *
-     * @param idsToRemove the IDs of motors that should no longer be skipped
+     * @param idsToRemove the IDs of motors that should no longer be used
      */
-    public static void removeSkippedIDs(Integer... idsToRemove) {
-        ArrayList<Integer> currentIDs = SKIPPED_IDS.get();
-        if (!currentIDs.containsAll(Arrays.asList(idsToRemove)))
+    public static void removeUsedMotorIDs(Integer... idsToRemove) {
+        if (!USED_MOTOR_IDS.containsAll(Arrays.asList(idsToRemove)))
             return;
 
-        currentIDs.removeAll(Arrays.asList(idsToRemove));
-        setSkippedIDs(currentIDs);
+        USED_MOTOR_IDS.removeAll(Arrays.asList(idsToRemove));
+        setUsedMotorIDs(USED_MOTOR_IDS);
     }
 
     /**
-     * Clears all skipped motor IDs.
+     * Clears all used motor IDs.
      */
-    public static void clearSkippedIDs() {
-        setSkippedIDs(new ArrayList<>());
+    public static void clearUsedMotorIDs() {
+        setUsedMotorIDs(new ArrayList<>());
     }
 
     /**
-     * Sets the skipped motor IDs to a specific list.
+     * Sets the used motor IDs to a specific list.
      *
-     * @param skippedIDs the list of motor IDs to be skipped
+     * @param usedMotorIDs the list of motor IDs to be used
      */
-    public static void setSkippedIDs(ArrayList<Integer> skippedIDs) {
-        SKIPPED_IDS.set(skippedIDs);
-        SHOULD_UPDATE_SKIPPED_MOTORS = true;
+    public static void setUsedMotorIDs(ArrayList<Integer> usedMotorIDs) {
+        USED_MOTOR_IDS = usedMotorIDs;
+        SHOULD_UPDATE_USED_MOTORS = true;
     }
 
     /**
@@ -160,21 +157,21 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static void updateMotors(int totalTracks) {
-        if (!SHOULD_UPDATE_SKIPPED_MOTORS)
+        if (!SHOULD_UPDATE_USED_MOTORS)
             return;
         ORCHESTRA.clearInstruments();
 
         applyTracks(totalTracks);
-        SHOULD_UPDATE_SKIPPED_MOTORS = false;
+        SHOULD_UPDATE_USED_MOTORS = false;
     }
 
     private static void updateMotors(int[] motorsPerTrack) {
-        if (!SHOULD_UPDATE_SKIPPED_MOTORS)
+        if (!SHOULD_UPDATE_USED_MOTORS)
             return;
         ORCHESTRA.clearInstruments();
 
         applyTracks(motorsPerTrack);
-        SHOULD_UPDATE_SKIPPED_MOTORS = false;
+        SHOULD_UPDATE_USED_MOTORS = false;
     }
 
     private static void applyTracks(int totalTracks) {
@@ -232,6 +229,6 @@ public class Orchestra extends SubsystemBase {
     }
 
     private static boolean shouldUseMotor(Integer id) {
-        return !SKIPPED_IDS.get().contains(id);
+        return USED_MOTOR_IDS.contains(id);
     }
 }
