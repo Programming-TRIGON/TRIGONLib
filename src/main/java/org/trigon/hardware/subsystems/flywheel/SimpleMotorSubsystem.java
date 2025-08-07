@@ -82,7 +82,7 @@ public class SimpleMotorSubsystem {
         }
         mechanism.update(
                 getVelocityRotationsPerSecond(),
-                targetState.getTargetVelocityRotationsPerSecond()
+                targetState.getTargetUnit()
         );
     }
 
@@ -106,7 +106,7 @@ public class SimpleMotorSubsystem {
 
         if (shouldUseVoltageControl)
             return true;
-        return Math.abs(getVelocityRotationsPerSecond() - targetState.getTargetVelocityRotationsPerSecond()) < velocityTolerance;
+        return Math.abs(getVelocityRotationsPerSecond() - targetState.getTargetUnit()) < velocityTolerance;
     }
 
     public double getVelocityRotationsPerSecond() {
@@ -131,12 +131,12 @@ public class SimpleMotorSubsystem {
 
     private void setTargetStateWithVoltage(SimpleMotorSubsystem.SimpleMotorState targetState) {
         this.targetState = targetState;
-        setTargetVoltage(targetState.getTargetVoltage());
+        setTargetVoltage(targetState.getTargetUnit());
     }
 
     private void setTargetStateWithVelocity(SimpleMotorSubsystem.SimpleMotorState targetState) {
         this.targetState = targetState;
-        setTargetVelocity(targetState.getTargetVelocityRotationsPerSecond());
+        setTargetVelocity(targetState.getTargetUnit());
     }
 
     private void setTargetVoltage(double targetVoltage) {
@@ -148,8 +148,6 @@ public class SimpleMotorSubsystem {
     }
 
     public interface SimpleMotorState {
-        double getTargetVoltage();
-
-        double getTargetVelocityRotationsPerSecond();
+        double getTargetUnit();
     }
 }
