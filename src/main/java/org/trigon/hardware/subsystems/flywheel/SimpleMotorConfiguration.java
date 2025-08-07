@@ -34,17 +34,15 @@ public class SimpleMotorConfiguration {
      */
     velocityTolerance = 1,
     /**
-     * sysID stuff. For more information, see
-     * <a href="https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/introduction.html">
-     * https://docs.wpilib.org/.../introduction.html
-     * </a>.
+     * Ramp rate used in system identification.
+     * See <a href="https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/introduction.html">
+     * WPILib System Identification Introduction</a>.
      */
     sysIDRampRate = 1,
     /**
-     * sysID stuff. For more information, see
-     * <a href="https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/introduction.html">
-     * https://docs.wpilib.org/.../introduction.html
-     * </a>.
+     * Step voltage used in system identification.
+     * See <a href="https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/introduction.html">
+     * WPILib System Identification Introduction</a>.
      */
     sysIDStepVoltage = 1;
     public boolean focEnabled = true;
