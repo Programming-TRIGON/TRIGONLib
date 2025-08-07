@@ -2,19 +2,58 @@ package org.trigon.hardware.subsystems.flywheel;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 
+/**
+ * The config for the SimpleMotor Subsystem.
+ */
 public class SimpleMotorConfiguration {
     public String name = "";
     public double
             gearRatio = 1,
-            momentOfInertia = 0.003,
-            maximumVelocity = 1,
-            maximumAcceleration = 1,
-            maximumJerk = 1,
-            maximumDisplayableVelocity = 1,
-            velocityTolerance = 1,
-            sysIDRampRate = 1,
-            sysIDStepVoltage = 1;
+    /**
+     * The moment of inertia of the motor
+     */
+    momentOfInertia = 0.003,
+    /**
+     * Maximum velocity of the motor.
+     */
+    maximumVelocity = 1,
+    /**
+     * Maximum acceleration of the motor.
+     */
+    maximumAcceleration = 1,
+    /**
+     * Maximum jerk of the motor.
+     */
+    maximumJerk = 1,
+    /**
+     * Maximum velocity displayed by the mechanism 2D
+     */
+    maximumDisplayableVelocity = 1,
+    /**
+     * The acceptable tolerance between the target velocity and current velocity.
+     */
+    velocityTolerance = 1,
+    /**
+     * sysID stuff. For more information, see
+     * <a href="https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/introduction.html">
+     * https://docs.wpilib.org/.../introduction.html
+     * </a>.
+     */
+    sysIDRampRate = 1,
+    /**
+     * sysID stuff. For more information, see
+     * <a href="https://docs.wpilib.org/en/stable/docs/software/advanced-controls/system-identification/introduction.html">
+     * https://docs.wpilib.org/.../introduction.html
+     * </a>.
+     */
+    sysIDStepVoltage = 1;
     public boolean focEnabled = true;
+    /**
+     * should the motor control mode be Voltage as opposed to Velocity.
+     */
     public boolean shouldUseVoltageControl = false;
+    /**
+     * The type and amount of motors to be used in the simulation.
+     */
     public DCMotor gearbox = DCMotor.getKrakenX60Foc(1);
 }
