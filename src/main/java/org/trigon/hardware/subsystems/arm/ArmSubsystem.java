@@ -152,6 +152,11 @@ public class ArmSubsystem {
         return originPoint.transformBy(armTransform);
     }
 
+    /**
+     * An interface for an arm state.
+     * getTargetAngle represents the target angle of the state.
+     * getSpeedScalar represents the speed scalar of the state.
+     */
     public interface ArmState {
         Rotation2d getTargetAngle();
 

@@ -147,6 +147,10 @@ public class SimpleMotorSubsystem {
         setControl(velocityRequest.withVelocity(targetVelocity));
     }
 
+    /**
+     * An interface for a Simple motor state.
+     * getTargetUnit represents the target Velocity or Voltage (depending on the control mode) of the state.
+     */
     public interface SimpleMotorState {
         double getTargetUnit();
     }

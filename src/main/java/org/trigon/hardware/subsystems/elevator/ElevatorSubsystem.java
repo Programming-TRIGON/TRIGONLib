@@ -168,6 +168,11 @@ public class ElevatorSubsystem {
         return Conversions.distanceToRotations(positionMeters, drumRadiusMeters * 2);
     }
 
+    /**
+     * An interface for an elevator state.
+     * getTargetPositionMeters represents the target position of the state.
+     * getSpeedScalar represents the speed scalar of the state.
+     */
     public interface ElevatorState {
         double getTargetPositionMeters();
 
