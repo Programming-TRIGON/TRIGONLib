@@ -1,10 +1,10 @@
-package frc.trigon.lib.hardware.talonfxs.io;
+package frc.trigon.lib.hardware.phoenix6.talonfxs.io;
 
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import frc.trigon.lib.hardware.talonfxs.TalonFXSIO;
+import frc.trigon.lib.hardware.phoenix6.talonfxs.TalonFXSIO;
 
 public class RealTalonFXSIO extends TalonFXSIO {
     private final TalonFXS talonFXS;

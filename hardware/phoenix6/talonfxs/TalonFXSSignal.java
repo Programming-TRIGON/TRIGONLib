@@ -1,8 +1,8 @@
-package frc.trigon.lib.hardware.talonfxs;
+package frc.trigon.lib.hardware.phoenix6.talonfxs;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.hardware.TalonFXS;
-import lib.utilities.Conversions;
+import frc.trigon.lib.utilities.Conversions;
 
 import java.util.function.Function;
 

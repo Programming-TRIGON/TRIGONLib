@@ -1,14 +1,14 @@
-package frc.trigon.lib.hardware.talonfxs;
+package frc.trigon.lib.hardware.phoenix6.talonfxs;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import frc.trigon.lib.hardware.RobotHardwareStats;
+import frc.trigon.lib.hardware.phoenix6.Phoenix6Inputs;
+import frc.trigon.lib.hardware.phoenix6.talonfxs.io.RealTalonFXSIO;
+import frc.trigon.lib.hardware.phoenix6.talonfxs.io.SimulationTalonFXSIO;
 import frc.trigon.lib.hardware.simulation.MotorPhysicsSimulation;
-import frc.trigon.lib.hardware.talonfxs.io.RealTalonFXSIO;
-import frc.trigon.lib.hardware.talonfxs.io.SimulationTalonFXSIO;
-import frc.trigon.lib.hardware.talonfxs.phoenix6.Phoenix6Inputs;
 import org.littletonrobotics.junction.Logger;
 
 /**
