@@ -1,4 +1,4 @@
-package psubsystems.elevator;
+package frc.trigon.lib.hardware.subsystems.elevator;
 
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
@@ -10,12 +10,12 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXMotor;
+import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXSignal;
+import frc.trigon.lib.hardware.simulation.ElevatorSimulation;
+import frc.trigon.lib.utilities.Conversions;
+import frc.trigon.lib.utilities.mechanisms.ElevatorMechanism2d;
 import org.littletonrobotics.junction.Logger;
-import org.trigon.hardware.phoenix6.talonfx.TalonFXMotor;
-import org.trigon.hardware.phoenix6.talonfx.TalonFXSignal;
-import org.trigon.hardware.simulation.ElevatorSimulation;
-import org.trigon.utilities.Conversions;
-import org.trigon.utilities.mechanisms.ElevatorMechanism2d;
 
 public class ElevatorSubsystem {
     private final TalonFXMotor motor;
