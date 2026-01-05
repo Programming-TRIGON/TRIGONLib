@@ -1,4 +1,4 @@
-package psubsystems.elevator;
+package frc.trigon.lib.hardware.subsystems.elevator;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.util.Color;
