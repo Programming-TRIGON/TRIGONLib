@@ -1,4 +1,4 @@
-package org.trigon.hardware.subsystems.elevator;
+package psubsystems.elevator;
 
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;

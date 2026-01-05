@@ -1,4 +1,4 @@
-package org.trigon.hardware.subsystems.arm;
+package psubsystems.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;

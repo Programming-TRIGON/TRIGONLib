@@ -1,4 +1,4 @@
-package org.trigon.hardware.subsystems.flywheel;
+package psubsystems.flywheel;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 

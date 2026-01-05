@@ -1,4 +1,4 @@
-package org.trigon.hardware.subsystems.flywheel;
+package psubsystems.flywheel;
 
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.VelocityVoltage;
