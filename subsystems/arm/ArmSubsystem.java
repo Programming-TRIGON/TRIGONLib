@@ -8,12 +8,12 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
-import lib.hardware.RobotHardwareStats;
-import lib.hardware.phoenix6.talonfx.TalonFXMotor;
-import lib.hardware.phoenix6.talonfx.TalonFXSignal;
-import lib.hardware.simulation.SingleJointedArmSimulation;
+import frc.trigon.lib.hardware.RobotHardwareStats;
+import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXMotor;
+import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXSignal;
+import frc.trigon.lib.hardware.simulation.SingleJointedArmSimulation;
 import frc.trigon.lib.subsystems.MotorSubsystem;
-import lib.utilities.mechanisms.SingleJointedArmMechanism2d;
+import frc.trigon.lib.utilities.mechanisms.SingleJointedArmMechanism2d;
 
 public class ArmSubsystem extends MotorSubsystem {
     private final TalonFXMotor motor;

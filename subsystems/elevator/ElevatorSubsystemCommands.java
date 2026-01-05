@@ -1,8 +1,8 @@
 package frc.trigon.lib.subsystems.elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import lib.commands.ExecuteEndCommand;
-import lib.commands.NetworkTablesCommand;
+import frc.trigon.lib.commands.ExecuteEndCommand;
+import frc.trigon.lib.commands.NetworkTablesCommand;
 
 import java.util.Set;
 

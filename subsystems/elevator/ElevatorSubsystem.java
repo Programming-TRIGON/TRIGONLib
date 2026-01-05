@@ -11,12 +11,12 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
-import lib.hardware.phoenix6.talonfx.TalonFXMotor;
-import lib.hardware.phoenix6.talonfx.TalonFXSignal;
-import lib.hardware.simulation.ElevatorSimulation;
+import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXMotor;
+import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXSignal;
+import frc.trigon.lib.hardware.simulation.ElevatorSimulation;
 import frc.trigon.lib.subsystems.MotorSubsystem;
-import lib.utilities.Conversions;
-import lib.utilities.mechanisms.ElevatorMechanism2d;
+import frc.trigon.lib.utilities.Conversions;
+import frc.trigon.lib.utilities.mechanisms.ElevatorMechanism2d;
 
 public class ElevatorSubsystem extends MotorSubsystem {
     private final TalonFXMotor motor;
