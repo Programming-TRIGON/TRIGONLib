@@ -14,7 +14,7 @@
 package frc.trigon.lib.hardware.rev.spark;
 
 import edu.wpi.first.wpilibj.Notifier;
-import org.littletonrobotics.junction.Logger;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.trigon.lib.hardware.SignalThreadBase;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class SparkSignalThread extends SignalThreadBase {
 
     private void periodic() {
         SIGNALS_LOCK.lock();
-        timestamps.offer(Logger.getRealTimestamp() / 1.0e6);
+        timestamps.offer(RobotController.getFPGATime() / 1.0e6);
         try {
             for (int i = 0; i < signals.size(); i++)
                 queues.get(i).offer(signals.get(i).getAsDouble());
