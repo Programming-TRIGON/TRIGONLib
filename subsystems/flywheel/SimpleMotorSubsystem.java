@@ -6,12 +6,12 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import org.littletonrobotics.junction.Logger;
 import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXMotor;
 import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXSignal;
 import frc.trigon.lib.hardware.simulation.SimpleMotorSimulation;
 import frc.trigon.lib.subsystems.MotorSubsystem;
 import frc.trigon.lib.utilities.mechanisms.SpeedMechanism2d;
+import org.littletonrobotics.junction.Logger;
 
 public class SimpleMotorSubsystem extends MotorSubsystem {
     private final TalonFXMotor motor;
@@ -57,12 +57,14 @@ public class SimpleMotorSubsystem extends MotorSubsystem {
 
     @Override
     public String getName() {
-        return name;
+        return "";
     }
 
     @Override
     public SysIdRoutine.Config getSysIDConfig() {
-        return sysIDConfig;
+        if (sysIDConfig != null)
+            return sysIDConfig;
+        return new SysIdRoutine.Config();
     }
 
     @Override
@@ -91,7 +93,9 @@ public class SimpleMotorSubsystem extends MotorSubsystem {
         }
         mechanism.update(
                 getVelocityRotationsPerSecond(),
-                targetState.getTargetUnit()
+                targetState == null ?
+                        0
+                        : targetState.getTargetUnit()
         );
     }
 
