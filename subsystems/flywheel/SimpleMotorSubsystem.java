@@ -93,9 +93,7 @@ public class SimpleMotorSubsystem extends MotorSubsystem {
         }
         mechanism.update(
                 getVelocityRotationsPerSecond(),
-                targetState == null ?
-                        0
-                        : targetState.getTargetUnit()
+                motor.getSignal(TalonFXSignal.CLOSED_LOOP_REFERENCE)
         );
     }
 
