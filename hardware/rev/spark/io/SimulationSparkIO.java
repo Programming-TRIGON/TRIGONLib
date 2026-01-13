@@ -1,5 +1,7 @@
 package frc.trigon.lib.hardware.rev.spark.io;
 
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.sim.SparkAbsoluteEncoderSim;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -30,22 +32,22 @@ public class SimulationSparkIO extends SparkIO {
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType) {
-        pidController.setReference(value, controlType);
+        pidController.setSetpoint(value, controlType);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot slot) {
-        pidController.setReference(value, controlType, slot);
+        pidController.setSetpoint(value, controlType, slot);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot slot, double arbitraryFeedForward) {
-        pidController.setReference(value, controlType, slot, arbitraryFeedForward);
+        pidController.setSetpoint(value, controlType, slot, arbitraryFeedForward);
     }
 
     @Override
     public void setReference(double value, SparkBase.ControlType controlType, ClosedLoopSlot slot, double arbitraryFeedForward, SparkClosedLoopController.ArbFFUnits arbitraryFeedForwardUnits) {
-        pidController.setReference(value, controlType, slot, arbitraryFeedForward, arbitraryFeedForwardUnits);
+        pidController.setSetpoint(value, controlType, slot, arbitraryFeedForward, arbitraryFeedForwardUnits);
     }
 
     @Override
@@ -72,14 +74,14 @@ public class SimulationSparkIO extends SparkIO {
     public void setInverted(boolean inverted) {
         final SparkMaxConfig configuration = new SparkMaxConfig();
         configuration.inverted(inverted);
-        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motor.configure(configuration, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
     @Override
     public void setBrake(boolean brake) {
         final SparkMaxConfig configuration = new SparkMaxConfig();
         configuration.idleMode(brake ? SparkMaxConfig.IdleMode.kBrake : SparkMaxConfig.IdleMode.kCoast);
-        motor.configure(configuration, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        motor.configure(configuration, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class SimulationSparkIO extends SparkIO {
     }
 
     @Override
-    public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void configure(SparkBaseConfig configuration, ResetMode resetMode, PersistMode persistMode) {
         motor.configure(configuration, resetMode, persistMode);
     }
 

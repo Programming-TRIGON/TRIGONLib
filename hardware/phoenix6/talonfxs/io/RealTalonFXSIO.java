@@ -1,5 +1,6 @@
 package frc.trigon.lib.hardware.phoenix6.talonfxs.io;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -10,7 +11,7 @@ public class RealTalonFXSIO extends TalonFXSIO {
     private final TalonFXS talonFXS;
 
     public RealTalonFXSIO(int id, String canbus) {
-        this.talonFXS = new TalonFXS(id, canbus);
+        this.talonFXS = new TalonFXS(id, new CANBus(canbus));
     }
 
     @Override

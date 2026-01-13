@@ -1,14 +1,16 @@
 package frc.trigon.lib.hardware.rev.spark;
 
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import org.littletonrobotics.junction.Logger;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.rev.spark.io.RealSparkIO;
 import frc.trigon.lib.hardware.rev.spark.io.SimulationSparkIO;
 import frc.trigon.lib.hardware.simulation.MotorPhysicsSimulation;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * A class the represents a Spark motor. Used to control and read data from a Spark motor.
@@ -177,7 +179,7 @@ public class SparkMotor {
      * @param resetMode               whether to reset safe parameters before setting the configuration or not
      * @param persistMode             whether to persist the parameters after setting the configuration or not
      */
-    public void applyConfigurations(SparkBaseConfig realConfiguration, SparkBaseConfig simulationConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void applyConfigurations(SparkBaseConfig realConfiguration, SparkBaseConfig simulationConfiguration, ResetMode resetMode, PersistMode persistMode) {
         if (RobotHardwareStats.isSimulation())
             motorIO.configure(simulationConfiguration, resetMode, persistMode);
         else
@@ -191,7 +193,7 @@ public class SparkMotor {
      * @param resetMode     whether to reset safe parameters before setting the configuration or not
      * @param persistMode   whether to persist the parameters after setting the configuration or not
      */
-    public void applyConfiguration(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void applyConfiguration(SparkBaseConfig configuration, ResetMode resetMode, PersistMode persistMode) {
         motorIO.configure(configuration, resetMode, persistMode);
     }
 
@@ -203,7 +205,7 @@ public class SparkMotor {
      * @param resetMode         whether to reset safe parameters before setting the configuration or not
      * @param persistMode       whether to persist the parameters after setting the configuration or not
      */
-    public void applyRealConfiguration(SparkBaseConfig realConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void applyRealConfiguration(SparkBaseConfig realConfiguration, ResetMode resetMode, PersistMode persistMode) {
         if (!RobotHardwareStats.isSimulation())
             motorIO.configure(realConfiguration, resetMode, persistMode);
     }
@@ -216,7 +218,7 @@ public class SparkMotor {
      * @param resetMode               whether to reset safe parameters before setting the configuration or not
      * @param persistMode             whether to persist the parameters after setting the configuration or not
      */
-    public void applySimulationConfiguration(SparkBaseConfig simulationConfiguration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void applySimulationConfiguration(SparkBaseConfig simulationConfiguration, ResetMode resetMode, PersistMode persistMode) {
         if (RobotHardwareStats.isSimulation())
             motorIO.configure(simulationConfiguration, resetMode, persistMode);
     }

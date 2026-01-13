@@ -1,5 +1,7 @@
 package frc.trigon.lib.hardware.rev.spark;
 
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -26,7 +28,7 @@ public class SparkIO {
     public void stopMotor() {
     }
 
-    public void configure(SparkBaseConfig configuration, SparkBase.ResetMode resetMode, SparkBase.PersistMode persistMode) {
+    public void configure(SparkBaseConfig configuration, ResetMode resetMode, PersistMode persistMode) {
     }
 
     public void setInverted(boolean inverted) {
