@@ -1,5 +1,6 @@
 package frc.trigon.lib.hardware.phoenix6.pigeon2.io;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,7 +10,7 @@ public class RealPigeon2IO extends Pigeon2IO {
     private final Pigeon2 pigeon2;
 
     public RealPigeon2IO(int id, String canbus) {
-        this.pigeon2 = new Pigeon2(id, canbus);
+        this.pigeon2 = new Pigeon2(id, new CANBus(canbus));
     }
 
     @Override
