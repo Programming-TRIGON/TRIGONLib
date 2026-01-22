@@ -1,10 +1,11 @@
 package frc.trigon.lib.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import org.littletonrobotics.junction.LogTable;
 import frc.trigon.lib.hardware.InputsBase;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.SignalThreadBase;
+import frc.trigon.robot.constants.RobotConstants;
+import org.littletonrobotics.junction.LogTable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,8 @@ public class Phoenix6Inputs extends InputsBase {
         if (RobotHardwareStats.isReplay())
             return;
 
-        BaseStatusSignal.refreshAll(CANIVORE_SIGNALS);
+        if (RobotConstants.USE_CANIVORE)
+            BaseStatusSignal.refreshAll(CANIVORE_SIGNALS);
         BaseStatusSignal.refreshAll(RIO_SIGNALS);
     }
 
@@ -61,6 +63,12 @@ public class Phoenix6Inputs extends InputsBase {
     public void registerThreadedSignal(BaseStatusSignal statusSignal, double updateFrequencyHertz) {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;
+
+        if (!isCanivore) {
+            updateFrequencyHertz = RobotHardwareStats.isSimulation() ? 50 : 100;
+            registerSignal(statusSignal, updateFrequencyHertz);
+            return;
+        }
 
         if (RobotHardwareStats.isSimulation()) // You can't run signals at a high frequency in simulation. A fast thread slows down the simulation.
             updateFrequencyHertz = 50;
