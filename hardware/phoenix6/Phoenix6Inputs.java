@@ -64,8 +64,8 @@ public class Phoenix6Inputs extends InputsBase {
         if (statusSignal == null || RobotHardwareStats.isReplay())
             return;
 
-        if (!isCanivore) {
-            updateFrequencyHertz = RobotHardwareStats.isSimulation() ? 50 : 100;
+        if (RobotConstants.USE_CANIVORE) {
+            updateFrequencyHertz = 100;
             registerSignal(statusSignal, updateFrequencyHertz);
             return;
         }
@@ -90,13 +90,17 @@ public class Phoenix6Inputs extends InputsBase {
             updateFrequencyHertz = 100; // For some reason, simulation sometimes malfunctions if a status signal isn't updated frequently enough.
 
         statusSignal.setUpdateFrequency(updateFrequencyHertz);
-        if (isCanivore)
+        if (isCanivore && RobotConstants.USE_CANIVORE)
             addSignalToCANivoreSignalsArray(statusSignal);
         else
             addSignalToRIOSignalsArray(statusSignal);
     }
 
     private void updateThreadedSignalsToTable(LogTable table) {
+        if (RobotConstants.USE_CANIVORE) {
+            updateSignalsToTable(table);
+            return;
+        }
         for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
             final double[] queueAsArray = SignalThreadBase.queueToDoubleArray(entry.getValue());
             table.put(entry.getKey() + "_Threaded", queueAsArray);
