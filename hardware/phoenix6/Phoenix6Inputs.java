@@ -47,7 +47,8 @@ public class Phoenix6Inputs extends InputsBase {
         if (numberOfInputs == 0 && signalToThreadedQueue.isEmpty())
             return;
 
-        updateThreadedSignalsToTable(table);
+        if (RobotConstants.USE_CANIVORE)
+            updateThreadedSignalsToTable(table);
         updateSignalsToTable(table);
 
         latestTable = table;
@@ -61,14 +62,14 @@ public class Phoenix6Inputs extends InputsBase {
      * @param updateFrequencyHertz the frequency at which the threaded signal will be updated
      */
     public void registerThreadedSignal(BaseStatusSignal statusSignal, double updateFrequencyHertz) {
-        if (statusSignal == null || RobotHardwareStats.isReplay())
-            return;
-
-        if (RobotConstants.USE_CANIVORE) {
+        if (!RobotConstants.USE_CANIVORE) {
             updateFrequencyHertz = 100;
             registerSignal(statusSignal, updateFrequencyHertz);
             return;
         }
+
+        if (statusSignal == null || RobotHardwareStats.isReplay())
+            return;
 
         if (RobotHardwareStats.isSimulation()) // You can't run signals at a high frequency in simulation. A fast thread slows down the simulation.
             updateFrequencyHertz = 50;
@@ -97,10 +98,6 @@ public class Phoenix6Inputs extends InputsBase {
     }
 
     private void updateThreadedSignalsToTable(LogTable table) {
-        if (RobotConstants.USE_CANIVORE) {
-            updateSignalsToTable(table);
-            return;
-        }
         for (Map.Entry<String, Queue<Double>> entry : signalToThreadedQueue.entrySet()) {
             final double[] queueAsArray = SignalThreadBase.queueToDoubleArray(entry.getValue());
             table.put(entry.getKey() + "_Threaded", queueAsArray);
