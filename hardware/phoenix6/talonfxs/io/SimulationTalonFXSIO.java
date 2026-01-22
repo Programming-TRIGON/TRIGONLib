@@ -3,6 +3,7 @@ package frc.trigon.lib.hardware.phoenix6.talonfxs.io;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.ExternalFeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSSimState;
 import frc.trigon.lib.hardware.RobotHardwareStats;
@@ -77,6 +78,11 @@ public class SimulationTalonFXSIO extends TalonFXSIO {
      */
     private TalonFXSConfiguration adaptConfigurationToSimulation(TalonFXSConfiguration configuration) {
         configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        configuration.ExternalFeedback.ExternalFeedbackSensorSource = ExternalFeedbackSensorSourceValue.Commutation;
+        configuration.ExternalFeedback.SensorToMechanismRatio *= configuration.ExternalFeedback.RotorToSensorRatio;
+        configuration.Slot0.GravityArmPositionOffset = 0.0;
+        configuration.Slot1.GravityArmPositionOffset = 0.0;
+        configuration.Slot2.GravityArmPositionOffset = 0.0;
         return configuration;
     }
 }
