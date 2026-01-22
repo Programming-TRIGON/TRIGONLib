@@ -74,7 +74,9 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     public void run() {
         Timer.delay(5);
 
-        while (RobotConstants.USE_CANIVORE)
+        boolean shouldUpdateValues = RobotConstants.USE_CANIVORE;
+
+        while (shouldUpdateValues)
             updateValues();
     }
 

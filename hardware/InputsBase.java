@@ -1,7 +1,6 @@
 package frc.trigon.lib.hardware;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.trigon.robot.constants.RobotConstants;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
@@ -63,9 +62,7 @@ public abstract class InputsBase implements LoggableInputs {
             return new double[0];
         }
 
-        final LogTable.LogValue value = RobotConstants.USE_CANIVORE
-                ? latestTable.get(signalName + "_Threaded")
-                : latestTable.get(signalName);
+        final LogTable.LogValue value = latestTable.get(signalName + "_Threaded");
         if (value == null) {
             if (shouldPrintError())
                 new NoSuchElementException("The device \"" + name + "\" is trying to retrieve threaded signal \"" + signalName + "\" which doesn't exist.").printStackTrace();
