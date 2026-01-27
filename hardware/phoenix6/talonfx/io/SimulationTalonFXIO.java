@@ -84,6 +84,9 @@ public class SimulationTalonFXIO extends TalonFXIO {
         configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         configuration.Feedback.SensorToMechanismRatio *= configuration.Feedback.RotorToSensorRatio;
         configuration.Feedback.RotorToSensorRatio = 1.0;
+        configuration.Slot0.GravityArmPositionOffset = 0.0;
+        configuration.Slot1.GravityArmPositionOffset = 0.0;
+        configuration.Slot2.GravityArmPositionOffset = 0.0;
         return configuration;
     }
 }
