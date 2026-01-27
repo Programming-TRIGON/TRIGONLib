@@ -73,10 +73,8 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     @Override
     public void run() {
         Timer.delay(5);
-
-        boolean shouldUpdateValues = RobotConstants.USE_CANIVORE;
-
-        while (shouldUpdateValues)
+        
+        while (signals.length > 0)
             updateValues();
     }
 

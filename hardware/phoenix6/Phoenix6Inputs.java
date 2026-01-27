@@ -4,7 +4,6 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import frc.trigon.lib.hardware.InputsBase;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.SignalThreadBase;
-import frc.trigon.robot.constants.RobotConstants;
 import org.littletonrobotics.junction.LogTable;
 
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class Phoenix6Inputs extends InputsBase {
         if (numberOfInputs == 0 && signalToThreadedQueue.isEmpty())
             return;
 
-        if (RobotConstants.USE_CANIVORE)
+        if (!signalToThreadedQueue.isEmpty())
             updateThreadedSignalsToTable(table);
         updateSignalsToTable(table);
 
