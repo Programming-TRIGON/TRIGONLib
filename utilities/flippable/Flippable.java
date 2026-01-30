@@ -77,6 +77,10 @@ public abstract class Flippable<T> {
         return isRedAlliance() && shouldFlipWhenRedAlliance ? flippedObject : nonFlippedObject;
     }
 
+    public T getBlueObject() {
+        return nonFlippedObject;
+    }
+
     /**
      * Flips the object across the center of the field.
      *
