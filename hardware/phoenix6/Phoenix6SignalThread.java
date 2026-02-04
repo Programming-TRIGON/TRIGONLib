@@ -85,11 +85,14 @@ public class Phoenix6SignalThread extends SignalThreadBase {
         try {
             if (BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals) != StatusCode.OK)
                 return;
+
+            tryToUpdateQueues();
         } finally {
             signalRegisteringLock.unlock();
         }
+    }
 
-
+    private void tryToUpdateQueues() {
         QUEUES_LOCK.lock();
         try {
             final double currentTimestamp = RobotController.getFPGATime() / 1e6;
