@@ -30,7 +30,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * An interface for asynchronously reading high-frequency signals and adding them to queues for Phoenix 6. Used to get values from status signals.
  */
 public class Phoenix6SignalThread extends SignalThreadBase {
-    public static ReentrantLock SIGNALS_LOCK = new ReentrantLock();
+    public static final ReentrantLock QUEUES_LOCK = new ReentrantLock();
+    private final ReentrantLock signalRegisteringLock = new ReentrantLock();
     private final List<Queue<Double>> queues = new ArrayList<>();
     private BaseStatusSignal[] signals = new BaseStatusSignal[0];
 
@@ -59,12 +60,14 @@ public class Phoenix6SignalThread extends SignalThreadBase {
      */
     public Queue<Double> registerSignal(BaseStatusSignal signal) {
         final Queue<Double> queue = new ArrayBlockingQueue<>(100);
-        SIGNALS_LOCK.lock();
+        signalRegisteringLock.lock();
+        QUEUES_LOCK.lock();
         try {
             addSignalToSignalsArray(signal);
             queues.add(queue);
         } finally {
-            SIGNALS_LOCK.unlock();
+            QUEUES_LOCK.unlock();
+            signalRegisteringLock.unlock();
         }
         return queue;
     }
@@ -78,16 +81,25 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     }
 
     private void updateValues() {
-        if (BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals) != StatusCode.OK)
-            return;
-        final double currentTimestamp = RobotController.getFPGATime() / 1e6;
-        final double resultTimestamp = currentTimestamp - calculateLatency();
-
-        SIGNALS_LOCK.lock();
+        signalRegisteringLock.lock();
         try {
+            if (BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals) != StatusCode.OK)
+                return;
+
+            tryToUpdateQueues();
+        } finally {
+            signalRegisteringLock.unlock();
+        }
+    }
+
+    private void tryToUpdateQueues() {
+        QUEUES_LOCK.lock();
+        try {
+            final double currentTimestamp = RobotController.getFPGATime() / 1e6;
+            final double resultTimestamp = currentTimestamp - calculateLatency();
             updateQueues(resultTimestamp);
         } finally {
-            SIGNALS_LOCK.unlock();
+            QUEUES_LOCK.unlock();
         }
     }
 
