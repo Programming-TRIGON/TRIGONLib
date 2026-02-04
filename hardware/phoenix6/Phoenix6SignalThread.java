@@ -66,8 +66,8 @@ public class Phoenix6SignalThread extends SignalThreadBase {
             addSignalToSignalsArray(signal);
             queues.add(queue);
         } finally {
-            signalRegisteringLock.unlock();
             QUEUES_LOCK.unlock();
+            signalRegisteringLock.unlock();
         }
         return queue;
     }
