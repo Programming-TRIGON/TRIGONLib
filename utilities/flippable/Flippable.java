@@ -78,6 +78,13 @@ public abstract class Flippable<T> {
     }
 
     /**
+     * @return the object when the robot is on the blue alliance; the non-flipped object
+     */
+    public T getBlueObject() {
+        return nonFlippedObject;
+    }
+
+    /**
      * Flips the object across the center of the field.
      *
      * @param object the object to flip
