@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.SignalThreadBase;
+import frc.trigon.robot.constants.RobotConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,8 +76,8 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     @Override
     public void run() {
         Timer.delay(5);
-
-        while (true)
+        
+        while (signals.length > 0)
             updateValues();
     }
 
