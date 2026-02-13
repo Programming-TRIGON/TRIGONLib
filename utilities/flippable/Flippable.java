@@ -77,6 +77,9 @@ public abstract class Flippable<T> {
         return isRedAlliance() && shouldFlipWhenRedAlliance ? flippedObject : nonFlippedObject;
     }
 
+    /**
+     * @return the object when the robot is on the blue alliance; the non-flipped object
+     */
     public T getBlueObject() {
         return nonFlippedObject;
     }
