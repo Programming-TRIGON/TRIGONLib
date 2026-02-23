@@ -31,7 +31,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Phoenix6SignalThread extends SignalThreadBase {
     public static final ReentrantLock QUEUES_LOCK = new ReentrantLock();
-    private final ReentrantLock signalRegisteringLock = new ReentrantLock();
     private final List<Queue<Double>> queues = new ArrayList<>();
     private BaseStatusSignal[] signals = new BaseStatusSignal[0];
 
@@ -60,14 +59,14 @@ public class Phoenix6SignalThread extends SignalThreadBase {
      */
     public Queue<Double> registerSignal(BaseStatusSignal signal) {
         final Queue<Double> queue = new ArrayBlockingQueue<>(100);
-        signalRegisteringLock.lock();
+        SignalThreadBase.SIGNALS_REGISTERING_LOCK.lock();
         QUEUES_LOCK.lock();
         try {
             addSignalToSignalsArray(signal);
             queues.add(queue);
         } finally {
             QUEUES_LOCK.unlock();
-            signalRegisteringLock.unlock();
+            SignalThreadBase.SIGNALS_REGISTERING_LOCK.unlock();
         }
         return queue;
     }
@@ -81,14 +80,14 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     }
 
     private void updateValues() {
-        signalRegisteringLock.lock();
+        SignalThreadBase.SIGNALS_REGISTERING_LOCK.lock();
         try {
             if (BaseStatusSignal.waitForAll(RobotHardwareStats.getPeriodicTimeSeconds(), signals) != StatusCode.OK)
                 return;
 
             tryToUpdateQueues();
         } finally {
-            signalRegisteringLock.unlock();
+            SignalThreadBase.SIGNALS_REGISTERING_LOCK.unlock();
         }
     }
 

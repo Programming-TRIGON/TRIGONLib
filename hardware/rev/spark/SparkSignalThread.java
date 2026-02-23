@@ -59,24 +59,24 @@ public class SparkSignalThread extends SignalThreadBase {
      */
     public Queue<Double> registerThreadedSignal(DoubleSupplier signal) {
         Queue<Double> queue = new ArrayBlockingQueue<>(100);
-        SIGNALS_LOCK.lock();
+        SIGNALS_REGISTERING_LOCK.lock();
         try {
             signals.add(signal);
             queues.add(queue);
         } finally {
-            SIGNALS_LOCK.unlock();
+            SIGNALS_REGISTERING_LOCK.unlock();
         }
         return queue;
     }
 
     private void periodic() {
-        SIGNALS_LOCK.lock();
+        SIGNALS_REGISTERING_LOCK.lock();
         timestamps.offer(RobotController.getFPGATime() / 1.0e6);
         try {
             for (int i = 0; i < signals.size(); i++)
                 queues.get(i).offer(signals.get(i).getAsDouble());
         } finally {
-            SIGNALS_LOCK.unlock();
+            SIGNALS_REGISTERING_LOCK.unlock();
         }
     }
 }
