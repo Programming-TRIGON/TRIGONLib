@@ -51,6 +51,15 @@ public class FlippablePose2d extends Flippable<Pose2d> {
         return new FlippableRotation2d(nonFlippedObject.getRotation(), shouldFlipWhenRedAlliance);
     }
 
+    /**
+     * Gets the translation value of the pose. The pose will be flipped if the robot is on the red alliance and {@link #shouldFlipWhenRedAlliance} is true.
+     *
+     * @return the translation value of the pose
+     */
+    public FlippableTranslation2d getTranslation() {
+        return new FlippableTranslation2d(nonFlippedObject.getTranslation(), shouldFlipWhenRedAlliance);
+    }
+
     @Override
     protected Pose2d flip(Pose2d pose) {
         return FlippingUtil.flipFieldPose(pose);
