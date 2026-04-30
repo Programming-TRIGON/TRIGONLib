@@ -6,6 +6,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
 
+/**
+ * A wrapper class for the WPILib {@link Rectangle2d}.
+ */
 public class BoundingBox extends Rectangle2d {
     public BoundingBox(Pose2d center, double xWidth, double yWidth) {
         super(center, xWidth, yWidth);
