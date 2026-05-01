@@ -1,5 +1,6 @@
 package frc.trigon.lib.utilities;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rectangle2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,14 +24,20 @@ public class BoundingBox extends Rectangle2d {
         super(cornerA, cornerB);
     }
 
+    /**
+     * Logs this bounding box for visualization in AdvantageScope.
+     *
+     * @param key the logging key
+     */
     public void log(String key) {
-        final Translation2d[] corners = new Translation2d[5];
-        System.arraycopy(getRectangleCorners(), 0, corners, 0, 4);
-        corners[4] = corners[0];
-        final Translation2d x = corners[3];
-        corners[3] = corners[2];
-        corners[2] = x;
-        Logger.recordOutput(key, corners);
+        final Translation2d[] corners = getRectangleCorners();
+        Logger.recordOutput(key, new Translation2d[]{
+                corners[0],
+                corners[1],
+                corners[3],
+                corners[2],
+                corners[0]
+        });
     }
 
     /**
@@ -88,6 +95,56 @@ public class BoundingBox extends Rectangle2d {
      */
     public double distanceTo(BoundingBox other) {
         return this.overlaps(other) ? 0 : getMinimumCornerDistance(other);
+    }
+
+    public double getMinimumDistanceToPerimeter(BoundingBox other) {
+        final Translation2d[] otherCorners = other.getRectangleCorners();
+        double minimumDistanceMeters = Double.POSITIVE_INFINITY;
+
+        for (Translation2d otherCorner : otherCorners)
+            minimumDistanceMeters = Math.min(minimumDistanceMeters, this.distanceToPerimeter(otherCorner));
+
+        return minimumDistanceMeters;
+    }
+
+    /**
+     * Returns the distance from a point to the nearest point on the perimeter of this bounding box.
+     * Unlike {@link #getDistance(Translation2d)}, this returns a non-zero value even if the point is inside.
+     *
+     * @param point the point to measure the distance from
+     * @return the distance from the point to the nearest perimeter point
+     */
+    public double distanceToPerimeter(Translation2d point) {
+        return point.getDistance(nearestPerimeterPoint(point));
+    }
+
+    /**
+     * Returns the nearest point on the perimeter of this bounding box to the given point.
+     * Unlike {@link #nearest(Translation2d)}, this always returns a point on the perimeter,
+     * even if the given point is inside the bounding box.
+     *
+     * @param point the point to find the nearest perimeter point to
+     * @return the nearest point on the perimeter of this bounding box
+     */
+    public Translation2d nearestPerimeterPoint(Translation2d point) {
+        final Pose2d center = this.getCenter();
+        final Translation2d localPoint = point.minus(center.getTranslation())
+                .rotateBy(center.getRotation().unaryMinus());
+
+        final double halfXWidth = this.getXWidth() / 2.0;
+        final double halfYWidth = this.getYWidth() / 2.0;
+
+        final boolean isInsideX = Math.abs(localPoint.getX()) < halfXWidth;
+        final boolean isInsideY = Math.abs(localPoint.getY()) < halfYWidth;
+
+        final Translation2d localPerimeterPoint = isInsideX && isInsideY
+                ? calculateNearestEdgePoint(localPoint, halfXWidth, halfYWidth)
+                : new Translation2d(
+                MathUtil.clamp(localPoint.getX(), -halfXWidth, halfXWidth),
+                MathUtil.clamp(localPoint.getY(), -halfYWidth, halfYWidth)
+        );
+
+        return localPerimeterPoint.rotateBy(center.getRotation()).plus(center.getTranslation());
     }
 
     /**
@@ -150,7 +207,7 @@ public class BoundingBox extends Rectangle2d {
      * @param other the other bounding box
      * @return the shortest distance between the perimeters
      */
-    private double getMinimumCornerDistance(BoundingBox other) {
+    public double getMinimumCornerDistance(BoundingBox other) {
         final Translation2d[]
                 thisBoundingBoxCorners = this.getRectangleCorners(),
                 otherBoundingBoxCorners = other.getRectangleCorners();
@@ -182,6 +239,36 @@ public class BoundingBox extends Rectangle2d {
                 new Translation2d(-halfXWidth, halfYWidth).rotateBy(center.getRotation()).plus(center.getTranslation()),
                 new Translation2d(-halfXWidth, -halfYWidth).rotateBy(center.getRotation()).plus(center.getTranslation())
         };
+    }
+
+    /**
+     * Returns the nearest point on the edge of a rectangle to a point that is inside it.
+     * The point and result are both in the rectangle's local coordinate frame.
+     *
+     * @param localPoint the point in local frame, must be strictly inside the rectangle
+     * @param halfXWidth half the rectangle's width along the X axis
+     * @param halfYWidth half the rectangle's width along the Y axis
+     * @return the nearest edge point in local frame
+     */
+    private static Translation2d calculateNearestEdgePoint(Translation2d localPoint, double halfXWidth, double halfYWidth) {
+        final double
+                distanceToLeftEdge = localPoint.getX() + halfXWidth,
+                distanceToRightEdge = halfXWidth - localPoint.getX(),
+                distanceToBottomEdge = localPoint.getY() + halfYWidth,
+                distanceToTopEdge = halfYWidth - localPoint.getY();
+
+        final double minimumEdgeDistance = Math.min(
+                Math.min(distanceToLeftEdge, distanceToRightEdge),
+                Math.min(distanceToBottomEdge, distanceToTopEdge)
+        );
+
+        if (minimumEdgeDistance == distanceToLeftEdge)
+            return new Translation2d(-halfXWidth, localPoint.getY());
+        if (minimumEdgeDistance == distanceToRightEdge)
+            return new Translation2d(halfXWidth, localPoint.getY());
+        if (minimumEdgeDistance == distanceToBottomEdge)
+            return new Translation2d(localPoint.getX(), -halfYWidth);
+        return new Translation2d(localPoint.getX(), halfYWidth);
     }
 
     /**
