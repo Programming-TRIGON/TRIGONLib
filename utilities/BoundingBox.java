@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Rectangle2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * A wrapper class for the WPILib {@link Rectangle2d}.
@@ -20,6 +21,16 @@ public class BoundingBox extends Rectangle2d {
 
     public BoundingBox(Translation2d cornerA, Translation2d cornerB) {
         super(cornerA, cornerB);
+    }
+
+    public void log(String key) {
+        final Translation2d[] corners = new Translation2d[5];
+        System.arraycopy(getRectangleCorners(), 0, corners, 0, 4);
+        corners[4] = corners[0];
+        final Translation2d x = corners[3];
+        corners[3] = corners[2];
+        corners[2] = x;
+        Logger.recordOutput(key, corners);
     }
 
     /**
