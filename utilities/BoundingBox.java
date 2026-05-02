@@ -97,14 +97,21 @@ public class BoundingBox extends Rectangle2d {
         return this.overlaps(other) ? 0 : getMinimumCornerDistance(other);
     }
 
+    /**
+     * Returns the shortest distance from the perimeter of this bounding box to the perimeter of another bounding box.
+     * Unlike {@link #distanceTo(BoundingBox)}, this returns a non-zero value even if the bounding boxes overlap.
+     *
+     * @param other the bounding box to measure the distance to
+     * @return the shortest distance from the perimeter of this bounding box to the perimeter of the other bounding box
+     */
     public double getMinimumDistanceToPerimeter(BoundingBox other) {
         final Translation2d[] otherCorners = other.getRectangleCorners();
-        double minimumDistanceMeters = Double.POSITIVE_INFINITY;
+        double minimumDistance = Double.POSITIVE_INFINITY;
 
         for (Translation2d otherCorner : otherCorners)
-            minimumDistanceMeters = Math.min(minimumDistanceMeters, this.distanceToPerimeter(otherCorner));
+            minimumDistance = Math.min(minimumDistance, this.distanceToPerimeter(otherCorner));
 
-        return minimumDistanceMeters;
+        return minimumDistance;
     }
 
     /**
