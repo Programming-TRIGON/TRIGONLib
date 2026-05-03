@@ -1,10 +1,7 @@
 package frc.trigon.lib.utilities;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rectangle2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.Distance;
 import org.littletonrobotics.junction.Logger;
 
@@ -38,6 +35,14 @@ public class BoundingBox extends Rectangle2d {
                 corners[2],
                 corners[0]
         });
+    }
+
+    public BoundingBox rotateBy(Rotation2d rotation) {
+        return new BoundingBox(
+                this.getCenter().plus(new Transform2d(0, 0, rotation)),
+                this.getXWidth(),
+                this.getYWidth()
+        );
     }
 
     /**
