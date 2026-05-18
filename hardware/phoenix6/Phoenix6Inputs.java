@@ -1,10 +1,10 @@
 package frc.trigon.lib.hardware.phoenix6;
 
 import com.ctre.phoenix6.BaseStatusSignal;
-import org.littletonrobotics.junction.LogTable;
 import frc.trigon.lib.hardware.InputsBase;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.SignalThreadBase;
+import org.littletonrobotics.junction.LogTable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +36,10 @@ public class Phoenix6Inputs extends InputsBase {
         if (RobotHardwareStats.isReplay())
             return;
 
-        BaseStatusSignal.refreshAll(CANIVORE_SIGNALS);
-        BaseStatusSignal.refreshAll(RIO_SIGNALS);
+        if (CANIVORE_SIGNALS.length > 0)
+            BaseStatusSignal.refreshAll(CANIVORE_SIGNALS);
+        if (RIO_SIGNALS.length > 0)
+            BaseStatusSignal.refreshAll(RIO_SIGNALS);
     }
 
     @Override

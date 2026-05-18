@@ -75,8 +75,9 @@ public class Phoenix6SignalThread extends SignalThreadBase {
     public void run() {
         Timer.delay(5);
 
-        while (true)
-            updateValues();
+        if (signals.length > 0)
+            while (true)
+                updateValues();
     }
 
     private void updateValues() {
