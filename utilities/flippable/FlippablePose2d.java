@@ -33,7 +33,7 @@ public class FlippablePose2d extends Flippable<Pose2d> {
     }
 
     /**
-     * Creates a new FlippablePose2d with the given x, y, and rotation.
+     * Creates a new FlippablePose2d with the given pose, and rotation.
      *
      * @param nonFlippedPose            the pose when the robot is on the blue alliance
      * @param shouldFlipWhenRedAlliance should the pose be flipped when the robot is on the red alliance
