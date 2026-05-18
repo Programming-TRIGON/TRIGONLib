@@ -47,8 +47,7 @@ public class Phoenix6Inputs extends InputsBase {
         if (numberOfInputs == 0 && signalToThreadedQueue.isEmpty())
             return;
 
-        if (!signalToThreadedQueue.isEmpty())
-            updateThreadedSignalsToTable(table);
+        updateThreadedSignalsToTable(table);
         updateSignalsToTable(table);
 
         latestTable = table;
