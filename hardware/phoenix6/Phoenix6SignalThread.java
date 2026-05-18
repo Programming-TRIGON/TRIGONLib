@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.SignalThreadBase;
-import frc.trigon.robot.constants.RobotConstants;
 
 import java.util.ArrayList;
 import java.util.List;
