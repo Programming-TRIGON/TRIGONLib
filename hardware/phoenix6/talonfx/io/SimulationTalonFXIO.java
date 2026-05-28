@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXIO;
 import frc.trigon.lib.hardware.simulation.MotorPhysicsSimulation;
@@ -62,6 +63,14 @@ public class SimulationTalonFXIO extends TalonFXIO {
     @Override
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
         this.physicsSimulation = physicsSimulation;
+
+        DCMotor gearbox = physicsSimulation.getGearbox();
+
+        double krakenX44Speed = DCMotor.getKrakenX44(1).freeSpeedRadPerSec;
+        double krakenX44FocSpeed = DCMotor.getKrakenX44Foc(1).freeSpeedRadPerSec;
+
+        if (Math.abs(gearbox.freeSpeedRadPerSec - krakenX44Speed) < 1e-4 || Math.abs(gearbox.freeSpeedRadPerSec - krakenX44FocSpeed) < 1e-4)
+            motorSimState.setMotorType(TalonFXSimState.MotorType.KrakenX44);
     }
 
     @Override
