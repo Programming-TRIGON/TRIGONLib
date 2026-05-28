@@ -63,13 +63,9 @@ public class SimulationTalonFXIO extends TalonFXIO {
     @Override
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
         this.physicsSimulation = physicsSimulation;
-
         DCMotor gearbox = physicsSimulation.getGearbox();
 
-        double krakenX44Speed = DCMotor.getKrakenX44(1).freeSpeedRadPerSec;
-        double krakenX44FocSpeed = DCMotor.getKrakenX44Foc(1).freeSpeedRadPerSec;
-
-        if (Math.abs(gearbox.freeSpeedRadPerSec - krakenX44Speed) < 1e-4 || Math.abs(gearbox.freeSpeedRadPerSec - krakenX44FocSpeed) < 1e-4)
+        if (Math.abs(gearbox.freeSpeedRadPerSec - DCMotor.getKrakenX44(1).freeSpeedRadPerSec) < 1e-4 || Math.abs(gearbox.freeSpeedRadPerSec - DCMotor.getKrakenX44Foc(1).freeSpeedRadPerSec) < 1e-4)
             motorSimState.setMotorType(TalonFXSimState.MotorType.KrakenX44);
     }
 
