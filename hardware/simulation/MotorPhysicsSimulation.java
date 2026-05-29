@@ -1,13 +1,21 @@
 package frc.trigon.lib.hardware.simulation;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+
 /**
  * An abstract class to simulate the physics of a motor.
  */
 public abstract class MotorPhysicsSimulation {
     private final double gearRatio;
+    private final DCMotor gearbox;
 
-    MotorPhysicsSimulation(double gearRatio) {
+    MotorPhysicsSimulation(DCMotor gearbox, double gearRatio) {
+        this.gearbox = gearbox;
         this.gearRatio = gearRatio;
+    }
+
+    public DCMotor getGearbox() {
+        return gearbox;
     }
 
     public double getRotorPositionRotations() {
