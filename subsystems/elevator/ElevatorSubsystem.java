@@ -46,7 +46,7 @@ public class ElevatorSubsystem extends MotorSubsystem {
         maximumJerk = config.maximumJerk;
         mechanism = new ElevatorMechanism2d(name + "Mechanism", config.maximumHeight, config.minimumHeight, config.mechanismColor);
         voltageRequest = new VoltageOut(0).withEnableFOC(config.focEnabled);
-        positionRequest = new DynamicMotionMagicVoltage(0, maximumVelocity, maximumAcceleration, maximumJerk).withEnableFOC(config.focEnabled);
+        positionRequest = new DynamicMotionMagicVoltage(0, maximumVelocity, maximumAcceleration).withEnableFOC(config.focEnabled);
         sysIDConfig = new SysIdRoutine.Config(
                 Units.Volts.of(config.sysIDRampRate).per(Units.Seconds),
                 Units.Volts.of(config.sysIDStepVoltage),
