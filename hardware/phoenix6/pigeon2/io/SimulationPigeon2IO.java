@@ -14,7 +14,7 @@ public class SimulationPigeon2IO extends Pigeon2IO {
     private final Pigeon2 pigeon2;
     private final Pigeon2SimState simState;
     private final GyroSimulation gyroSimulation;
-    private DoubleSupplier yawVelocitySupplierDegreesPerSecond = null;
+    private DoubleSupplier yawVelocitySupplierRadiansPerSecond = null;
 
     public SimulationPigeon2IO(int id) {
         this.pigeon2 = new Pigeon2(id);
@@ -24,15 +24,15 @@ public class SimulationPigeon2IO extends Pigeon2IO {
 
     @Override
     public void updateGyro() {
-        if (yawVelocitySupplierDegreesPerSecond == null)
+        if (yawVelocitySupplierRadiansPerSecond == null)
             return;
-        gyroSimulation.update(yawVelocitySupplierDegreesPerSecond.getAsDouble(), RobotHardwareStats.getPeriodicTimeSeconds());
+        gyroSimulation.update(yawVelocitySupplierRadiansPerSecond.getAsDouble(), RobotHardwareStats.getPeriodicTimeSeconds());
         simState.setRawYaw(gyroSimulation.getGyroYawDegrees());
     }
 
     @Override
-    public void setSimulationYawVelocitySupplier(DoubleSupplier yawVelocitySupplierDegreesPerSecond) {
-        this.yawVelocitySupplierDegreesPerSecond = yawVelocitySupplierDegreesPerSecond;
+    public void setSimulationYawVelocitySupplier(DoubleSupplier yawVelocitySupplierRadiansPerSecond) {
+        this.yawVelocitySupplierRadiansPerSecond = yawVelocitySupplierRadiansPerSecond;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package frc.trigon.lib.hardware.phoenix6.cancoder.io;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import frc.trigon.lib.hardware.phoenix6.cancoder.CANcoderIO;
@@ -8,7 +9,7 @@ public class RealCANcoderIO extends CANcoderIO {
     private final CANcoder cancoder;
 
     public RealCANcoderIO(int id, String canbus) {
-        this.cancoder = new CANcoder(id, canbus);
+        this.cancoder = new CANcoder(id, new CANBus(canbus));
     }
 
     @Override

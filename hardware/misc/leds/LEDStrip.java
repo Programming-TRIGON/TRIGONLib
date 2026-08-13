@@ -1,7 +1,7 @@
 package frc.trigon.lib.hardware.misc.leds;
 
-import com.ctre.phoenix.led.LarsonAnimation;
-import edu.wpi.first.wpilibj.util.Color;
+import com.ctre.phoenix6.signals.LarsonBounceValue;
+import com.ctre.phoenix6.signals.RGBWColor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 
@@ -83,21 +83,19 @@ public abstract class LEDStrip extends SubsystemBase {
 
     protected abstract void clearLEDColors();
 
-    protected abstract void staticColor(Color color);
+    protected abstract void staticColor(RGBWColor color);
 
-    protected abstract void blink(Color color, double speed);
+    protected abstract void blink(RGBWColor color, double speed);
 
-    protected abstract void breathe(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode);
+    protected abstract void breathe(RGBWColor color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonBounceValue bounceMode);
 
-    protected abstract void colorFlow(Color color, double speed, boolean inverted);
+    protected abstract void colorFlow(RGBWColor color, double speed, boolean inverted);
 
-    protected abstract void alternateColor(Color firstColor, Color secondColor);
-
-    protected abstract void sectionColor(Supplier<Color>[] colors);
+    protected abstract void sectionColor(Supplier<RGBWColor>[] colors);
 
     protected abstract void rainbow(double brightness, double speed, boolean inverted);
 
-    protected abstract void setSingleLEDColor(int index, Color color);
+    protected abstract void setSingleLEDColor(int index, RGBWColor color);
 
     private void addLEDStripToLEDStripsArray(LEDStrip ledStrip) {
         final LEDStrip[] newLEDStrips = new LEDStrip[LED_STRIPS.length + 1];

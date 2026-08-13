@@ -1,7 +1,7 @@
 package frc.trigon.lib.hardware.misc.leds;
 
-import com.ctre.phoenix.led.LarsonAnimation;
-import edu.wpi.first.wpilibj.util.Color;
+import com.ctre.phoenix6.signals.LarsonBounceValue;
+import com.ctre.phoenix6.signals.RGBWColor;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -56,7 +56,7 @@ public class LEDCommands {
      * @param ledStrips the LED strips to animate
      * @return the command
      */
-    public static Command getStaticColorCommand(Color color, LEDStrip... ledStrips) {
+    public static Command getStaticColorCommand(RGBWColor color, LEDStrip... ledStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledStrips);
@@ -74,7 +74,7 @@ public class LEDCommands {
      * @param ledBoard the LED board to animate
      * @return the command
      */
-    public static Command getStaticColorCommand(Color color, LEDBoard ledBoard) {
+    public static Command getStaticColorCommand(RGBWColor color, LEDBoard ledBoard) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips());
@@ -93,7 +93,7 @@ public class LEDCommands {
      * @param ledStrips the LED strips to animate
      * @return the command
      */
-    public static Command getBlinkCommand(Color color, double speed, LEDStrip... ledStrips) {
+    public static Command getBlinkCommand(RGBWColor color, double speed, LEDStrip... ledStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledStrips);
@@ -112,7 +112,7 @@ public class LEDCommands {
      * @param ledBoard the LED board to animate
      * @return the command
      */
-    public static Command getBlinkCommand(Color color, double speed, LEDBoard ledBoard) {
+    public static Command getBlinkCommand(RGBWColor color, double speed, LEDBoard ledBoard) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips());
@@ -134,7 +134,7 @@ public class LEDCommands {
      * @param ledStrips             the LED strips to animate
      * @return the command
      */
-    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode, LEDStrip... ledStrips) {
+    public static Command getBreatheCommand(RGBWColor color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonBounceValue bounceMode, LEDStrip... ledStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledStrips);
@@ -156,7 +156,7 @@ public class LEDCommands {
      * @param ledBoard              the LED board to animate
      * @return the command
      */
-    public static Command getBreatheCommand(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int ledSpacing, boolean inverted, LEDBoard ledBoard) {
+    public static Command getBreatheCommand(RGBWColor color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int ledSpacing, boolean inverted, LEDBoard ledBoard) {
         return new FunctionalCommand(
                 () -> ledBoard.breathe(color, numberOfBreathingLEDs, speedLEDsPerSecond, ledSpacing, inverted),
                 ledBoard::updateBreathingPeriodically,
@@ -175,7 +175,7 @@ public class LEDCommands {
      * @param ledStrips the LED strips to animate
      * @return the command
      */
-    public static Command getColorFlowCommand(Color color, double speed, boolean inverted, LEDStrip... ledStrips) {
+    public static Command getColorFlowCommand(RGBWColor color, double speed, boolean inverted, LEDStrip... ledStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledStrips);
@@ -195,49 +195,11 @@ public class LEDCommands {
      * @param ledBoard the LED board to animate
      * @return the command
      */
-    public static Command getColorFlowCommand(Color color, double speed, boolean inverted, LEDBoard ledBoard) {
+    public static Command getColorFlowCommand(RGBWColor color, double speed, boolean inverted, LEDBoard ledBoard) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips());
                     runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.colorFlow(color, speed, inverted)), ledBoard.getLEDStrips());
-                },
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips()),
-                ledBoard
-        ).ignoringDisable(true);
-    }
-
-    /**
-     * Gets a command that displays 2 colors in an alternating pattern on the LED strips.
-     *
-     * @param firstColor  the first color
-     * @param secondColor the second color
-     * @param ledStrips   the LED strips to animate
-     * @return the command
-     */
-    public static Command getAlternateColorCommand(Color firstColor, Color secondColor, LEDStrip... ledStrips) {
-        return new StartEndCommand(
-                () -> {
-                    runForLEDs(LEDStrip::clearLEDColors, ledStrips);
-                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.alternateColor(firstColor, secondColor)), ledStrips);
-                },
-                () -> runForLEDs(LEDStrip::clearLEDColors, ledStrips),
-                ledStrips
-        ).ignoringDisable(true);
-    }
-
-    /**
-     * Gets a command that displays 2 colors in an alternating pattern on the LED strips in an LED board.
-     *
-     * @param firstColor  the first color
-     * @param secondColor the second color
-     * @param ledBoard    the LED board to animate
-     * @return the command
-     */
-    public static Command getAlternateColorCommand(Color firstColor, Color secondColor, LEDBoard ledBoard) {
-        return new StartEndCommand(
-                () -> {
-                    runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips());
-                    runForLEDs(ledStrip -> ledStrip.setCurrentAnimation(() -> ledStrip.alternateColor(firstColor, secondColor)), ledBoard.getLEDStrips());
                 },
                 () -> runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips()),
                 ledBoard
@@ -251,7 +213,7 @@ public class LEDCommands {
      * @param ledStrips the LED strips to animate
      * @return the command
      */
-    public static Command getSectionColorCommand(Supplier<Color>[] colors, LEDStrip... ledStrips) {
+    public static Command getSectionColorCommand(Supplier<RGBWColor>[] colors, LEDStrip... ledStrips) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledStrips);
@@ -269,7 +231,7 @@ public class LEDCommands {
      * @param ledBoard the LED board to animate
      * @return the command
      */
-    public static Command getSectionColorCommand(Supplier<Color>[] colors, LEDBoard ledBoard) {
+    public static Command getSectionColorCommand(Supplier<RGBWColor>[] colors, LEDBoard ledBoard) {
         return new StartEndCommand(
                 () -> {
                     runForLEDs(LEDStrip::clearLEDColors, ledBoard.getLEDStrips());
@@ -368,7 +330,7 @@ public class LEDCommands {
      * @param ledBoard           the LED board to animate
      * @return the command
      */
-    public static Command getSetBoardBounceCommand(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond, int ledSpacing, int stripSpacing, LEDBoard ledBoard) {
+    public static Command getSetBoardBounceCommand(RGBWColor color, int numberOfMovingLEDs, int speedLEDsPerSecond, int ledSpacing, int stripSpacing, LEDBoard ledBoard) {
         return new FunctionalCommand(
                 () -> ledBoard.bounce(color, numberOfMovingLEDs, speedLEDsPerSecond, ledSpacing, stripSpacing),
                 ledBoard::updateBouncingPeriodically,

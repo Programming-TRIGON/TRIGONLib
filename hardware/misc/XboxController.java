@@ -2,6 +2,7 @@ package frc.trigon.lib.hardware.misc;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -97,13 +98,17 @@ public class XboxController extends CommandXboxController {
     }
 
     public void rumble(double durationSeconds, double power) {
+        rumble(durationSeconds, power, GenericHID.RumbleType.kBothRumble);
+    }
+
+    public void rumble(double durationSeconds, double power, GenericHID.RumbleType rumbleType) {
         if (stopRumbleCommand != null)
             stopRumbleCommand.cancel();
 
-        stopRumbleCommand = new WaitCommand(durationSeconds).andThen(() -> getHID().setRumble(GenericHID.RumbleType.kBothRumble, 0)).ignoringDisable(true);
-        stopRumbleCommand.schedule();
+        stopRumbleCommand = new WaitCommand(durationSeconds).andThen(() -> getHID().setRumble(rumbleType, 0)).ignoringDisable(true);
+        CommandScheduler.getInstance().schedule(stopRumbleCommand);
 
-        getHID().setRumble(GenericHID.RumbleType.kBothRumble, power);
+        getHID().setRumble(rumbleType, power);
     }
 
     /**

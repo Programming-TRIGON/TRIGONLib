@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Signal threads are specialized threads that run at a specific frequency to handle updating signals.
  */
 public class SignalThreadBase extends Thread {
-    public static final ReentrantLock SIGNALS_LOCK = new ReentrantLock();
+    protected static final ReentrantLock SIGNALS_REGISTERING_LOCK = new ReentrantLock();
     protected final Queue<Double> timestamps = new ArrayBlockingQueue<>(100);
     private final ThreadInputsAutoLogged threadInputs = new ThreadInputsAutoLogged();
     private final String name;

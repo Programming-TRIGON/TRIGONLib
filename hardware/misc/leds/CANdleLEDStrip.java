@@ -1,7 +1,10 @@
 package frc.trigon.lib.hardware.misc.leds;
 
-import com.ctre.phoenix.led.*;
-import edu.wpi.first.wpilibj.util.Color;
+import com.ctre.phoenix6.controls.*;
+import com.ctre.phoenix6.hardware.CANdle;
+import com.ctre.phoenix6.signals.AnimationDirectionValue;
+import com.ctre.phoenix6.signals.LarsonBounceValue;
+import com.ctre.phoenix6.signals.RGBWColor;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 
 import java.util.function.Supplier;
@@ -58,88 +61,61 @@ public class CANdleLEDStrip extends LEDStrip {
 
     @Override
     protected void clearLEDColors() {
-        CANDLE.clearAnimation(animationSlot);
+        CANDLE.setControl(new EmptyAnimation(animationSlot));
     }
 
     @Override
-    protected void blink(Color color, double speed) {
+    protected void blink(RGBWColor color, double speed) {
         shouldRunPeriodically = false;
-        CANDLE.animate(
+        CANDLE.setControl(
                 new SingleFadeAnimation(
-                        (int) (color.red * 255),
-                        (int) (color.green * 255),
-                        (int) (color.blue * 255),
-                        0,
-                        speed,
-                        this.numberOfLEDs,
-                        indexOffset
-                ),
-                animationSlot
+                        indexOffset,
+                        this.numberOfLEDs
+                )
         );
     }
 
     @Override
-    protected void staticColor(Color color) {
+    protected void staticColor(RGBWColor color) {
         shouldRunPeriodically = false;
-        CANDLE.setLEDs(
-                ((int) color.red * 255),
-                ((int) color.green * 255),
-                ((int) color.blue * 255),
-                0,
-                indexOffset,
-                numberOfLEDs
+        CANDLE.setControl(
+                new SolidColor(
+                        indexOffset,
+                        this.numberOfLEDs
+                )
+                        .withColor(color)
         );
     }
 
     @Override
-    protected void breathe(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    protected void breathe(RGBWColor color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonBounceValue bounceMode) {
         shouldRunPeriodically = false;
-        CANDLE.animate(
+        CANDLE.setControl(
                 new LarsonAnimation(
-                        (int) (color.red * 255),
-                        (int) (color.green * 255),
-                        (int) (color.blue * 255),
-                        0,
-                        speed,
-                        this.numberOfLEDs,
-                        bounceMode,
-                        numberOfBreathingLEDs,
-                        indexOffset
-                ),
-                animationSlot
+                        indexOffset,
+                        this.numberOfLEDs
+                )
+                        .withColor(color)
+                        .withSize(numberOfBreathingLEDs)
+                        .withFrameRate(speed)
+                        .withBounceMode(bounceMode)
+                        .withSlot(animationSlot)
         );
     }
 
     @Override
-    protected void alternateColor(Color firstColor, Color secondColor) {
-        shouldRunPeriodically = false;
-        for (int i = 0; i < numberOfLEDs; i++)
-            CANDLE.setLEDs(
-                    (int) ((isEven(i) ? firstColor.red : secondColor.red) * 255),
-                    (int) ((isEven(i) ? firstColor.green : secondColor.green) * 255),
-                    (int) ((isEven(i) ? firstColor.blue : secondColor.blue) * 255),
-                    0,
-                    i + indexOffset,
-                    1
-            );
-    }
-
-    @Override
-    protected void colorFlow(Color color, double speed, boolean inverted) {
+    protected void colorFlow(RGBWColor color, double speed, boolean inverted) {
         shouldRunPeriodically = false;
         final boolean correctedInverted = this.inverted != inverted;
-        CANDLE.animate(
+        CANDLE.setControl(
                 new ColorFlowAnimation(
-                        (int) (color.red * 255),
-                        (int) (color.green * 255),
-                        (int) (color.blue * 255),
-                        0,
-                        speed,
-                        this.numberOfLEDs,
-                        correctedInverted ? ColorFlowAnimation.Direction.Backward : ColorFlowAnimation.Direction.Forward,
-                        indexOffset
-                ),
-                animationSlot
+                        indexOffset,
+                        this.numberOfLEDs
+                )
+                        .withColor(color)
+                        .withFrameRate(speed)
+                        .withDirection(correctedInverted ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
+                        .withSlot(animationSlot)
         );
     }
 
@@ -147,44 +123,45 @@ public class CANdleLEDStrip extends LEDStrip {
     protected void rainbow(double brightness, double speed, boolean inverted) {
         shouldRunPeriodically = false;
         final boolean correctedInverted = this.inverted != inverted;
-        CANDLE.animate(
+        CANDLE.setControl(
                 new RainbowAnimation(
-                        brightness,
-                        speed,
-                        this.numberOfLEDs,
-                        correctedInverted,
-                        indexOffset
-                ),
-                animationSlot
+                        indexOffset,
+                        this.numberOfLEDs
+                )
+                        .withBrightness(brightness)
+                        .withFrameRate(speed)
+                        .withDirection(correctedInverted ? AnimationDirectionValue.Backward : AnimationDirectionValue.Forward)
+                        .withSlot(animationSlot)
         );
     }
 
     @Override
-    protected void sectionColor(Supplier<Color>[] colors) {
+    protected void sectionColor(Supplier<RGBWColor>[] colors) {
         shouldRunPeriodically = true;
         final int ledsPerSection = (int) Math.floor((double) numberOfLEDs / colors.length);
         setSectionColor(colors.length, ledsPerSection, colors);
     }
 
     @Override
-    protected void setSingleLEDColor(int index, Color color) {
-        CANDLE.setLEDs((int) color.red, (int) color.green, (int) color.blue, 0, index, 1);
+    protected void setSingleLEDColor(int index, RGBWColor color) {
+        CANDLE.setControl(
+                new SolidColor(
+                        indexOffset + index,
+                        indexOffset + index + 1
+                )
+                        .withColor(color)
+        );
     }
 
-    private void setSectionColor(int amountOfSections, int ledsPerSection, Supplier<Color>[] colors) {
+    private void setSectionColor(int amountOfSections, int ledsPerSection, Supplier<RGBWColor>[] colors) {
         for (int i = 0; i < amountOfSections; i++) {
-            CANDLE.setLEDs(
-                    (int) ((inverted ? colors[amountOfSections - i - 1].get().red : colors[i].get().red) * 255),
-                    (int) ((inverted ? colors[amountOfSections - i - 1].get().green : colors[i].get().green) * 255),
-                    (int) ((inverted ? colors[amountOfSections - i - 1].get().blue : colors[i].get().blue) * 255),
-                    0,
-                    ledsPerSection * i + indexOffset,
-                    i == amountOfSections - 1 ? numberOfLEDs - 1 : ledsPerSection * (i + 1) - 1
+            CANDLE.setControl(
+                    new SolidColor(
+                            ledsPerSection * i + indexOffset,
+                            i == amountOfSections - 1 ? numberOfLEDs + indexOffset : ledsPerSection * (i + 1) - 1
+                    )
+                            .withColor(inverted ? colors[amountOfSections - i - 1].get() : colors[i].get())
             );
         }
-    }
-
-    private boolean isEven(int number) {
-        return number % 2 == 0;
     }
 }

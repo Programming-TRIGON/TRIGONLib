@@ -6,6 +6,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.phoenix6.talonfx.TalonFXIO;
 import frc.trigon.lib.hardware.simulation.MotorPhysicsSimulation;
@@ -62,6 +63,12 @@ public class SimulationTalonFXIO extends TalonFXIO {
     @Override
     public void setPhysicsSimulation(MotorPhysicsSimulation physicsSimulation) {
         this.physicsSimulation = physicsSimulation;
+
+        if (physicsSimulation == null)
+            return;
+        DCMotor gearbox = physicsSimulation.getGearbox();
+        if (Math.abs(gearbox.freeSpeedRadPerSec - DCMotor.getKrakenX44(1).freeSpeedRadPerSec) < 1e-4 || Math.abs(gearbox.freeSpeedRadPerSec - DCMotor.getKrakenX44Foc(1).freeSpeedRadPerSec) < 1e-4)
+            motorSimState.setMotorType(TalonFXSimState.MotorType.KrakenX44);
     }
 
     @Override
@@ -84,6 +91,9 @@ public class SimulationTalonFXIO extends TalonFXIO {
         configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         configuration.Feedback.SensorToMechanismRatio *= configuration.Feedback.RotorToSensorRatio;
         configuration.Feedback.RotorToSensorRatio = 1.0;
+        configuration.Slot0.GravityArmPositionOffset = 0.0;
+        configuration.Slot1.GravityArmPositionOffset = 0.0;
+        configuration.Slot2.GravityArmPositionOffset = 0.0;
         return configuration;
     }
 }

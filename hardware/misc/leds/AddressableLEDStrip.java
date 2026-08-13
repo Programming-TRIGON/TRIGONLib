@@ -1,6 +1,7 @@
 package frc.trigon.lib.hardware.misc.leds;
 
-import com.ctre.phoenix.led.LarsonAnimation;
+import com.ctre.phoenix6.signals.LarsonBounceValue;
+import com.ctre.phoenix6.signals.RGBWColor;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
@@ -59,11 +60,11 @@ public class AddressableLEDStrip extends LEDStrip {
 
     @Override
     protected void clearLEDColors() {
-        setStaticColor(Color.kBlack);
+        setStaticColor(new RGBWColor(0, 0, 0));
     }
 
     @Override
-    protected void blink(Color color, double speed) {
+    protected void blink(RGBWColor color, double speed) {
         final double correctedSpeed = 1 - speed;
         final double currentTime = Timer.getTimestamp();
 
@@ -80,12 +81,12 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    protected void staticColor(Color color) {
+    protected void staticColor(RGBWColor color) {
         setStaticColor(color);
     }
 
     @Override
-    protected void breathe(Color color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    protected void breathe(RGBWColor color, int numberOfBreathingLEDs, double speed, boolean inverted, LarsonBounceValue bounceMode) {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
@@ -104,7 +105,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    protected void colorFlow(Color color, double speed, boolean inverted) {
+    protected void colorFlow(RGBWColor color, double speed, boolean inverted) {
         clearLEDColors();
         final boolean correctedInverted = this.inverted != inverted;
         final double moveLEDTimeSeconds = 1 - speed;
@@ -120,12 +121,6 @@ public class AddressableLEDStrip extends LEDStrip {
 
         checkIfColorFlowHasHitEnd();
         setLEDColors(color, correctedInverted ? numberOfLEDs - amountOfColorFlowLEDs - 1 : 0, correctedInverted ? numberOfLEDs - 1 : amountOfColorFlowLEDs);
-    }
-
-    @Override
-    protected void alternateColor(Color firstColor, Color secondColor) {
-        for (int i = 0; i < numberOfLEDs; i++)
-            LED_BUFFER.setLED(i + indexOffset, i % 2 == 0 ? firstColor : secondColor);
     }
 
     @Override
@@ -150,7 +145,7 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    protected void sectionColor(Supplier<Color>[] colors) {
+    protected void sectionColor(Supplier<RGBWColor>[] colors) {
         final int amountOfSections = colors.length;
         final int ledsPerSection = (int) Math.floor((double) numberOfLEDs / amountOfSections);
 
@@ -172,15 +167,15 @@ public class AddressableLEDStrip extends LEDStrip {
     }
 
     @Override
-    protected void setSingleLEDColor(int index, Color color) {
-        LED_BUFFER.setLED(indexOffset + index, color);
+    protected void setSingleLEDColor(int index, RGBWColor color) {
+        LED_BUFFER.setLED(indexOffset + index, new Color(color.Red, color.Green, color.Blue));
     }
 
-    private void setStaticColor(Color color) {
+    private void setStaticColor(RGBWColor color) {
         setLEDColors(color, 0, numberOfLEDs - 1);
     }
 
-    private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean inverted, LarsonAnimation.BounceMode bounceMode) {
+    private void checkIfBreathingHasHitEnd(int amountOfBreathingLEDs, boolean inverted, LarsonBounceValue bounceMode) {
         final int bounceModeAddition = switch (bounceMode) {
             case Back -> amountOfBreathingLEDs;
             case Center -> amountOfBreathingLEDs / 2;
@@ -191,15 +186,23 @@ public class AddressableLEDStrip extends LEDStrip {
             lastBreatheLED = inverted ? indexOffset + numberOfLEDs : indexOffset;
     }
 
-    private void setBreathingLEDs(Color color, int breathingLEDs, LarsonAnimation.BounceMode bounceMode) {
+    private void setBreathingLEDs(RGBWColor color, int breathingLEDs, LarsonBounceValue bounceMode) {
         for (int i = 0; i < breathingLEDs; i++) {
             if (lastBreatheLED - i >= indexOffset && lastBreatheLED - i < indexOffset + numberOfLEDs)
-                LED_BUFFER.setLED(lastBreatheLED - i, color);
+                LED_BUFFER.setLED(lastBreatheLED - i, new Color(
+                        color.Red,
+                        color.Green,
+                        color.Blue
+                ));
 
             else if (lastBreatheLED - i < indexOffset + numberOfLEDs) {
-                if (bounceMode.equals(LarsonAnimation.BounceMode.Back) || bounceMode.equals(LarsonAnimation.BounceMode.Center) && i > breathingLEDs / 2)
+                if (bounceMode.equals(LarsonBounceValue.Back) || bounceMode.equals(LarsonBounceValue.Center) && i > breathingLEDs / 2)
                     return;
-                LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, color);
+                LED_BUFFER.setLED(lastBreatheLED - i + numberOfLEDs, new Color(
+                        color.Red,
+                        color.Green,
+                        color.Blue
+                ));
             }
         }
     }
@@ -211,8 +214,8 @@ public class AddressableLEDStrip extends LEDStrip {
         }
     }
 
-    private void setLEDColors(Color color, int startIndex, int endIndex) {
+    private void setLEDColors(RGBWColor color, int startIndex, int endIndex) {
         for (int i = 0; i <= endIndex - startIndex; i++)
-            LED_BUFFER.setLED(startIndex + indexOffset + i, color);
+            LED_BUFFER.setLED(startIndex + indexOffset + i, new Color(color.Red, color.Green, color.Blue));
     }
 }

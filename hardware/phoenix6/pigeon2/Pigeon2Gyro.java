@@ -5,11 +5,11 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.geometry.Rotation2d;
-import org.littletonrobotics.junction.Logger;
 import frc.trigon.lib.hardware.RobotHardwareStats;
 import frc.trigon.lib.hardware.phoenix6.Phoenix6Inputs;
 import frc.trigon.lib.hardware.phoenix6.pigeon2.io.RealPigeon2IO;
 import frc.trigon.lib.hardware.phoenix6.pigeon2.io.SimulationPigeon2IO;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.function.DoubleSupplier;
 
@@ -63,10 +63,10 @@ public class Pigeon2Gyro {
      * Sets the yaw velocity of the robot supplier used in simulation.
      * This is used to calculate the gyro's yaw in simulation by multiplying it by the time since the last update, and adding it to the total yaw.
      *
-     * @param yawVelocitySupplierDegreesPerSecond the yaw velocity supplier in degrees per second
+     * @param yawVelocitySupplierRadiansPerSecond the yaw velocity supplier in radians per second
      */
-    public void setSimulationYawVelocitySupplier(DoubleSupplier yawVelocitySupplierDegreesPerSecond) {
-        gyroIO.setSimulationYawVelocitySupplier(yawVelocitySupplierDegreesPerSecond);
+    public void setSimulationYawVelocitySupplier(DoubleSupplier yawVelocitySupplierRadiansPerSecond) {
+        gyroIO.setSimulationYawVelocitySupplier(yawVelocitySupplierRadiansPerSecond);
     }
 
     public void applyConfigurations(Pigeon2Configuration realConfiguration, Pigeon2Configuration simulationConfiguration) {

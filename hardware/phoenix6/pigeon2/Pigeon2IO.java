@@ -19,7 +19,7 @@ public class Pigeon2IO {
     protected void setYaw(Rotation2d currentYaw) {
     }
 
-    protected void setSimulationYawVelocitySupplier(DoubleSupplier yawVelocitySupplierDegreesPerSecond) {
+    protected void setSimulationYawVelocitySupplier(DoubleSupplier yawVelocitySupplierRadiansPerSecond) {
     }
 
     protected Pigeon2 getPigeon2() {

@@ -1,7 +1,7 @@
 package frc.trigon.lib.hardware.misc.leds;
 
+import com.ctre.phoenix6.signals.RGBWColor;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.lib.utilities.RGBArrayUtils;
 
@@ -10,7 +10,7 @@ import java.io.IOException;
 public class LEDBoard extends SubsystemBase {
     private final LEDStrip[] ledStrips;
     private String[] currentAnimationFilePaths;
-    private Color movingLEDColor;
+    private RGBWColor movingLEDColor;
     private int
             currentAnimationFrame,
             numberOfMovingLEDs,
@@ -54,7 +54,7 @@ public class LEDBoard extends SubsystemBase {
         for (int i = 0; i < rgbArray.length; i++) {
             for (int j = 0; j < rgbArray[0].length; j++) {
                 int[] currentRawColor = rgbArray[i][j];
-                Color currentColor = new Color(currentRawColor[0], currentRawColor[1], currentRawColor[2]);
+                RGBWColor currentColor = new RGBWColor(currentRawColor[0], currentRawColor[1], currentRawColor[2]);
                 ledStrips[i].setSingleLEDColor(j, currentColor);
             }
         }
@@ -68,7 +68,7 @@ public class LEDBoard extends SubsystemBase {
         setImage(filePaths[0]);
     }
 
-    void breathe(Color color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int ledSpacing, boolean inverted) {
+    void breathe(RGBWColor color, int numberOfBreathingLEDs, int speedLEDsPerSecond, int ledSpacing, boolean inverted) {
         movingLEDColor = color;
         this.numberOfMovingLEDs = numberOfBreathingLEDs;
         currentMovingLEDIndex = 0;
@@ -80,7 +80,7 @@ public class LEDBoard extends SubsystemBase {
         updateBreathingLEDs();
     }
 
-    void bounce(Color color, int numberOfMovingLEDs, int speedLEDsPerSecond, int ledSpacing, int stripSpacing) {
+    void bounce(RGBWColor color, int numberOfMovingLEDs, int speedLEDsPerSecond, int ledSpacing, int stripSpacing) {
         movingLEDColor = color;
         this.numberOfMovingLEDs = numberOfMovingLEDs;
         currentMovingLEDIndex = 0;

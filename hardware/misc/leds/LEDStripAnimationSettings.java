@@ -1,7 +1,7 @@
 package frc.trigon.lib.hardware.misc.leds;
 
-import com.ctre.phoenix.led.LarsonAnimation;
-import edu.wpi.first.wpilibj.util.Color;
+import com.ctre.phoenix6.signals.LarsonBounceValue;
+import com.ctre.phoenix6.signals.RGBWColor;
 
 import java.util.function.Supplier;
 
@@ -18,7 +18,7 @@ public class LEDStripAnimationSettings {
      *
      * @param color the color to set the LED strip to
      */
-    public record StaticColorSettings(Color color) implements LEDAnimationSettings {
+    public record StaticColorSettings(RGBWColor color) implements LEDAnimationSettings {
         @Override
         public void apply(LEDStrip ledStrip) {
             ledStrip.staticColor(color);
@@ -31,7 +31,7 @@ public class LEDStripAnimationSettings {
      * @param color the color to blink
      * @param speed the speed at which the LED strip should blink on a scale between 0 and 1
      */
-    public record BlinkSettings(Color color, double speed) implements LEDAnimationSettings {
+    public record BlinkSettings(RGBWColor color, double speed) implements LEDAnimationSettings {
         @Override
         public void apply(LEDStrip ledStrip) {
             ledStrip.blink(color, speed);
@@ -47,8 +47,8 @@ public class LEDStripAnimationSettings {
      * @param inverted              whether the breathing should be inverted
      * @param bounceMode            when the breathing LEDs should restart their cycle throughout the strip
      */
-    public record BreatheSettings(Color color, int numberOfBreathingLEDs, double speed, boolean inverted,
-                                  LarsonAnimation.BounceMode bounceMode) implements LEDAnimationSettings {
+    public record BreatheSettings(RGBWColor color, int numberOfBreathingLEDs, double speed, boolean inverted,
+                                  LarsonBounceValue bounceMode) implements LEDAnimationSettings {
         @Override
         public void apply(LEDStrip ledStrip) {
             ledStrip.breathe(color, numberOfBreathingLEDs, speed, inverted, bounceMode);
@@ -62,23 +62,10 @@ public class LEDStripAnimationSettings {
      * @param speed    the speed at which the color should travel throughout the strip on a scale between 0 and 1
      * @param inverted whether the color flow should be inverted
      */
-    public record ColorFlowSettings(Color color, double speed, boolean inverted) implements LEDAnimationSettings {
+    public record ColorFlowSettings(RGBWColor color, double speed, boolean inverted) implements LEDAnimationSettings {
         @Override
         public void apply(LEDStrip ledStrip) {
             ledStrip.colorFlow(color, speed, inverted);
-        }
-    }
-
-    /**
-     * The settings for a command that displays 2 colors in an alternating pattern.
-     *
-     * @param firstColor  the first color
-     * @param secondColor the second color
-     */
-    public record AlternateColorSettings(Color firstColor, Color secondColor) implements LEDAnimationSettings {
-        @Override
-        public void apply(LEDStrip ledStrip) {
-            ledStrip.alternateColor(firstColor, secondColor);
         }
     }
 
@@ -87,7 +74,7 @@ public class LEDStripAnimationSettings {
      *
      * @param colors an array of the colors to color the sections with. The length of the array dictates the amount of sections
      */
-    public record SectionColorSettings(Supplier<Color>[] colors) implements LEDAnimationSettings {
+    public record SectionColorSettings(Supplier<RGBWColor>[] colors) implements LEDAnimationSettings {
         @Override
         public void apply(LEDStrip ledStrip) {
             ledStrip.sectionColor(colors);
