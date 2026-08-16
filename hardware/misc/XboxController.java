@@ -101,14 +101,14 @@ public class XboxController extends CommandXboxController {
         rumble(durationSeconds, power, GenericHID.RumbleType.kBothRumble);
     }
 
-    public void rumble(double durationSeconds, double power, GenericHID.RumbleType rumbleMotors) {
+    public void rumble(double durationSeconds, double power, GenericHID.RumbleType rumbleType) {
         if (stopRumbleCommand != null)
             stopRumbleCommand.cancel();
 
-        stopRumbleCommand = new WaitCommand(durationSeconds).andThen(() -> getHID().setRumble(rumbleMotors, 0)).ignoringDisable(true);
+        stopRumbleCommand = new WaitCommand(durationSeconds).andThen(() -> getHID().setRumble(rumbleType, 0)).ignoringDisable(true);
         CommandScheduler.getInstance().schedule(stopRumbleCommand);
 
-        getHID().setRumble(rumbleMotors, power);
+        getHID().setRumble(rumbleType, power);
     }
 
     /**
